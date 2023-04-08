@@ -1,7 +1,7 @@
-obj/*
-bin/*
-server.csproj
-server.csproj.user
+server/obj/*
+server/bin/*
+server/server.csproj
+server/server.csproj.user
 server.sln
 
 *.props
