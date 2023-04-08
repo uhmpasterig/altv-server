@@ -5,7 +5,6 @@ using Autofac;
 using server.Core;
 using System.Reflection;
 
-
 namespace server.Helpers;
 internal class Startup : IDisposable
 {
