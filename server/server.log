@@ -1,0 +1,16 @@
+[Warning] No server config exists, using default config[21:53:17] alt:V Server 13.48 (release)
+[21:53:17][Error] Vehicle mods can't be loaded.
+[21:53:17][Error] Vehicle models can't be loaded.
+[21:53:17][Error] Ped models can't be loaded.
+[21:53:17][Error] Clothes can't be loaded. Download from altv.mp
+[21:53:17] Starting New alt:V server on 0.0.0.0:7788
+[21:53:17] Required server permissions:
+[21:53:17] Optional server permissions:
+[21:53:17] Starting HTTP server on 0.0.0.0:7788
+[21:53:17] Main thread started (ThreadId: 16528)
+[21:53:17] Colshape thread started (ThreadId: 14592)
+[21:53:17] EntityStreamer thread started (ThreadId: 13720)
+[21:53:17] Sync thread started (ThreadId: 14868)
+[21:53:17] Network thread started (ThreadId: 4560)
+[21:53:17] Console thread started (ThreadId: 14872)
+[21:53:17] Server started

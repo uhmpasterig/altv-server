@@ -1,0 +1,136 @@
+using server.Core;
+using server.Events;
+using _logger = server.Logger.Logger;
+using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
+using server.Models;
+
+namespace server.Modules.Items;
+
+public class xItem : Models.Item
+{
+  public xItem(Models.Item item)
+  {
+    this.id = item.id;
+    this.name = item.name;
+    this.stackSize = item.stackSize;
+    this.weight = item.weight;
+    this.job = item.job;
+    this.data = item.data;
+    this.image = item.image;
+  }
+}
+
+public class InventoryItem
+{
+  public int id { get; set; }
+  public string name { get; set; }
+  public int stackSize { get; set; }
+  public float weight { get; set; }
+  public string job { get; set; }
+  public string data { get; set; }
+  public string image { get; set; }
+  public int slot { get; set; }
+  public int count { get; set; }
+  
+  public InventoryItem()
+  {
+  }
+
+  public InventoryItem(int id, string name, int stackSize, float weight, string job, string data, string image, int slot, int count)
+  {
+    this.id = id;
+    this.name = name;
+    this.stackSize = stackSize;
+    this.weight = weight;
+    this.job = job;
+    this.data = data;
+    this.image = image;
+
+    this.slot = slot;
+    this.count = count;
+  }
+
+  public InventoryItem(xItem item, int slot, int count)
+  {
+    this.id = item.id;
+    this.name = item.name;
+    this.stackSize = item.stackSize;
+    this.weight = item.weight;
+    this.job = item.job;
+    this.data = item.data;
+    this.image = item.image;
+
+    this.slot = slot;
+    this.count = count;
+  }
+}
+
+public class Items : ILoadEvent
+{
+  public static Dictionary<string, xItem> _items = new Dictionary<string, xItem>();
+  public static Dictionary<string, Action<xPlayer>> _usableItems = new Dictionary<string, Action<xPlayer>>();
+
+  public static void RegisterUsableItem(string itemname, Action<xPlayer> action)
+  {
+    if (!_items.ContainsKey(itemname))
+    {
+      _logger.Error($"Item {itemname} does not exist");
+      return;
+    }
+
+    _usableItems.Add(itemname, action);
+  }
+
+  public static void UseItem(xPlayer player, string itemname)
+  {
+    if (!_items.ContainsKey(itemname))
+    {
+      _logger.Error($"Item {itemname} does not exist");
+      return;
+    }
+
+    foreach (var action in _usableItems.Where(x => x.Key == itemname))
+    {
+      action.Value(player);
+    }
+  }
+
+  public static xItem GetItem(string itemname)
+  {
+    if (!_items.ContainsKey(itemname))
+    {
+      _logger.Error($"Item {itemname} does not exist");
+      return null;
+    }
+
+    return _items[itemname];
+  }
+
+  public static xItem GetItem(int id)
+  {
+    foreach (var item in _items)
+    {
+      if (item.Value.id == id)
+      {
+        return item.Value;
+      }
+    }
+
+    _logger.Error($"Item with id {id} does not exist");
+    return null;
+  }
+
+  public async void OnLoad()
+  {
+    await using ServerContext serverContext = new ServerContext();
+    foreach (Models.Item item in serverContext.Items)
+    {
+      xItem iitem = new xItem(item);
+      _items.Add(iitem.name, iitem);
+      _logger.Debug($"Loaded item {iitem.name}");
+    }
+    Alt.Emit("ItemsLoaded");
+  }
+}
