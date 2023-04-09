@@ -87,15 +87,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
           to.DragRemoveItem(tslot);
         }
       }
-      try {
-        item!.slot = tslot;
-        item2!.slot = fslot;
-        to.items.Add(item);
-        from.items.Add(item2);
-      } catch (Exception e) {
-        _logger.Log(e.Message);
-      }
-
 
       List<object> uiStorages = new List<object>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])

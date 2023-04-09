@@ -147,6 +147,7 @@ public class xStorage : Models.Storage
 
   public async Task<bool> DragAddItem(InventoryItem item)
   {
+    this.items.Add(item);
     return true;
   }
 
