@@ -11,14 +11,13 @@ using AltV.Net.Async;
 namespace server.Handlers.Vehicle;
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
-
   public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
-  public VehicleHandler() {}
-  
+  public VehicleHandler() { }
+
   public async Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation)
   {
-    xVehicle vehicle = (xVehicle) await AltAsync.CreateVehicle(model, position, rotation);
+    xVehicle vehicle = (xVehicle)await AltAsync.CreateVehicle(model, position, rotation);
     _logger.Debug($"Created vehicle with model {model} at {position}");
     Vehicles.Add(vehicle.Id, vehicle);
     return vehicle;
@@ -30,10 +29,10 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     _logger.Debug($"Created vehicle with model {vehicle.model} at {vehicle.Position}");
     return await SetVehicleData(xvehicle, vehicle);
   }
- 
+
   public async Task<xVehicle> SetVehicleData(xVehicle xvehicle, Models.Vehicle vehicle)
   {
-    if(Vehicles.ContainsKey(vehicle.id)) return null!;
+    if (Vehicles.ContainsKey(vehicle.id)) return null!;
     Vehicles.Add(vehicle.id, xvehicle);
 
     xvehicle.vehicleId = vehicle.id;
@@ -45,7 +44,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     xvehicle.PrimaryColor = (byte)vehicle.color;
     xvehicle.SecondaryColor = (byte)vehicle.color2;
     await xvehicle.SetNumberplateTextAsync(vehicle.plate);
-    
+
     return xvehicle;
   }
 
@@ -53,10 +52,13 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   {
     await using ServerContext serverContext = new ServerContext();
     Models.Vehicle vehicle = await serverContext.Vehicle.FindAsync(xvehicle.vehicleId);
-    if(vehicle != null){
+    if (vehicle != null)
+    {
       vehicle.Position = xvehicle.Position;
       vehicle.Rotation = xvehicle.Rotation;
-    } else {
+    }
+    else
+    {
       _logger.Error($"Vehicle with id {xvehicle.vehicleId} not found in database");
     }
     await serverContext.SaveChangesAsync();
@@ -70,11 +72,17 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     {
       Models.Vehicle dbVehicle = serverContext.Vehicle.Find(vehicle.vehicleId);
 
-      if(dbVehicle == null) continue;
+      if (dbVehicle == null) continue;
       dbVehicle.Position = vehicle.Position;
       dbVehicle.Rotation = vehicle.Rotation;
     }
     await serverContext.SaveChangesAsync();
+  }
+
+  public xVehicle SetModByType(xVehicle veh, VehicleModType modType, byte id)
+  {
+    veh.SetMod((byte)modType, id);
+    return veh;
   }
 
   public xVehicle GetClosestVehicle(Position position, int range = 2)
@@ -90,7 +98,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
-    foreach(Models.Vehicle vehicle in serverContext.Vehicle.Where(v => v.garageId == -1))
+    foreach (Models.Vehicle vehicle in serverContext.Vehicle.Where(v => v.garageId == -1))
     {
       await CreateVehicleFromDb(vehicle);
     }

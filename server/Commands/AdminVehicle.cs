@@ -1,5 +1,6 @@
 using System;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using server.Core;
 using AltV.Net.Resources.Chat.Api;
 using server.Handlers.Vehicle;
@@ -34,6 +35,17 @@ internal class AdminVehicle : IScript
 
     foreach(xVehicle veh in vehicles){
       veh.Destroy();
+    }
+  }
+
+  [Command("fulltune")]
+  public static void FullTune(xPlayer player, int range = 5)
+  {
+    Position pos = player.Position;
+    xVehicle veh = (xVehicle)player.Vehicle;
+
+    if(veh.Exists){
+      _vehicleHandler.SetModByType(veh, VehicleModType.Color1, 2);
     }
   }
 }
