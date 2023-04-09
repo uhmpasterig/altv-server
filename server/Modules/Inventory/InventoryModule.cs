@@ -58,6 +58,42 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     player.Emit("inventory:open", JsonConvert.SerializeObject(uiStorages));
     return true;
   }
+  // Ich weis das ist scheiße aber ich hab keine Lust mehr
+  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot) 
+  {
+    if (fromi == null && toi == null) return false;
+    if(to.weight + (fromi.weight * fromi.count) > to.maxWeight) return false;
+
+    if(fromi != null && toi != null){
+      if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
+        _logger.Log("Unerlaubte Clientmodifikation");
+        if(fromi.count + toi.count <= toi.stackSize){
+          toi.count += fromi.count;
+          from.items.Remove(fromi);
+        } else {
+          int diff = toi.stackSize - toi.count;
+          toi.count = toi.stackSize;
+          fromi.count -= diff;
+        }
+        return true;
+
+      }
+    }
+    if(toi == null) {
+      if(to.items.Count >= to.slots) return false;
+    }
+    if(fromi != null) {
+      from.items.Remove(fromi);
+      fromi.slot = tslot;
+      to.items.Add(fromi);
+    } 
+    if(toi != null) {
+      to.items.Remove(toi);
+      toi.slot = fslot;
+      from.items.Add(toi);
+    }
+    return true;
+  }
 
   public async void OnLoad()
   {
@@ -67,23 +103,18 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
       xStorage to = await storageHandler.GetStorage(toStorage);
-      
       InventoryItem item = from.items.Find(x => x.slot == fslot)!;
       InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
+      
       if(count == 0){
         count = item.count;
       }
-      
-      from.DragRemoveItem(fslot);
-      to.DragRemoveItem(tslot);
-      if (item != null) {
-        item.slot = tslot;
-        bool canMove1 = await to.DragAddItem(item);
+      try{
+        await DragCheck(item, item2, from, to, fslot, tslot);
+      } catch(Exception e){
+        _logger.Log(e.Message);
       }
-      if (item2 != null) {
-        item2.slot = fslot;
-        bool canMove2 = await from.DragAddItem(item2);
-      }
+
       List<object> uiStorages = new List<object>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])
       {
