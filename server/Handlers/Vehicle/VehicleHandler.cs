@@ -81,6 +81,11 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return Vehicles.Values.FirstOrDefault(v => v.Position.Distance(position) < range)!;
   }
 
+  public List<xVehicle> GetVehiclesInRadius(Position position, int range = 2)
+  {
+    return Vehicles.Values.Where(v => v.Position.Distance(position) < range).ToList();
+  }
+
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
