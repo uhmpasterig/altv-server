@@ -81,7 +81,7 @@ public class EventHandler : IEventHandler
     {
       if (await pressedEEvent.OnKeyPressE((xPlayer)player)) return;
     }
-  }
+  } 
 
   public async void OnKeyPressI(IPlayer iplayer)
   {
