@@ -145,10 +145,9 @@ public class xStorage : Models.Storage
     return this.items.FirstOrDefault(x => x.slot == slot);
   }
 
-  public async Task<bool> DragAddItem(InventoryItem item)
+  public void DragAddItem(InventoryItem item)
   {
     this.items.Add(item);
-    return true;
   }
 
   public void DragRemoveItem(int slot)

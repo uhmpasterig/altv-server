@@ -59,6 +59,31 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     return true;
   }
 
+  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to) 
+  {
+    if (fromi == null && toi == null) return false;
+    if(to.weight + (fromi.weight * fromi.count) > to.maxWeight) return false;
+    if(fromi!.name == toi.name ){
+      if(fromi.count + toi.count <= toi.stackSize){
+        toi.count += fromi.count;
+        from.items.Remove(fromi);
+      } else {
+        int diff = toi.stackSize - toi.count;
+        toi.count = toi.stackSize;
+        fromi.count -= diff;
+      }
+      return true;
+    }
+    if(toi == null) {
+      if(to.items.Count >= to.slots) return false;
+    }
+    from.items.Remove(fromi);
+    to.items.Remove(toi);
+    from.items.Add(toi);
+    to.items.Add(fromi);
+    return true;
+  }
+
   public async void OnLoad()
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
@@ -73,17 +98,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if(count == 0){
         count = item.count;
       }
-      
-      from.DragRemoveItem(fslot);
-      to.DragRemoveItem(tslot);
-      if (item != null) {
-        item.slot = tslot;
-        bool canMove1 = await to.DragAddItem(item);
-      }
-      if (item2 != null) {
-        item2.slot = fslot;
-        bool canMove2 = await from.DragAddItem(item2);
-      }
+      await DragCheck(item, item2, from, to);
+
       List<object> uiStorages = new List<object>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])
       {
