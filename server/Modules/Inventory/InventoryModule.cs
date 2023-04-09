@@ -67,7 +67,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     _logger.Log("2");
     
     if(fromi != null && toi != null){
-      if(fromi!.name == toi.name ){
+      if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
         if(fromi.count + toi.count <= toi.stackSize){
           toi.count += fromi.count;
           from.items.Remove(fromi);
