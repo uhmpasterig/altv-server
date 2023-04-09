@@ -106,6 +106,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       xStorage to = await storageHandler.GetStorage(toStorage);
       InventoryItem item = from.items.Find(x => x.slot == fslot)!;
       InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
+      if(item == null && item2 == null) return;
       
       if(count == 0){
         count = item.count;
