@@ -33,6 +33,7 @@ internal class AdminVehicle : IScript
     List<xVehicle> vehicles = _vehicleHandler.GetVehiclesInRadius(pos, range);
 
     _logger.Debug("Get All Vehicles in Area");
+    Console.Write(vehicles);
     vehicles.ForEach(delegate (xVehicle veh)
     { 
       _logger.Debug(veh.toString);
