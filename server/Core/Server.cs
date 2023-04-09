@@ -36,7 +36,6 @@ public class Server : IServer
 
     foreach(Models.Player player in _serverContext.Player)
     {
-      Alt.Log(player.name);
       player.isOnline = false;
     }
     _serverContext.SaveChangesAsync();
