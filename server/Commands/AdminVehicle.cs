@@ -32,12 +32,9 @@ internal class AdminVehicle : IScript
     Position pos = player.Position;
     List<xVehicle> vehicles = _vehicleHandler.GetVehiclesInRadius(pos, range);
 
-    _logger.Debug("Get All Vehicles in Area");
-    Console.Write(vehicles);
-    vehicles.ForEach(delegate (xVehicle veh)
-    { 
+    foreach(xVehicle veh in vehicles){
       _logger.Debug(veh.toString);
       veh.Destroy();
-    });
+    }
   }
 }
