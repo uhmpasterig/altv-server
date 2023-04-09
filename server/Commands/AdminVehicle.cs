@@ -46,8 +46,8 @@ internal class AdminVehicle : IScript
 
     player.SendChatMessage("Vehicle Exists: "+veh.Exists);
     if(veh.Exists){
-      player.SendChatMessage("Set Vehicle ModType.Color1");
-      _vehicleHandler.SetModByType(veh, VehicleModType.Spoilers, 2);
+      player.SendChatMessage("Set Vehicle ModType.Spoilers");
+      _vehicleHandler.SetModByType(veh, VehicleModType.WindowTint, 3);
     }
   }
 }
