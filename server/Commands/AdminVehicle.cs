@@ -33,7 +33,7 @@ internal class AdminVehicle : IScript
     List<xVehicle> vehicles = _vehicleHandler.GetVehiclesInRadius(pos, range);
 
     foreach(xVehicle veh in vehicles){
-      _logger.Debug(veh.toString);
+      _logger.Debug($"Vehicle ownerID: {veh.ownerId}");
       veh.Destroy();
     }
   }
