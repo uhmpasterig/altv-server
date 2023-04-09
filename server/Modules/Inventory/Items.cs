@@ -34,17 +34,8 @@ public class InventoryItem
   public int slot { get; set; }
   public int count { get; set; }
   
-  public InventoryItem(InventoryItem item)
+  public InventoryItem()
   {
-    this.id = item.id;
-    this.name = item.name;
-    this.stackSize = item.stackSize;
-    this.weight = item.weight;
-    this.job = item.job;
-    this.data = item.data;
-    this.image = item.image;
-    this.slot = item.slot;
-    this.count = item.count;
   }
 
   public InventoryItem(int id, string name, int stackSize, float weight, string job, string data, string image, int slot, int count)
