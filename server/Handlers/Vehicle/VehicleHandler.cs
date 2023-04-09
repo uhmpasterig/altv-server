@@ -84,7 +84,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public List<xVehicle> GetVehiclesInRadius(Position position, int range = 5)
   {
-    _logger.Debug(Vehicles.Values.First().Position.Distance(position).ToString());
     return Vehicles.Values.Where(v => v.Position.Distance(position) < range).ToList();
   }
 
