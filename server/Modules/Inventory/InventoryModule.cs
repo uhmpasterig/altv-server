@@ -65,6 +65,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     _logger.Log("1");
     if(to.weight + (fromi.weight * fromi.count) > to.maxWeight) return false;
     _logger.Log("2");
+    
     if(fromi != null && toi != null){
       if(fromi!.name == toi.name ){
         if(fromi.count + toi.count <= toi.stackSize){
@@ -81,10 +82,14 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     if(toi == null) {
       if(to.items.Count >= to.slots) return false;
     }
-    from.items.Remove(fromi);
-    to.items.Remove(toi);
-    from.items.Add(toi);
-    to.items.Add(fromi);
+    if(fromi != null) {
+      from.items.Remove(fromi);
+      to.items.Add(fromi);
+    } 
+    if(toi != null) {
+      to.items.Remove(toi);
+      from.items.Add(toi);
+    }
     return true;
   }
 
