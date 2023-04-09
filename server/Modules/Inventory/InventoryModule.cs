@@ -72,6 +72,22 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if(count == 0){
         count = item.count;
       }
+      item.slot = tslot;
+      if(item != null){
+        bool canMove1 = await to.DragAddItem(item);
+        if (canMove1) {
+          from.DragRemoveItem(fslot);
+        }
+      }
+      if (item2 != null)
+      {
+        item2.slot = fslot;
+        bool canMove2 = await from.DragAddItem(item2);
+        if (canMove2)
+        {
+          to.DragRemoveItem(tslot);
+        }
+      }
 
       List<object> uiStorages = new List<object>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])
