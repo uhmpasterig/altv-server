@@ -67,11 +67,15 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
       xStorage to = await storageHandler.GetStorage(toStorage);
-      InventoryItem item = from.items.Find(x => x.slot == fslot)!;
-      InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
+      InventoryItem item = new InventoryItem(from.items.Find(x => x.slot == fslot)!);
+      InventoryItem item2 = new InventoryItem(to.items.Find(x => x.slot == tslot)!);
       if(count == 0){
         count = item.count;
       }
+      _logger.Log($"Move Item:");
+      _logger.Log($"From: {fromStorage} Slot: {fslot}");
+      _logger.Log($"To: {toStorage} Slot: {tslot}");
+      _logger.Log($"Count: {count}");
       item.slot = tslot;
       if(item != null){
         bool canMove1 = await to.DragAddItem(item);
@@ -79,6 +83,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
           from.DragRemoveItem(fslot);
         }
       }
+
       if (item2 != null)
       {
         item2.slot = fslot;
