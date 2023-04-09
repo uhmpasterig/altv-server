@@ -32,7 +32,7 @@ internal class AdminVehicle : IScript
     Position pos = player.Position;
     List<xVehicle> vehicles = _vehicleHandler.GetVehiclesInRadius(pos, range);
 
-    _logger.Debug(vehicles.Count.ToString());
+    _logger.Debug("FETCHED VEHICLES FROM VEHICLES IN RADIUS: "+vehicles.Count.ToString());
     foreach(xVehicle veh in vehicles){
       _logger.Debug($"Vehicle ownerID: {veh.ownerId}");
       veh.Destroy();
