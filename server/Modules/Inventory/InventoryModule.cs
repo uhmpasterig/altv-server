@@ -77,9 +77,11 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       from.DragRemoveItem(fslot);
       to.DragRemoveItem(tslot);
       if (item != null) {
+        item.slot = tslot;
         bool canMove1 = await to.DragAddItem(item);
       }
       if (item2 != null) {
+        item2.slot = fslot;
         bool canMove2 = await from.DragAddItem(item2);
       }
       List<object> uiStorages = new List<object>();
