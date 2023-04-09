@@ -154,6 +154,7 @@ public class xStorage : Models.Storage
   public void DragRemoveItem(int slot)
   {
     InventoryItem item = this.items.FirstOrDefault(x => x.slot == slot)!;
+    if (item == null) return;
     this.items.Remove(item);
   }
 
