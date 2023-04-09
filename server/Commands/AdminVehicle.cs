@@ -44,7 +44,9 @@ internal class AdminVehicle : IScript
     Position pos = player.Position;
     xVehicle veh = (xVehicle)player.Vehicle;
 
+    player.SendChatMessage("Vehicle Exists: "+veh.Exists);
     if(veh.Exists){
+      player.SendChatMessage("Set Vehicle ModType.Color1");
       _vehicleHandler.SetModByType(veh, VehicleModType.Color1, 2);
     }
   }
