@@ -72,6 +72,11 @@ public class EventHandler : IEventHandler
     return Task.CompletedTask;
   }
 
+  public async void OnCommand(IPlayer iplayer, string commandName)
+  {
+    xPlayer player = (xPlayer)iplayer;
+  }
+
   public async void OnKeyPressE(IPlayer iplayer)
   {
     xPlayer player = (xPlayer)iplayer;
@@ -80,7 +85,7 @@ public class EventHandler : IEventHandler
     {
       if (await pressedEEvent.OnKeyPressE((xPlayer)player)) return;
     }
-  } 
+  }
 
   public async void OnKeyPressI(IPlayer iplayer)
   {
