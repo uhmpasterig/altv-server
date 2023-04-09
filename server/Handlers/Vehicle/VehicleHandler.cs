@@ -76,7 +76,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     await serverContext.SaveChangesAsync();
   }
 
-  public xVehicle GetClosestxVehicle(Position position, int range = 2)
+  public xVehicle GetClosestVehicle(Position position, int range = 2)
   {
     return Vehicles.Values.FirstOrDefault(v => v.Position.Distance(position) < range)!;
   }
