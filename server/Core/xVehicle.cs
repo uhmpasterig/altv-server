@@ -18,7 +18,7 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public int storageIdGloveBox { get; set; }
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
-
+  public string toString { get; }
   public new IxVehicle ToAsync(IAsyncContext _) => this;
 }
 
@@ -30,4 +30,6 @@ public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
   public int storageIdGloveBox { get; set; }
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
+  public string toString { get { return "OwnerID: "+ownerId; } }
+
 }
