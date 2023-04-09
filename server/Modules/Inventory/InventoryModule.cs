@@ -67,6 +67,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     if(fromi != null && toi != null){
       if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
         _logger.Log("Unerlaubte Clientmodifikation");
+        
         if(fromi.count + toi.count <= toi.stackSize){
           toi.count += fromi.count;
           from.items.Remove(fromi);
