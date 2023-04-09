@@ -67,18 +67,15 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
       xStorage to = await storageHandler.GetStorage(toStorage);
-      InventoryItem item = new InventoryItem(from.items.Find(x => x.slot == fslot)!);
-      InventoryItem item2 = new InventoryItem(to.items.Find(x => x.slot == tslot)!);
+      
+      InventoryItem item = from.items.Find(x => x.slot == fslot)!;
+      InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
+
       if(count == 0){
         count = item.count;
       }
-      _logger.Log($"Move Item:");
-      _logger.Log($"From: {fromStorage} Slot: {fslot}");
-      _logger.Log($"To: {toStorage} Slot: {tslot}");
-      _logger.Log($"Count: {count}");
-      item.slot = tslot;
       if(item != null){
-        bool canMove1 = await to.DragAddItem(item);
+        bool canMove1 = await to.DragAddItem(item, tslot);
         if (canMove1) {
           from.DragRemoveItem(fslot);
         }
@@ -86,8 +83,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
       if (item2 != null)
       {
-        item2.slot = fslot;
-        bool canMove2 = await from.DragAddItem(item2);
+        bool canMove2 = await from.DragAddItem(item2, fslot);
         if (canMove2)
         {
           to.DragRemoveItem(tslot);
