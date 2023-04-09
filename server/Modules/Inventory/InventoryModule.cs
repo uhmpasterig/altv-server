@@ -68,31 +68,20 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       xStorage from = await storageHandler.GetStorage(fromStorage);
       xStorage to = await storageHandler.GetStorage(toStorage);
       
-      InventoryItem item = new InventoryItem();
-      if (from.items.Exists(x => x.slot == fslot))
-      {
-        item = from.items.Find(x => x.slot == fslot)!;
-      }
-      InventoryItem item2 = new InventoryItem();
-      if (to.items.Exists(x => x.slot == tslot))
-      {
-        item2 = to.items.Find(x => x.slot == tslot)!;
-      }
+      InventoryItem item = new InventoryItem(from.items.Find(x => x.slot == fslot)!);
+      InventoryItem item2 = new InventoryItem(to.items.Find(x => x.slot == tslot)!);
       if(count == 0){
         count = item.count;
       }
-      
-
       if(item != null){
-        item.slot = tslot;
         bool canMove1 = await to.DragAddItem(item);
         if (canMove1) {
           from.DragRemoveItem(fslot);
         }
       }
 
-      if (item2 != null){
-        item2.slot = fslot;
+      if (item2 != null)
+      {
         bool canMove2 = await from.DragAddItem(item2);
         if (canMove2)
         {
