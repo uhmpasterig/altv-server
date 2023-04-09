@@ -59,7 +59,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     return true;
   }
 
-  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to) 
+  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot) 
   {
     if (fromi == null && toi == null) return false;
     _logger.Log("1");
@@ -84,10 +84,12 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     }
     if(fromi != null) {
       from.items.Remove(fromi);
+      fromi.slot = tslot;
       to.items.Add(fromi);
     } 
     if(toi != null) {
       to.items.Remove(toi);
+      toi.slot = fslot;
       from.items.Add(toi);
     }
     return true;
@@ -108,7 +110,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         count = item.count;
       }
       try{
-        await DragCheck(item, item2, from, to);
+        await DragCheck(item, item2, from, to, fslot, tslot);
       } catch(Exception e){
         _logger.Log(e.Message);
       }
