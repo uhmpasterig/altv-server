@@ -92,13 +92,17 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
       xStorage to = await storageHandler.GetStorage(toStorage);
-      
       InventoryItem item = from.items.Find(x => x.slot == fslot)!;
       InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
+      
       if(count == 0){
         count = item.count;
       }
-      await DragCheck(item, item2, from, to);
+      try{
+        await DragCheck(item, item2, from, to);
+      } catch(Exception e){
+        _logger.Log(e.Message);
+      }
 
       List<object> uiStorages = new List<object>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])
