@@ -58,16 +58,15 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     player.Emit("inventory:open", JsonConvert.SerializeObject(uiStorages));
     return true;
   }
-
+  // Ich weis das ist scheiße aber ich hab keine Lust mehr
   public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot) 
   {
     if (fromi == null && toi == null) return false;
-    _logger.Log("1");
     if(to.weight + (fromi.weight * fromi.count) > to.maxWeight) return false;
-    _logger.Log("2");
-    
+
     if(fromi != null && toi != null){
       if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
+        _logger.Log("Unerlaubte Clientmodifikation");
         if(fromi.count + toi.count <= toi.stackSize){
           toi.count += fromi.count;
           from.items.Remove(fromi);
@@ -77,6 +76,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
           fromi.count -= diff;
         }
         return true;
+
       }
     }
     if(toi == null) {
