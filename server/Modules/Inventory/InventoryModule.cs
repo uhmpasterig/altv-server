@@ -13,8 +13,6 @@ using _logger = server.Logger.Logger;
 
 namespace server.Modules.Inventory;
 
-
-
 public class InventoryModule : IPressedIEvent, ILoadEvent
 {
   internal static IPlayerHandler playerHandler = new PlayerHandler();
@@ -57,7 +55,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
   load:
     userOpenInventorys[player] = openInventorys;
-
     player.Emit("inventory:open", JsonConvert.SerializeObject(uiStorages));
     return true;
   }
@@ -66,6 +63,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {
+      xPlayer playerr = (xPlayer)player;
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
       xStorage to = await storageHandler.GetStorage(toStorage);
