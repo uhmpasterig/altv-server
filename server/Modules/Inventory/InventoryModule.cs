@@ -109,9 +109,11 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
       if(item == null && item2 == null) return;
       
+      _logger.Log("1: "+count.ToString());
       if(count == 0){
         count = item.count;
       }
+      _logger.Log("2: "+count.ToString());
       try{
         await DragCheck(item, item2, from, to, fslot, tslot);
       } catch(Exception e){
