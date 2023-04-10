@@ -77,6 +77,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       dbPlayer.Position = player.Position;
     }
+    Alt.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     dbPlayer._weapons = JsonConvert.SerializeObject(player.weapons);
     dbPlayer.Rotation = player.Rotation;
 
