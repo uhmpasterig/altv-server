@@ -73,6 +73,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if(fromi.name == toi.name) goto move;
     };
 move:
+  _logger.Debug("In check1");
     if(fromi != null && toi != null){
       if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
         if(fromi.count + toi.count <= toi.stackSize){
@@ -87,8 +88,11 @@ move:
       }
     }
     if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
+    _logger.Debug("In check2");
     if(fromi != null ) {
+      _logger.Debug("In check3");
       if(count != fromi.count) {
+       _logger.Debug("In check4");
         if(fromi.count - count <= 0) return false;
         fromi.count -= count;
         InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.stackSize, fromi.weight, fromi.job, fromi.data, fromi.image, tslot, count);
