@@ -62,7 +62,9 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot) 
   {
     if (fromi == null && toi == null) return false;
-    if(to.weight + (fromi.weight * fromi.count) > to.maxWeight) return false;
+    
+    if(to.weight + (fromi?.weight * fromi?.count) > to.maxWeight) return false;
+    if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
 
     if(fromi != null && toi != null){
       if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
@@ -93,6 +95,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       toi.slot = fslot;
       from.items.Add(toi);
     }
+    from.CalculateWeight();
+    to.CalculateWeight();
     return true;
   }
 
