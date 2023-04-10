@@ -12,7 +12,7 @@ public interface IVehicleHandler
 
   Task SaveAllVehicles();
   xVehicle GetClosestVehicle(Position position, int range = 2);
-  Task<bool> SetModByType(xVehicle veh, VehicleModType modType, byte id);
+  bool SetModByType(xVehicle veh, VehicleModType modType, byte id);
   Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation);
   List<xVehicle> GetVehiclesInRadius(Position position, int range = 5);
 }

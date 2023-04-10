@@ -80,9 +80,9 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   }
 
   [Obsolete]
-  public async Task<bool> SetModByType(xVehicle veh, VehicleModType modType, byte id)
+  public bool SetModByType(xVehicle veh, VehicleModType modType, byte id)
   {
-    await veh.SetModKitAsync(0);
+    veh.ModKit = 1;
     bool isModSet = veh.SetMod((byte)modType, id);
     return isModSet;
   }
