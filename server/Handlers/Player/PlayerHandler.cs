@@ -45,7 +45,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         _logger.Debug($"Requesting inv {name}!");
         await storageHandler.LoadStorage(storageId);
       }
-      player.LoadWeaponsFromDb(dbPlayer._weapons);
       _logger.Debug($"{player.name} is loaded from the db!");
       _logger.Debug($"{player.name} has the id: {player.id}!");
       _logger.Debug($"{player.name} has the last login: {dbPlayer.lastLogin}!");
@@ -56,8 +55,10 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.Rotation = dbPlayer.Rotation;
       player.SetWeather(AltV.Net.Enums.WeatherType.ExtraSunny);
       player.SetDateTime(DateTime.Now);
+      
       player.Health = dbPlayer.health;
       player.Armor = dbPlayer.armor;
+      player.LoadWeaponsFromDb(dbPlayer._weapons);
 
       return player;
     }
