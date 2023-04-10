@@ -59,7 +59,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     return true;
   }
   // Ich weis das ist scheiße aber ich hab keine Lust mehr
-  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot) 
+  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count) 
   {
     if (fromi == null && toi == null) return false;
     if(to.weight + (fromi?.weight * fromi?.count) > to.maxWeight) return false;
@@ -80,6 +80,13 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         return true;
 
       }
+    }
+    if(count != fromi.count) {
+      if(fromi.count - count <= 0) return false;
+      fromi.count -= count;
+      InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.stackSize, fromi.weight, fromi.job, fromi.data, fromi.image, tslot, count);
+      to.items.Add(item);
+      return true;
     }
     if(toi == null) {
       if(to.items.Count >= to.slots) return false;
@@ -111,11 +118,11 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       
       _logger.Log("1: "+count.ToString());
       if(count == 0){
-        count = item.count;
+        count = item!.count;
       }
       _logger.Log("2: "+count.ToString());
       try{
-        await DragCheck(item, item2, from, to, fslot, tslot);
+        await DragCheck(item!, item2, from, to, fslot, tslot, count);
       } catch(Exception e){
         _logger.Log(e.Message);
       }
