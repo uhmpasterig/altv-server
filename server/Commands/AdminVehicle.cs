@@ -57,9 +57,18 @@ internal class AdminVehicle : IScript
 
     player.SendChatMessage("Vehicle Exists: "+veh.Exists);
     if(veh.Exists){
-      player.SendChatMessage("Set Vehicle ModType.Horns");
-      bool isSet = _vehicleHandler.SetModByType(veh, VehicleModType.Horns, 20);
-      player.SendChatMessage("Set Vehicle Mod: "+isSet);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Horns, 20);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Spoilers, 2);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Color1, 5);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Color2, 10);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Engine, 3);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Transmission, 2);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Suspension, 3);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Turbo, 0);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Brakes, 2);
+      _vehicleHandler.SetModByType(veh, VehicleModType.Plate, 3);
+      _vehicleHandler.SetModByType(veh, VehicleModType.WindowTint, 2);
+
     }
   }
 }
