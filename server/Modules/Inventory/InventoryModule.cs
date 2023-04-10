@@ -62,11 +62,13 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot) 
   {
     if (fromi == null && toi == null) return false;
-    if(to.weight + (fromi.weight * fromi.count) > to.maxWeight) return false;
+    if(to.weight + (fromi?.weight * fromi?.count) > to.maxWeight) return false;
+    if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
 
     if(fromi != null && toi != null){
       if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
         _logger.Log("Unerlaubte Clientmodifikation");
+        
         if(fromi.count + toi.count <= toi.stackSize){
           toi.count += fromi.count;
           from.items.Remove(fromi);
@@ -105,6 +107,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       xStorage to = await storageHandler.GetStorage(toStorage);
       InventoryItem item = from.items.Find(x => x.slot == fslot)!;
       InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
+      if(item == null && item2 == null) return;
       
       if(count == 0){
         count = item.count;
@@ -114,6 +117,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       } catch(Exception e){
         _logger.Log(e.Message);
       }
+      from.CalculateWeight();
+      to.CalculateWeight(); 
 
       List<object> uiStorages = new List<object>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])
