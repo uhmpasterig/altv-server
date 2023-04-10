@@ -5,6 +5,7 @@ using AltV.Net.Async;
 using server.Modules.Weapons;
 using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
+using AltV.Net.Resources.Chat.Api;
 
 namespace server.Core;
 
@@ -48,9 +49,10 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public void SendMessage(string message, NOTIFYS notifyType)
   {
     // this.Emit("client:notify", message, notifyType);
-    Console.ForegroundColor = ConsoleColor.Green;
+    /* Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine($"[ CLIENT NOTIFY ({notifyType}) ] {message}");
-    Console.ResetColor();
+    Console.ResetColor(); */
+    this.SendChatMessage(message);
   }
 
   public bool CanInteract()
@@ -82,6 +84,12 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public void GiveSavedWeapon(string name, int ammo = 100, string job = null!)
   {
+    if(weapons.Find(x => x.name == name) != null)
+    {
+      this.SendMessage("Du hast dieses Waffe bereits!", NOTIFYS.ERROR);
+      return;
+    }
+
     xWeapon weapon = new xWeapon(0, name, ammo, job);
     this.weapons.Add(weapon);
     this.GiveWeapon(Alt.Hash(name), ammo, false);
