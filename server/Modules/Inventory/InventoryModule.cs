@@ -62,8 +62,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot) 
   {
     if (fromi == null && toi == null) return false;
-    _logger.Log($"Weight: {to.weight + (fromi?.weight * fromi?.count)} MaxWeight: {to.maxWeight}");
-    _logger.Log($"Weigh2t: {from.weight + (toi?.weight * toi?.count)}, MaxWeight: {from.maxWeight}");
     if(to.weight + (fromi?.weight * fromi?.count) > to.maxWeight) return false;
     if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
 
