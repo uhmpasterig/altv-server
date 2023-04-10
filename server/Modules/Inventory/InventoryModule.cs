@@ -129,7 +129,7 @@ move:
       if(item == null && item2 == null) return;
       if(from == null || to == null) return;
       
-      if(count == 0){
+      if(count == 0 && item != null){
         count = item!.count;
       }
       try{
