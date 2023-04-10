@@ -79,10 +79,10 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     await serverContext.SaveChangesAsync();
   }
 
-  public xVehicle SetModByType(xVehicle veh, VehicleModType modType, byte id)
+  public bool SetModByType(xVehicle veh, VehicleModType modType, byte id)
   {
-    veh.SetMod((byte)modType, id);
-    return veh;
+    bool isModSet = veh.SetMod((byte)modType, id);
+    return isModSet;
   }
 
   public xVehicle GetClosestVehicle(Position position, int range = 2)
