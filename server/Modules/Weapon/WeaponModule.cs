@@ -21,4 +21,6 @@ public class xWeapon {
     this.ammo = ammo;
     this.job = job;
   }
+
+  public xWeapon(){}
 }
