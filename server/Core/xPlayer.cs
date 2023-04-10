@@ -4,6 +4,7 @@ using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Async;
 using server.Modules.Weapons;
 using Newtonsoft.Json;
+using _logger = server.Logger.Logger;
 
 namespace server.Core;
 
@@ -71,6 +72,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public void LoadWeaponsFromDb(string weapons)
   {
+    _logger.Log($"LoadWeaponsFromDb: {weapons}");
     this.weapons = JsonConvert.DeserializeObject<List<xWeapon>>(weapons)!;
     foreach(xWeapon weapon in this.weapons)
     {
