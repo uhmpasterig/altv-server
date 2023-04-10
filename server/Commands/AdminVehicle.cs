@@ -67,7 +67,6 @@ internal class AdminVehicle : IScript
       _vehicleHandler.SetModByType(veh, VehicleModType.Brakes, 2);
       _vehicleHandler.SetModByType(veh, VehicleModType.Plate, 3);
       _vehicleHandler.SetModByType(veh, VehicleModType.WindowTint, 2);
-      veh.DriftMode = true;
     }
   }
 }
