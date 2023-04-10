@@ -20,9 +20,9 @@ public class Server : IServer
   private readonly IStorageHandler _storageHandler;
 
   public static List<string> _serverWeapons = new List<string>() {
-    "WEAPON_PISTOL",
-    "WEAPON_COMBATPISTOL",
-    "WEAPON_PISTOL50",
+    "weapon_pistol",
+    "weapon_combatpistol",
+    "weapon_pistol50",
   };
 
   public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)

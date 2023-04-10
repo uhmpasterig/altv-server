@@ -90,7 +90,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
       return;
     }
 
-    if(weapons.Find(x => x.name == name) != null)
+    if(weapons.Find(x => x.name == name.ToLower()) != null)
     {
       this.SendMessage("Du hast dieses Waffe bereits!", NOTIFYS.ERROR);
       return;
