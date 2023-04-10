@@ -84,6 +84,12 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public void GiveSavedWeapon(string name, int ammo = 100, string job = null!)
   {
+    if(Alt.Hash(name) == 0)
+    {
+      this.SendMessage("Dieses Waffe existiert nicht!", NOTIFYS.ERROR);
+      return;
+    }
+
     if(weapons.Find(x => x.name == name) != null)
     {
       this.SendMessage("Du hast dieses Waffe bereits!", NOTIFYS.ERROR);
