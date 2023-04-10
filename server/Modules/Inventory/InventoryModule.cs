@@ -87,12 +87,14 @@ move:
       }
     }
     if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
-    if(count != fromi.count) {
-      if(fromi.count - count <= 0) return false;
-      fromi.count -= count;
-      InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.stackSize, fromi.weight, fromi.job, fromi.data, fromi.image, tslot, count);
-      to.items.Add(item);
-      return true;
+    if(fromi != null ) {
+      if(count != fromi.count) {
+        if(fromi.count - count <= 0) return false;
+        fromi.count -= count;
+        InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.stackSize, fromi.weight, fromi.job, fromi.data, fromi.image, tslot, count);
+        to.items.Add(item);
+        return true;
+      }
     }
     if(toi == null) {
       if(to.items.Count >= to.slots) return false;
