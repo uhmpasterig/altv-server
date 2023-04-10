@@ -79,8 +79,10 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     await serverContext.SaveChangesAsync();
   }
 
-  public bool SetModByType(xVehicle veh, VehicleModType modType, byte id)
+  [Obsolete]
+  public async Task<bool> SetModByType(xVehicle veh, VehicleModType modType, byte id)
   {
+    await veh.SetModKitAsync(1);
     bool isModSet = veh.SetMod((byte)modType, id);
     return isModSet;
   }
