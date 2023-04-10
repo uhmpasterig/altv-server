@@ -13,7 +13,6 @@ public class StorageHandler : IStorageHandler
 
   public StorageHandler()
   {
-    _logger.Log("StorageHandler initialized");
   }
 
   public async Task<xStorage> GetStorage(int storageId)

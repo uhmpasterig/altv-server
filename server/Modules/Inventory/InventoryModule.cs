@@ -62,13 +62,19 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count) 
   {
     if (fromi == null && toi == null) return false;
-    if(to.weight + (fromi?.weight * count) > to.maxWeight) return false;
-    if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
+    if(to.id == from.id) goto move;
+    _logger.Debug($"check1: {to.weight} + ({fromi?.weight} * {count}) > {to.maxWeight}");
+    _logger.Debug($"check2: {from.weight} + ({toi?.weight} * {toi?.count}) > {from.maxWeight}");
 
+    if(to.weight + (fromi?.weight * count) > to.maxWeight) return false;
+    if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) {
+      if(toi == null) return false;
+      if(fromi == null) return false;
+      if(fromi.name == toi.name) goto move;
+    };
+move:
     if(fromi != null && toi != null){
       if(fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize)){
-        _logger.Log("Unerlaubte Clientmodifikation");
-        
         if(fromi.count + toi.count <= toi.stackSize){
           toi.count += fromi.count;
           from.items.Remove(fromi);
@@ -115,11 +121,9 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       InventoryItem item2 = to.items.Find(x => x.slot == tslot)!;
       if(item == null && item2 == null) return;
       
-      _logger.Log("1: "+count.ToString());
       if(count == 0){
         count = item!.count;
       }
-      _logger.Log("2: "+count.ToString());
       try{
         await DragCheck(item!, item2, from, to, fslot, tslot, count);
       } catch(Exception e){

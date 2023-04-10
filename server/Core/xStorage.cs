@@ -50,7 +50,6 @@ public class xStorage : Models.Storage
       {
         if (item.count < item.stackSize)
         {
-          _logger.Log($"Adding incomplete stack {item.slot} with {item.stackSize - item.count} items");
           stacks.Add(item.slot, item.stackSize - item.count);
         }
       }
@@ -104,16 +103,13 @@ public class xStorage : Models.Storage
     foreach (KeyValuePair<int, int> stack in stacks)
     {
       InventoryItem alrItem = this.items.FirstOrDefault(x => x.slot == stack.Key);
-      _logger.Log($"Adding {count} to stack {stack.Key}, stack size: {stack.Value}");
       if (count <= stack.Value)
       {
-        _logger.Log($"1Adding {count} to stack {stack.Key}");
         alrItem.count += count;
         goto itemFinish;
       }
       else
       {
-        _logger.Log($"2Adding {stack.Value} to stack {stack.Key}");
         alrItem.count += stack.Value;
         count -= stack.Value;
       }
@@ -123,7 +119,6 @@ public class xStorage : Models.Storage
     while (count > item.stackSize)
     {
       InventoryItem iitem = new InventoryItem(item, this.GetFreeSlot(), item.stackSize);
-      _logger.Log($"Adding {item.stackSize} to new stack {iitem.slot}");
       this.items.Add(iitem);
       count -= item.stackSize;
     }
@@ -131,7 +126,6 @@ public class xStorage : Models.Storage
     if (count > 0)
     {
       InventoryItem iitem = new InventoryItem(item, this.GetFreeSlot(), count);
-      _logger.Log($"Adding {count} to new stack {iitem.slot}");
       this.items.Add(iitem);
     }
 
