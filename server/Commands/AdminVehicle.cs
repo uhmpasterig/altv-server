@@ -38,6 +38,17 @@ internal class AdminVehicle : IScript
     }
   }
 
+  [Command("repair")]
+  public static void RepairVehicle(xPlayer player, int range = 5)
+  {
+    Position pos = player.Position;
+    xVehicle veh = (xVehicle)player.Vehicle;
+
+    if(veh.Exists){
+      veh.Repair();
+    }
+  }
+
   [Command("fulltune")]
   public static void FullTune(xPlayer player, int range = 5)
   {
@@ -48,6 +59,8 @@ internal class AdminVehicle : IScript
     if(veh.Exists){
       player.SendChatMessage("Set Vehicle ModType.Horns");
       bool isSet = _vehicleHandler.SetModByType(veh, VehicleModType.Horns, 20);
+      veh.SetWheelOnFire(0, true);
+      veh.SetWheelOnFire(1, true);
       player.SendChatMessage("Set Vehicle Mod: "+isSet);
     }
   }

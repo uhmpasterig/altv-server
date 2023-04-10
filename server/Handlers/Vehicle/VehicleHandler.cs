@@ -81,7 +81,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public bool SetModByType(xVehicle veh, VehicleModType modType, byte id)
   {
-    _logger.Debug("CATEGORY BYTE "+(byte)modType);
     bool isModSet = veh.SetMod((byte)modType, id);
     return isModSet;
   }
