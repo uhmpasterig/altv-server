@@ -21,6 +21,8 @@ public partial class Player
 
   public string _playerInventorys { get; set; }
 
+  public string _weapons { get; set; }
+
   public string _pos { get; set; }
   public string _rot { get; set; }
 
