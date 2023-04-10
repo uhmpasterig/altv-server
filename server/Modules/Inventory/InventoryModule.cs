@@ -79,7 +79,6 @@ move:
           toi.count += fromi.count;
           from.items.Remove(fromi);
         } else {
-          if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
           int diff = toi.stackSize - toi.count;
           toi.count = toi.stackSize;
           fromi.count -= diff;
@@ -87,6 +86,7 @@ move:
         return true;
       }
     }
+    if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
     if(count != fromi.count) {
       if(fromi.count - count <= 0) return false;
       fromi.count -= count;
