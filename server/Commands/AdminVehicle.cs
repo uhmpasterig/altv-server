@@ -69,6 +69,7 @@ internal class AdminVehicle : IScript
       _vehicleHandler.SetModByType(veh, VehicleModType.WindowTint, 2);
       veh.SetWheelDetached(0, true);
       veh.SetWheelDetached(2, true);
+      veh.DriftMode = true;
     }
   }
 }
