@@ -62,7 +62,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count) 
   {
     if (fromi == null && toi == null) return false;
-    if(to.weight + (fromi?.weight * fromi?.count) > to.maxWeight) return false;
+    if(to.weight + (fromi?.weight * count) > to.maxWeight) return false;
     if(from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
 
     if(fromi != null && toi != null){
@@ -78,7 +78,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
           fromi.count -= diff;
         }
         return true;
-
       }
     }
     if(count != fromi.count) {
