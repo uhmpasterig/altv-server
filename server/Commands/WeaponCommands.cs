@@ -8,6 +8,7 @@ using AltV.Net.Data;
 using AltV.Net;
 using _logger = server.Logger.Logger;
 using server.Modules.Fraktionen;
+using server.Handlers.Storage;
 
 namespace server.Commands;
 
@@ -17,6 +18,18 @@ internal class WeaponCommands : IScript
   public static void GiveWeapon(xPlayer player, string name, int ammo = 100)
   {
     player.GiveSavedWeapon(name, ammo);
+  }
+
+  [Command("frakweap")]
+  public async static void FrakWeap(xPlayer player)
+  {
+    IStorageHandler _storageHandler = new StorageHandler();
+    
+    Models.BadFrak frak = FraktionsModuleMain.GetFrak(player.job);
+    xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["inventory"]);
+    if(frak == null) return;
+    inventory.AddItem(frak.weapon, 1);
+    inventory.AddItem("packed_weapon_pistol_mk2", 1);
   }
 
   [Command("jobinfo")]

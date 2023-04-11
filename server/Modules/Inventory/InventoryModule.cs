@@ -149,5 +149,12 @@ move:
 
       player.Emit("inventory:open", JsonConvert.SerializeObject(uiStorages));
     });
+
+    AltAsync.OnClient<xPlayer, string>("inventory:useItem", (player, name) => {
+      _items.UseItem(player, name);
+    });
+
+    AltAsync.OnClient<xPlayer, int, int>("inventory:removeItem",(player, slot, count) => {
+    });
   }
 }

@@ -44,5 +44,4 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   {
     Alt.Log($"Frak: {frak.name} - {frak.money} - {frak.logo} - {frak._pos} - {frak._posLager}");
   }
-  
 }
