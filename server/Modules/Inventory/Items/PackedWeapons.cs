@@ -14,14 +14,15 @@ class PackedWeapons : IItemsLoaded
     async void UnpackFunc(xPlayer player, string item, string weapon)
     {
       xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["inventory"]);
-      if(inv.RemoveItem("packed_weapon_bat", 1)){
-        bool succ = player.GiveSavedWeapon("weapon_bat", 100, true);
-        if(!succ)
-          player.SendMessage("Du hast kein Platz fuer den Baseball Schlaeger", NOTIFYS.ERROR);
-          inv.AddItem("packed_weapon_bat", 1);
+      if(inv.RemoveItem(item, 1)){
+        bool succ = await player.GiveSavedWeapon(weapon, 100, true);
+        if(!succ){
+          player.SendMessage($"Du hast kein Platz fuer {item}", NOTIFYS.ERROR);
+          inv.AddItem(item, 1);
+        }
       }
       else
-        player.SendMessage("Du hast kein Baseball Schlaeger", NOTIFYS.ERROR);
+        player.SendMessage($"Du hast kein {item}", NOTIFYS.ERROR);
     }
 
     Items.RegisterUsableItem("packed_weapon_pistol_mk2", async (xPlayer player) =>
