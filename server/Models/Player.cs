@@ -23,6 +23,10 @@ public partial class Player
 
   public string _weapons { get; set; }
 
+  public string job { get; set; }
+  public int job_rank { get; set; }
+  public string job_perm { get; set; }
+
   public string _pos { get; set; }
   public string _rot { get; set; }
 
