@@ -1,40 +1,55 @@
 using AltV.Net.Async;
 using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Data;
+using AltV.Net.EntitySync.Events;
+using AltV.Net.EntitySync.ServerEvent;
+using AltV.Net.EntitySync;
+using server.Handlers.Entities;
 
 namespace server.Core;
 
-public enum ENTITY_TYPES 
+public class xEntity
 {
-  PROP = 0,
-  PED = 1,
-  VEHICLE = 2,
-}
-
-public interface IxEntity
-{
-  int id { get; set; }
-
-  string name { get; set; }
-  ENTITY_TYPES entityType { get; set; }
+  public IEntity entity = null!;
   
-  int dimension { get; set; }
-  Position position { get; set; }
-
-  void SetData(string key, object value);
-}
-
-public class xProp : IxEntity
-{
-  public int id { get; set; }
-  public string name { get; set; }
+  public uint range { get; set; }
   public ENTITY_TYPES entityType { get; set; }
-  
   public int dimension { get; set; }
   public Position position { get; set; }
 
-  public void SetData(string key, object value)
+  public Dictionary<string, object> data { get; set; }
+  
+  public void CreateEntity()
   {
-    // AltAsync.Do(() => AltAsync.CreateProp(0, position, new Rotation(0, 0, 0)).SetData(key, value));
+    this.entity = AltEntitySync.CreateEntity((ulong)this.entityType, this.position, this.dimension, this.range);
+  }
+
+  public void Destroy()
+  {
+    AltEntitySync.RemoveEntity(entity);
+    this.entity = null!;
+  }
+
+  public void Hide()
+  {
+    AltEntitySync.RemoveEntity(entity);
+  }
+
+  public void Show()
+  {
+    AltEntitySync.AddEntity(entity);
+  }
+
+  public void SetSyncedData(string key, object value)
+  {
+    this.data[key] = value;
+    this.entity.SetData(key, value);
+  }
+
+  public void RemoveData(string key)
+  {
+    this.data[key] = null!;
+    this.entity.SetData(key, null!);
   }
 }
+

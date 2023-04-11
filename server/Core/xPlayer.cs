@@ -35,28 +35,41 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public List<xWeapon> weapons { get; set; }
   
+  public string job { get; set; }
+  public int job_rank { get; set; }
+  public Dictionary<string, bool> job_perm { get; set; } 
+
   public DateTime creationDate { get; set; }
   public DateTime lastLogin { get; set; }
   public DIMENSIONEN dimensionType { get; set; }
+
+  public int isDead { get; set; }
 
   public xPlayer(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
     id = 0;
     name = "";
+    playerInventorys = new Dictionary<string, int>();
+    weapons = new List<xWeapon>();
+    job = "";
+    job_rank = 0;
+    job_perm = new Dictionary<string, bool>();
     creationDate = DateTime.Now;
   }
 
   public void SendMessage(string message, NOTIFYS notifyType)
   {
-    // this.Emit("client:notify", message, notifyType);
-    /* Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine($"[ CLIENT NOTIFY ({notifyType}) ] {message}");
-    Console.ResetColor(); */
     this.SendChatMessage(message);
   }
 
   public bool CanInteract()
   {
+    if(this.isDead == 1)
+    {
+      this.SendMessage("Du kannst nichts machen, während du tot bist!", NOTIFYS.ERROR);
+      return false;
+    }
+
     return true;
   }
 

@@ -13,6 +13,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Vehicle> Vehicle { get; set; }
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Models.Item> Items { get; set; }
+  public virtual DbSet<Models.BadFrak> BadFrak { get; set; }
 
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -47,6 +48,11 @@ public partial class ServerContext : DbContext
     modelBuilder.Entity<Models.Item>(entity =>
     {
       entity.ToTable("item_data");
+    });
+
+    modelBuilder.Entity<Models.BadFrak>(entity =>
+    {
+      entity.ToTable("fraktionen");
     });
 
     OnModelCreatingPartial(modelBuilder);

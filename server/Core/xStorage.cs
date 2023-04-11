@@ -26,7 +26,7 @@ public class xStorage : Models.Storage
     this.usePos = storage.usePos;
 
     this._items = storage._items;
-    this.items = JsonConvert.DeserializeObject<List<InventoryItem>>(this._items);
+    this.items = JsonConvert.DeserializeObject<List<InventoryItem>>(this._items)!;
     _logger.Log($"Storage {this.name} loaded");
     _logger.Log(JsonConvert.SerializeObject(this.items));
     this.CalculateWeight();
@@ -102,7 +102,7 @@ public class xStorage : Models.Storage
     // Add items to existing stacks
     foreach (KeyValuePair<int, int> stack in stacks)
     {
-      InventoryItem alrItem = this.items.FirstOrDefault(x => x.slot == stack.Key);
+      InventoryItem alrItem = this.items.FirstOrDefault(x => x.slot == stack.Key)!;
       if (count <= stack.Value)
       {
         alrItem.count += count;
@@ -122,7 +122,6 @@ public class xStorage : Models.Storage
       this.items.Add(iitem);
       count -= item.stackSize;
     }
-  newItem:
     if (count > 0)
     {
       InventoryItem iitem = new InventoryItem(item, this.GetFreeSlot(), count);
@@ -136,7 +135,7 @@ public class xStorage : Models.Storage
 
   public InventoryItem GetItemFromSlot(int slot)
   {
-    return this.items.FirstOrDefault(x => x.slot == slot);
+    return this.items.FirstOrDefault(x => x.slot == slot)!;
   }
 
   public void DragAddItem(InventoryItem item)

@@ -52,7 +52,7 @@ public partial class Player
   [NotMapped]
   public Dictionary<string, int> playerInventorys {
     get {
-      return JsonConvert.DeserializeObject<Dictionary<string, int>>(_playerInventorys);
+      return JsonConvert.DeserializeObject<Dictionary<string, int>>(_playerInventorys)!;
     }
     set {
       _playerInventorys = JsonConvert.SerializeObject(value);
