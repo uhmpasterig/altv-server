@@ -37,6 +37,7 @@ internal class WeaponCommands : IScript
   public static void UseItem(xPlayer player, string name)
   {
     Items.UseItem(player, name);
+    _logger.Log("www");
   }
 
   [Command("giveitem")]
