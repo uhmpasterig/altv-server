@@ -26,7 +26,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     List<int> openInventorys = new List<int>();
 
     xStorage playerStorage = await storageHandler.GetStorage(player.playerInventorys["inventory"]);
-    playerStorage.AddItem("weste", 2);
     uiStorages.Add(playerStorage.GetData());
     openInventorys.Add(playerStorage.id);
 
