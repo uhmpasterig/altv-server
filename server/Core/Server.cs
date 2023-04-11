@@ -26,7 +26,7 @@ public class Server : IServer
     "weapon_combatpistol",
     "weapon_pistol50",
   };
-
+  
   public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)
   {
     _serverContext = serverContext;
