@@ -27,6 +27,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
       if(player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
     }
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
+    player.Emit("showFrak");
     return true;
   }
 
