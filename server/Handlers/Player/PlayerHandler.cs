@@ -55,7 +55,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.Rotation = dbPlayer.Rotation;
       player.SetWeather(AltV.Net.Enums.WeatherType.ExtraSunny);
       player.SetDateTime(DateTime.Now);
-      
+
       player.Health = dbPlayer.health;
       player.Armor = dbPlayer.armor;
       player.LoadWeaponsFromDb(dbPlayer._weapons);
@@ -69,7 +69,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     }
   }
 
-  public async Task SavePlayerToDatabase(xPlayer player, bool isDisconnect = false, bool isKick = false)
+  public async Task SavePlayerToDatabase(xPlayer player, bool isDisconnect = false)
   {
     await using var serverContext = new ServerContext();
     Models.Player? dbPlayer = await serverContext.Player.FindAsync(player.id);
@@ -78,7 +78,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       dbPlayer.Position = player.Position;
     }
-    Alt.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+
     dbPlayer._weapons = JsonConvert.SerializeObject(player.weapons);
     dbPlayer.Rotation = player.Rotation;
 
@@ -88,12 +88,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     if (isDisconnect)
     {
       dbPlayer.isOnline = false;
-    }
-    else if (isKick)
-    {
-      dbPlayer.isOnline = false;
       player.Kick("Du wurdest gekickt!");
-      return;
     }
     await serverContext.SaveChangesAsync();
   }
