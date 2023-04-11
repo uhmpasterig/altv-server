@@ -15,6 +15,7 @@ class FraktionsModuleMain : ILoadEvent
     await using var serverContext = new ServerContext();
     foreach(BadFrak _frak in serverContext.BadFrak)
     {
+      Alt.Log("Frak: " + _frak.name);
       frakList.Add(_frak.name, _frak);
     }
   }

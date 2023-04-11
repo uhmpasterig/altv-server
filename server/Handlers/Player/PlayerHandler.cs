@@ -51,7 +51,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
       player.job = dbPlayer.job;
       player.job_rank = dbPlayer.job_rank;
-      player.job_perm = JsonConvert.DeserializeObject<Dictionary<string, bool>>(dbPlayer.job_perm);
+      player.job_perm = JsonConvert.DeserializeObject<Dictionary<string, bool>>(dbPlayer.job_perm)!;
 
       player.Model = (uint)Alt.Hash("mp_m_freemode_01");
 
