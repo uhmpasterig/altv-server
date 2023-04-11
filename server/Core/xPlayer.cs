@@ -95,23 +95,24 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     }
   }
 
-  public void GiveSavedWeapon(string name, int ammo = 100, bool hold = false, string job = null!)
+  public bool GiveSavedWeapon(string name, int ammo = 100, bool hold = false, string job = null!)
   {
     if(Server._serverWeapons.Find(x => x == name) == null)
     {
       this.SendMessage("Dieses Waffe existiert nicht!", NOTIFYS.ERROR);
-      return;
+      return false;
     }
 
     if(weapons.Find(x => x.name == name.ToLower()) != null)
     {
       this.SendMessage("Du hast dieses Waffe bereits!", NOTIFYS.ERROR);
-      return;
+      return false;
     }
 
     xWeapon weapon = new xWeapon(0, name, ammo, job);
     this.weapons.Add(weapon);
     this.GiveWeapon(Alt.Hash(name), ammo, hold);
+    return true;
   }
 
   public new IxPlayer ToAsync(IAsyncContext _) => this;
