@@ -21,6 +21,8 @@ public class Server : IServer
 
   public static List<string> _serverWeapons = new List<string>() {
     "weapon_pistol",
+    "weapon_pistol_mk2",
+    "weapon_bat",
     "weapon_combatpistol",
     "weapon_pistol50",
   };
