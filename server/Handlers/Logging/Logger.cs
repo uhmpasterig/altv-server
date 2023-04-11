@@ -4,6 +4,7 @@ namespace server.Logger;
 
 public class Logger
 {
+  
   public static void Log(string message)
   {
     Console.WriteLine($"[LOG] {message}");
@@ -11,6 +12,8 @@ public class Logger
 
   public static void Startup(string message)
   {
+    Console.BackgroundColor = ConsoleColor.Blue;
+    Console.ForegroundColor = ConsoleColor.Cyan;
     Console.WriteLine($"[STARTUP] {message}");
   }
 
