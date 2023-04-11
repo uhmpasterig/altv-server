@@ -24,6 +24,6 @@ internal class WeaponCommands : IScript
   {
     player.SendChatMessage($"Du bist im Job: {player.job} mit dem Rang: {player.job_rank}");
     Models.BadFrak frak = FraktionsModuleMain.GetFrak(player.job);
-    _logger.Log(frak.ToString()!);
+    FraktionsModuleMain.FrakToString(frak);
   }
 }
