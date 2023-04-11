@@ -6,7 +6,7 @@ using server.Models;
 
 namespace server.Modules.Fraktionen;
 
-class FraktionsModuleMain : ILoadEvent
+class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {
   public static Dictionary<string, BadFrak> frakList = new Dictionary<string, BadFrak>();
   
@@ -18,6 +18,16 @@ class FraktionsModuleMain : ILoadEvent
       Alt.Log("Frak: " + _frak.name);
       frakList.Add(_frak.name.ToLower(), _frak);
     }
+  }
+
+  public async Task<bool> OnKeyPressE(xPlayer player)
+  {
+    if(frakList.ContainsKey(player.job.ToLower()))
+    {
+      if(player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
+    }
+    player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
+    return true;
   }
 
   public static BadFrak GetFrak(string name)
@@ -33,4 +43,5 @@ class FraktionsModuleMain : ILoadEvent
   {
     Alt.Log($"Frak: {frak.name} - {frak.money} - {frak.logo} - {frak._pos} - {frak._posLager}");
   }
+  
 }
