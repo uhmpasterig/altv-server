@@ -5,6 +5,7 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using server.Models;
+using server.Handlers.Storage;
 
 namespace server.Modules.Items;
 
@@ -96,6 +97,38 @@ public class Items : ILoadEvent
       action.Value(player);
     }
   }
+
+  public async static void UseItemFromSlot(xPlayer player, int slot, int storageId)
+  {
+    IStorageHandler handler = new StorageHandler();
+    xStorage storage = await handler.GetStorage(storageId);
+    if (storage == null)
+    {
+      _logger.Error($"Storage with id {storageId} does not exist");
+      return;
+    }
+    InventoryItem item = storage.items.Find(x => x.slot == slot)!;
+    if (item == null)
+    {
+      _logger.Error($"Item with slot {slot} does not exist");
+      return;
+    }
+    if (!_items.ContainsKey(item.name))
+    {
+      _logger.Error($"Item {item.name} does not exist");
+      return;
+    }
+    if(!storage.RemoveItem(slot)) {
+      _logger.Error($"Could not remove item {item.name} from storage {storageId}");
+      return;
+    }
+    foreach (var action in _usableItems.Where(x => x.Key == item.name))
+    {
+      action.Value(player);
+    }
+  }
+
+  
 
   public static xItem GetItem(string itemname)
   {
