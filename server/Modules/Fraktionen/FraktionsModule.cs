@@ -16,13 +16,13 @@ class FraktionsModuleMain : ILoadEvent
     foreach(BadFrak _frak in serverContext.BadFrak)
     {
       Alt.Log("Frak: " + _frak.name);
-      frakList.Add(_frak.name, _frak);
+      frakList.Add(_frak.name.ToLower(), _frak);
     }
   }
 
   public static BadFrak GetFrak(string name)
   {
-    if(frakList.FirstOrDefault(x => x.Key.ToLower() == name.ToLower()).Key != null)
+    if(frakList.ContainsKey(name.ToLower()))
     {
       return frakList[name];
     }
