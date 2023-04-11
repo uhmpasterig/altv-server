@@ -9,6 +9,7 @@ using AltV.Net;
 using _logger = server.Logger.Logger;
 using server.Modules.Fraktionen;
 using server.Handlers.Storage;
+using server.Modules.Items;
 
 namespace server.Commands;
 
@@ -30,6 +31,12 @@ internal class WeaponCommands : IScript
     if(frak == null) return;
     inventory.AddItem(frak.weapon, 1);
     inventory.AddItem("packed_weapon_pistol_mk2", 1);
+  }
+
+  [Command("useitem")]
+  public static void UseItem(xPlayer player, string name)
+  {
+    Items.UseItem(player, name);
   }
 
   [Command("jobinfo")]

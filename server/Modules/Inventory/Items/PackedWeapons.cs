@@ -10,12 +10,12 @@ class PackedWeapons : IItemsLoaded
   {
     Items.RegisterUsableItem("packed_weapon_pistol_mk2", (xPlayer player) =>
     {
-      player.GiveSavedWeapon("weapon_pistol_mk2");
+      player.GiveSavedWeapon("weapon_pistol_mk2", 100, true);
     });
 
     Items.RegisterUsableItem("packed_weapon_bat", (xPlayer player) =>
     {
-      player.GiveSavedWeapon("weapon_bat");
+      player.GiveSavedWeapon("weapon_bat", 100, true);
     });
   }
 }

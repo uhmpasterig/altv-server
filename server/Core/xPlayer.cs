@@ -95,7 +95,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     }
   }
 
-  public void GiveSavedWeapon(string name, int ammo = 100, string job = null!)
+  public void GiveSavedWeapon(string name, int ammo = 100, bool hold = false, string job = null!)
   {
     if(Server._serverWeapons.Find(x => x == name) == null)
     {
@@ -111,7 +111,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
     xWeapon weapon = new xWeapon(0, name, ammo, job);
     this.weapons.Add(weapon);
-    this.GiveWeapon(Alt.Hash(name), ammo, false);
+    this.GiveWeapon(Alt.Hash(name), ammo, hold);
   }
 
   public new IxPlayer ToAsync(IAsyncContext _) => this;
