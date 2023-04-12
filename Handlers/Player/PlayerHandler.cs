@@ -110,20 +110,20 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     await serverContext.SaveChangesAsync();
   }
 
-  public async Task OnPlayerConnect(IPlayer iplayer, string reason)
+  public async void OnPlayerConnect(IPlayer iplayer, string reason)
   {
     xPlayer? xplayer = await LoadPlayerFromDatabase((xPlayer)iplayer);
     Players.Add(xplayer!);
   }
 
-  public async Task OnPlayerDisconnect(IPlayer player, string reason)
+  public async void OnPlayerDisconnect(IPlayer player, string reason)
   {
     _logger.Info($"{player.Name} disconnected from the server!");
     await SavePlayerToDatabase((xPlayer)player, true);
     Players.Remove((xPlayer)player);
   }
 
-  public xPlayer GetPlayer(int id)
+  public async Task<xPlayer> GetPlayer(int id)
   {
     xPlayer? player = Players.Find(p => p.id == id);
     return player!;

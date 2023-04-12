@@ -9,12 +9,10 @@ namespace server.Modules.Death;
 
 class DeathModule : IPlayerDeadEvent
 {
-  public Task OnPlayerDeath(IPlayer iplayer, IEntity ikiller, uint weapon)
+  public void OnPlayerDeath(IPlayer iplayer, IEntity ikiller, uint weapon)
   {
     xPlayer player = (xPlayer)iplayer;
     xPlayer killer = (xPlayer)ikiller;
     player.SetDead(1);
-    
-    return Task.CompletedTask;
   }
 }
