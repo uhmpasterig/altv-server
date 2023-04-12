@@ -6,6 +6,10 @@ using server.Handlers.Vehicle;
 using server.Handlers.Player;
 using server.Handlers.Storage;
 using AltV.Net.Elements.Entities;
+using AltV.Net.EntitySync;
+using AltV.Net.EntitySync.SpatialPartitions;
+using AltV.Net.EntitySync.ServerEvent;
+using _logger = server.Logger.Logger;
 
 
 namespace server.Core;
@@ -39,14 +43,31 @@ public class Server : IServer
 
   public void Start()
   {
-    Alt.Log("Server started");
+    _logger.Startup("Server startet...");
+    _logger.Startup("Lade Handler...");
     _eventHandler.LoadHandlers();
+    _logger.Startup("Handler Geladen!");
+    
+    _logger.Startup("Lade Timer...");
+    _logger.Startup("Timer Geladen!");
 
+    _logger.Startup("AltEntitySync initialisieren...");
+    AltEntitySync.Init(1, (threadId) => 100, (threadId) => false,
+      (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
+      (entity, threadCount) => (entity.Id % threadCount),
+      (entityId, entityType, threadCount) => (entityId % threadCount),
+      (threadId) => new LimitedGrid3(50_000, 50_000, 100, 10_000, 10_000, 300),
+      new IdProvider());
+    _logger.Startup("AltEntitySync initialisiert!");
+
+    _logger.Startup("Spieler Daten setzen...");
     foreach(Models.Player player in _serverContext.Player)
     {
       player.isOnline = false;
     }
+    _logger.Startup("Spieler Daten gesetzt!");
     _serverContext.SaveChangesAsync();
+    _logger.Startup("Server gestartet!");
   }
 
   public async Task SaveAll()
