@@ -35,6 +35,9 @@ public class InventoryItem
   
   public InventoryItem()
   {
+    name = "";
+    job = "";
+    data = "";
   }
 
   public InventoryItem(int id, string name, int stackSize, float weight, string job, string data, int slot, int count)
@@ -148,7 +151,7 @@ public class Items : ILoadEvent
     }
 
     _logger.Error($"Item with id {id} does not exist");
-    return null;
+    return null!;
   }
 
   public async void OnLoad()
