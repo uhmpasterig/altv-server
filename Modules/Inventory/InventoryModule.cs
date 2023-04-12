@@ -9,6 +9,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using server.Modules.Items;
 using server.Handlers.Player;
+using server.Util.Inventory;
 using _logger = server.Logger.Logger;
 
 namespace server.Modules.Inventory;
@@ -17,16 +18,16 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 {
   internal static IPlayerHandler playerHandler = new PlayerHandler();
   internal Dictionary<xPlayer, List<int>> userOpenInventorys = new Dictionary<xPlayer, List<int>>();
+  IStorageHandler storageHandler = new StorageHandler();
+  IVehicleHandler vehicleHandler = new VehicleHandler();
 
   public async Task<bool> OnKeyPressI(xPlayer player)
   {
-    IVehicleHandler vehicleHandler = new VehicleHandler();
-    IStorageHandler storageHandler = new StorageHandler();
-    List<object> uiStorages = new List<object>();
+    List<xStorage> uiStorages = new List<xStorage>();
     List<int> openInventorys = new List<int>();
 
     xStorage playerStorage = await storageHandler.GetStorage(player.playerInventorys["inventory"]);
-    uiStorages.Add(playerStorage.GetData());
+    uiStorages.Add(playerStorage);
     openInventorys.Add(playerStorage.id);
 
     if (player.IsInVehicle)
@@ -34,7 +35,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       xVehicle vehicle = (xVehicle)player.Vehicle;
       xStorage gloveStorage = await storageHandler.GetStorage(vehicle.storageIdGloveBox);
       openInventorys.Add(gloveStorage.id);
-      uiStorages.Add(gloveStorage.GetData());
+      uiStorages.Add(gloveStorage);
       goto load;
     }
     xVehicle closestVehicle = vehicleHandler.GetClosestVehicle(player.Position);
@@ -42,19 +43,19 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     {
       xStorage trunkStorage = await storageHandler.GetStorage(closestVehicle.storageIdTrunk);
       openInventorys.Add(trunkStorage.id);
-      uiStorages.Add(trunkStorage.GetData());
+      uiStorages.Add(trunkStorage);
       goto load;
     }
     xStorage closestStorage = storageHandler.GetClosestxStorage(player.Position);
     if (closestStorage != null)
     {
       openInventorys.Add(closestStorage.id);
-      uiStorages.Add(closestStorage.GetData());
+      uiStorages.Add(closestStorage);
     }
 
   load:
     userOpenInventorys[player] = openInventorys;
-    player.Emit("inventory:open", JsonConvert.SerializeObject(uiStorages));
+    player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
     return true;
   }
   // Ich weis das ist scheiße aber ich hab keine Lust mehr
@@ -139,14 +140,14 @@ move:
       from.CalculateWeight();
       to.CalculateWeight(); 
 
-      List<object> uiStorages = new List<object>();
+      List<xStorage> uiStorages = new List<xStorage>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])
       {
         xStorage storage = await storageHandler.GetStorage(storageId);
-        uiStorages.Add(storage.GetData());
+        uiStorages.Add(storage);
       }
 
-      player.Emit("inventory:open", JsonConvert.SerializeObject(uiStorages));
+      player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
     });
 
     AltAsync.OnClient<xPlayer, int, int>("inventory:useItem", (player, slot, storageId) => {
