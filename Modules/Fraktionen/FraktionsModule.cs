@@ -4,7 +4,6 @@ using server.Events;
 using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
-
 namespace server.Modules.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
@@ -13,23 +12,25 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   
   public async void OnLoad()
   {
+    _logger.Startup("Fraktionen werden geladen...");
     await using var serverContext = new ServerContext();
     foreach(BadFrak _frak in serverContext.BadFrak)
     {
-      _logger.Debug($"Fraktion: {_frak.name}");
+      _logger.Debug("Frak: " + _frak.name);
       frakList.Add(_frak.name.ToLower(), _frak);
     }
+    _logger.Startup($"x{frakList.Count} Fraktionen wurden geladen!");
   }
 
-  public Task<bool> OnKeyPressE(xPlayer player)
+  public async Task<bool> OnKeyPressE(xPlayer player)
   {
     if(frakList.ContainsKey(player.job.ToLower()))
     {
-      if(player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return Task.FromResult(false);
+      if(player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
     }
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
     player.Emit("showFrak");
-    return Task.FromResult(true);
+    return true;
   }
 
   public static BadFrak GetFrak(string name)
