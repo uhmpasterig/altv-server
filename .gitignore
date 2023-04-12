@@ -1,13 +1,9 @@
-server/obj/*
-server/bin/*
-server/server.csproj
-server/server.csproj.user
-server.sln
+obj/*
+bin/*
+server.csproj
+server.csproj.user
 
 *.props
 *.targets
 *.json
 *.cache
-
-!client/package.json
-!client/package-lock.json
