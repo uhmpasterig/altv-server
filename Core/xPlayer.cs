@@ -6,6 +6,7 @@ using server.Modules.Weapons;
 using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
 using AltV.Net.Resources.Chat.Api;
+using AltV.Net.Data;
 
 namespace server.Core;
 
@@ -113,6 +114,20 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.weapons.Add(weapon);
     this.GiveWeapon(Alt.Hash(name), ammo, hold);
     return Task.FromResult(true);
+  }
+
+  public void SetDead(int isDead)
+  {
+    this.isDead = isDead;
+    this.Emit("player:dead", isDead);
+  }
+
+  public void Revive()
+  {
+    this.SetDead(0);
+    this.ClearBloodDamage();
+    this.Spawn(this.Position, 0);
+    this.Health = 100;
   }
 
   public new IxPlayer ToAsync(IAsyncContext _) => this;

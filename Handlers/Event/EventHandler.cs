@@ -12,6 +12,7 @@ public class EventHandler : IEventHandler
   private readonly ITimerHandler _timerHandler;
   private readonly IEnumerable<IPlayerConnectEvent> _playerConnectedEvents;
   private readonly IEnumerable<IPlayerDisconnectEvent> _playerDisconnectedEvents;
+  private readonly IEnumerable<IPlayerDeadEvent> _playerDeadEvents;
   private readonly IEnumerable<ILoadEvent> _loadEvents;
 
   private readonly IEnumerable<IItemsLoaded> _itemsLoadedEvent;
@@ -27,6 +28,7 @@ public class EventHandler : IEventHandler
   public EventHandler(ITimerHandler timerHandler,
                       IEnumerable<IPlayerConnectEvent> playerConnectedEvents,
                       IEnumerable<IPlayerDisconnectEvent> playerDisconnectEvents,
+                      IEnumerable<IPlayerDeadEvent> playerDeadEvents,
                       IEnumerable<ILoadEvent> loadEvents,
                       IEnumerable<IPressedEEvent> pressedEEvents,
                       IEnumerable<IPressedIEvent> pressedIEvents,
@@ -39,6 +41,7 @@ public class EventHandler : IEventHandler
     _timerHandler = timerHandler;
     _playerConnectedEvents = playerConnectedEvents;
     _playerDisconnectedEvents = playerDisconnectEvents;
+    _playerDeadEvents = playerDeadEvents;
     _loadEvents = loadEvents;
     _itemsLoadedEvent = itemsLoadedEvent;
 
@@ -66,6 +69,14 @@ public class EventHandler : IEventHandler
       foreach (var playerDisconnectEvent in _playerDisconnectedEvents)
       {
         playerDisconnectEvent.OnPlayerDisconnect(player, reason);
+      }
+    };
+
+    AltAsync.OnPlayerDead += async (IPlayer player, IEntity killer, uint weapon) =>
+    {
+      foreach (var playerDeadEvent in _playerDeadEvents)
+      {
+        playerDeadEvent.OnPlayerDeath(player, killer, weapon);
       }
     };
 
