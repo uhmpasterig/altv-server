@@ -22,7 +22,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     Vehicles.Add(vehicle.Id, vehicle);
     return vehicle;
   }
-  [Obsolete]
+
   public async Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle)
   {
     xVehicle xvehicle = await CreateVehicle(vehicle.model, vehicle.Position, vehicle.Rotation);
@@ -96,7 +96,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   {
     return Vehicles.Values.Where(v => v.Position.Distance(position) < range).ToList();
   }
-  [Obsolete]
+  
   public async void OnLoad()
   {
     _logger.Startup("Lade fahrzeuge aus der Datenbank");
