@@ -7,5 +7,5 @@ using AltV.Net.Elements.Entities;
 namespace server.Events;
 public interface IPlayerDeadEvent
 {
-  Task OnPlayerDeath(IPlayer player, IEntity killer, uint weapon);
+  void OnPlayerDeath(IPlayer player, IEntity killer, uint weapon);
 }
