@@ -21,6 +21,12 @@ internal class WeaponCommands : IScript
     player.GiveSavedWeapon(name, ammo);
   }
 
+  [Command("revive")]
+  public static void Revive(xPlayer player)
+  {
+    player.Revive();
+  }
+
   [Command("frakweap")]
   public async static void FrakWeap(xPlayer player)
   {
