@@ -127,7 +127,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.SetDead(0);
     this.ClearBloodDamage();
     this.Spawn(this.Position, 0);
-    this.Health = 100;
+    this.Health = this.MaxHealth;
   }
 
   public new IxPlayer ToAsync(IAsyncContext _) => this;
