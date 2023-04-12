@@ -8,7 +8,16 @@ namespace server.Models;
 [PrimaryKey("id")]
 public partial class BadFrak
 {
-  public BadFrak() {}
+  public BadFrak() {
+    id = 0;
+    name = "";
+    weapon = "";
+    logo = "";
+    _pos = "";
+    _posLager = "";
+    money = 0;
+  }
+  
   public int id { get; set; }
   public string name { get; set; }
   public string weapon { get; set; }

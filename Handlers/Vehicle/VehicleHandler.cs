@@ -99,12 +99,12 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async void OnLoad()
   {
-    _logger.Log("Lade fahrzeuge aus der Datenbank");
+    _logger.Startup("Lade fahrzeuge aus der Datenbank");
     await using ServerContext serverContext = new ServerContext();
     foreach (Models.Vehicle vehicle in serverContext.Vehicle.Where(v => v.garageId == -1))
     {
       await CreateVehicleFromDb(vehicle);
     }
-    _logger.Log("Fahrzeuge geladen!");
+    _logger.Startup("Fahrzeuge geladen!");
   }
 }

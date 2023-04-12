@@ -8,6 +8,16 @@ namespace server.Models;
 [PrimaryKey("id")]
 public partial class Storage
 {
+  public Storage() {
+    id = 0;
+    name = "";
+    maxWeight = 0;
+    currentWeight = 0;
+    slots = 0;
+    _pos = "";
+    usePos = false;
+    _items = "";
+  }
   public int id { get; set; }
 
   public string name { get; set; }  

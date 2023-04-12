@@ -1,7 +1,6 @@
 using server.Core;
 using server.Events;
 using _logger = server.Logger.Logger;
-using server.Core;
 using server.Handlers.Storage;
 
 namespace server.Modules.Items;

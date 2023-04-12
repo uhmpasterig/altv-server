@@ -8,6 +8,14 @@ namespace server.Models;
 [PrimaryKey("id")]
 public partial class Item
 {
+  public Item() {
+    id = 0;
+    name = "";
+    stackSize = 0;
+    weight = 0;
+    job = "";
+    data = "";
+  }
   public int id { get; set; }
 
   public string name { get; set; }  

@@ -3,6 +3,7 @@ using AltV.Net;
 using server.Events;
 using server.Handlers.Event;
 using server.Models;
+using _logger = server.Logger.Logger;
 
 namespace server.Modules.Fraktionen;
 
@@ -15,7 +16,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     await using var serverContext = new ServerContext();
     foreach(BadFrak _frak in serverContext.BadFrak)
     {
-      Alt.Log("Frak: " + _frak.name);
+      _logger.Debug($"Fraktion: {_frak.name}");
       frakList.Add(_frak.name.ToLower(), _frak);
     }
   }
