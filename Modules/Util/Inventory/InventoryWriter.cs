@@ -47,8 +47,6 @@ public class inventoryWriter : IWritable
         writer.Value(item.weight);
         writer.Name("data");
         writer.Value("Heyy");
-        writer.Name("image");
-        writer.Value(item.image);        
         writer.Name("count");
         writer.Value(item.count);
         writer.Name("slot");

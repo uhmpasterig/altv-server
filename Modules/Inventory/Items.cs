@@ -19,7 +19,6 @@ public class xItem : Models.Item
     this.weight = item.weight;
     this.job = item.job;
     this.data = item.data;
-    this.image = item.image;
   }
 }
 
@@ -31,7 +30,6 @@ public class InventoryItem
   public float weight { get; set; }
   public string job { get; set; }
   public string data { get; set; }
-  public string image { get; set; }
   public int slot { get; set; }
   public int count { get; set; }
   
@@ -39,7 +37,7 @@ public class InventoryItem
   {
   }
 
-  public InventoryItem(int id, string name, int stackSize, float weight, string job, string data, string image, int slot, int count)
+  public InventoryItem(int id, string name, int stackSize, float weight, string job, string data, int slot, int count)
   {
     this.id = id;
     this.name = name;
@@ -47,7 +45,6 @@ public class InventoryItem
     this.weight = weight;
     this.job = job;
     this.data = data;
-    this.image = image;
 
     this.slot = slot;
     this.count = count;
@@ -61,7 +58,6 @@ public class InventoryItem
     this.weight = item.weight;
     this.job = item.job;
     this.data = item.data;
-    this.image = item.image;
 
     this.slot = slot;
     this.count = count;

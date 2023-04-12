@@ -15,5 +15,4 @@ public partial class Item
   public float weight { get; set; }
   public string job { get; set; }
   public string data { get; set; }
-  public string image { get; set; }
 }
