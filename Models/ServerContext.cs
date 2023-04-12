@@ -6,8 +6,20 @@ namespace server.Models;
 
 public partial class ServerContext : DbContext
 {
-  public ServerContext() { }
-  public ServerContext(DbContextOptions<ServerContext> options) : base(options) { }
+  public ServerContext() { 
+    Player = null!;
+    Vehicle = null!;
+    Storages = null!;
+    Items = null!;
+    BadFrak = null!;
+  }
+  public ServerContext(DbContextOptions<ServerContext> options) : base(options) { 
+    Player = null!;
+    Vehicle = null!;
+    Storages = null!;
+    Items = null!;
+    BadFrak = null!;
+  }
 
   public virtual DbSet<Player> Player { get; set; }
   public virtual DbSet<Vehicle> Vehicle { get; set; }

@@ -58,7 +58,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
     return true;
   }
-  public async void OnLoad()
+  public void OnLoad()
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {

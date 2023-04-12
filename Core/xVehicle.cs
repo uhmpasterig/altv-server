@@ -9,6 +9,7 @@ public class xVehicle : AsyncVehicle, IxVehicle
 {
   public xVehicle(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
+    toString = "OwnerID: " + ownerId;
   }
 
   public int vehicleId { get; set; }

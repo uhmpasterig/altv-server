@@ -68,7 +68,7 @@ public class StorageHandler : IStorageHandler
     {
       var dbStorage = await serverContext.Storages.FindAsync(storage.id);
 
-      dbStorage.name = storage.name;
+      dbStorage!.name = storage.name;
       dbStorage.slots = storage.slots;
       dbStorage.maxWeight = storage.maxWeight;
       dbStorage._items = JsonConvert.SerializeObject(storage.items);

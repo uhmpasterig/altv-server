@@ -18,7 +18,7 @@ namespace server
 {
   public class Resource : AsyncResource
   {
-    private IServer _server;
+    private IServer _server = null!;
 
     public override async void OnStart()
     {

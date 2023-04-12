@@ -22,5 +22,8 @@ public class xWeapon {
     this.job = job;
   }
 
-  public xWeapon(){}
+  public xWeapon(){
+    name = "";
+    job = "";
+  }
 }

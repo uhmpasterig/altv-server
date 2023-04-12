@@ -8,5 +8,5 @@ using AltV.Net.Elements.Entities;
 namespace server.Events;
 public interface IPlayerDisconnectEvent
 {
-  void OnPlayerDisconnect(IPlayer player, string reason);
+  Task OnPlayerDisconnect(IPlayer player, string reason);
 }

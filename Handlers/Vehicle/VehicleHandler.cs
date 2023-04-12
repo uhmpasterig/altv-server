@@ -22,14 +22,14 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     Vehicles.Add(vehicle.Id, vehicle);
     return vehicle;
   }
-
+  [Obsolete]
   public async Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle)
   {
     xVehicle xvehicle = await CreateVehicle(vehicle.model, vehicle.Position, vehicle.Rotation);
     _logger.Debug($"Created vehicle with model {vehicle.model} at {vehicle.Position}");
     return await SetVehicleData(xvehicle, vehicle);
   }
-
+  [Obsolete]
   public async Task<xVehicle> SetVehicleData(xVehicle xvehicle, Models.Vehicle vehicle)
   {
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
@@ -51,7 +51,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task SaveVehicle(xVehicle xvehicle)
   {
     await using ServerContext serverContext = new ServerContext();
-    Models.Vehicle vehicle = await serverContext.Vehicle.FindAsync(xvehicle.vehicleId);
+    Models.Vehicle? vehicle = await serverContext.Vehicle.FindAsync(xvehicle.vehicleId);
     if (vehicle != null)
     {
       vehicle.Position = xvehicle.Position;
@@ -70,7 +70,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     _logger.Log($"Found {Vehicles.Count} vehicles in memory");
     foreach (var vehicle in Vehicles.Values)
     {
-      Models.Vehicle dbVehicle = serverContext.Vehicle.Find(vehicle.vehicleId);
+      Models.Vehicle? dbVehicle = serverContext.Vehicle.Find(vehicle.vehicleId);
 
       if (dbVehicle == null) continue;
       dbVehicle.Position = vehicle.Position;
@@ -96,7 +96,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   {
     return Vehicles.Values.Where(v => v.Position.Distance(position) < range).ToList();
   }
-
+  [Obsolete]
   public async void OnLoad()
   {
     _logger.Startup("Lade fahrzeuge aus der Datenbank");

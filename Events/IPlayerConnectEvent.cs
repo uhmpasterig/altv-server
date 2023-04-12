@@ -7,5 +7,5 @@ using AltV.Net.Elements.Entities;
 namespace server.Events;
 public interface IPlayerConnectEvent
 {
-  void OnPlayerConnect(IPlayer player, string reason);
+  Task OnPlayerConnect(IPlayer player, string reason);
 }

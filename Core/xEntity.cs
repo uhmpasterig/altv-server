@@ -11,6 +11,10 @@ namespace server.Core;
 
 public class xEntity
 {
+  public xEntity()
+  {
+    this.data = new Dictionary<string, object>();
+  }
   public IEntity entity = null!;
   
   public uint range { get; set; }

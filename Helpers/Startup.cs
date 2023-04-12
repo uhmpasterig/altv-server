@@ -9,8 +9,8 @@ using System.Reflection;
 namespace server.Helpers;
 internal class Startup : IDisposable
 {
-  private IContainer _container;
-  private ILifetimeScope _scope;
+  private IContainer _container = null!;
+  private ILifetimeScope _scope = null!;
 
   public void Register()
   {
@@ -23,13 +23,13 @@ internal class Startup : IDisposable
       .SingleInstance();
 
     builder.RegisterAssemblyTypes(dataAccess)
-      .Where(t => t.Namespace != null)
-      .Where(t => t.Namespace.StartsWith("server.Handlers"))
+      .Where(t => t!.Namespace != null)
+      .Where(t => t.Namespace!.StartsWith("server.Handlers"))
       .AsImplementedInterfaces();
 
     builder.RegisterAssemblyTypes(dataAccess)
-     .Where(t => t.Namespace != null)
-     .Where(t => t.Namespace.StartsWith("server.Modules"))
+     .Where(t => t!.Namespace != null)
+     .Where(t => t.Namespace!.StartsWith("server.Modules"))
      .AsSelf()
      .SingleInstance()
      .AsImplementedInterfaces();

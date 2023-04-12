@@ -21,15 +21,15 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     }
   }
 
-  public async Task<bool> OnKeyPressE(xPlayer player)
+  public Task<bool> OnKeyPressE(xPlayer player)
   {
     if(frakList.ContainsKey(player.job.ToLower()))
     {
-      if(player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
+      if(player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return Task.FromResult(false);
     }
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
     player.Emit("showFrak");
-    return true;
+    return Task.FromResult(true);
   }
 
   public static BadFrak GetFrak(string name)

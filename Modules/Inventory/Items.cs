@@ -134,7 +134,7 @@ public class Items : ILoadEvent
     if (!_items.ContainsKey(itemname))
     {
       _logger.Error($"Item {itemname} does not exist");
-      return null;
+      return null!;
     }
 
     return _items[itemname];

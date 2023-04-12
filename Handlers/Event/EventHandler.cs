@@ -60,7 +60,7 @@ public class EventHandler : IEventHandler
     {
       foreach (var playerConnectEvent in _playerConnectedEvents)
       {
-        playerConnectEvent.OnPlayerConnect(player, reason);
+        await playerConnectEvent.OnPlayerConnect(player, reason);
       }
     };
 
@@ -68,7 +68,7 @@ public class EventHandler : IEventHandler
     {
       foreach (var playerDisconnectEvent in _playerDisconnectedEvents)
       {
-        playerDisconnectEvent.OnPlayerDisconnect(player, reason);
+        await playerDisconnectEvent.OnPlayerDisconnect(player, reason);
       }
     };
 
@@ -76,16 +76,11 @@ public class EventHandler : IEventHandler
     {
       foreach (var playerDeadEvent in _playerDeadEvents)
       {
-        playerDeadEvent.OnPlayerDeath(player, killer, weapon);
+        await playerDeadEvent.OnPlayerDeath(player, killer, weapon);
       }
     };
 
     return Task.CompletedTask;
-  }
-
-  public async void OnCommand(IPlayer iplayer, string commandName)
-  {
-    xPlayer player = (xPlayer)iplayer;
   }
 
   public async void OnKeyPressE(IPlayer iplayer)
