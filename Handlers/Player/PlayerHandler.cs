@@ -9,6 +9,7 @@ using _logger = server.Logger.Logger;
 using server.Events;
 using server.Handlers.Storage;
 using Newtonsoft.Json;
+using server.Util.Player;
 
 namespace server.Handlers.Player;
 
@@ -63,6 +64,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.Health = dbPlayer.health;
       player.Armor = dbPlayer.armor;
       player.LoadWeaponsFromDb(dbPlayer._weapons);
+
+      player.Emit("player:loaded", new PlayerLoadedWriter(player));
 
       return player;
     }

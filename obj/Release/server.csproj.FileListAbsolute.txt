@@ -1,0 +1,13 @@
+C:\AltV\resources\Release\server.deps.json
+C:\AltV\resources\Release\server.dll
+C:\AltV\resources\Release\server.pdb
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.csproj.AssemblyReference.cache
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.AssemblyInfoInputs.cache
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.AssemblyInfo.cs
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.csproj.CopyComplete
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.dll
+C:\Users\Administrator\Desktop\altvServer\obj\Release\refint\server.dll
+C:\Users\Administrator\Desktop\altvServer\obj\Release\server.pdb
+C:\Users\Administrator\Desktop\altvServer\obj\Release\ref\server.dll
