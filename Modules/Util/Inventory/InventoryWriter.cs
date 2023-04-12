@@ -54,6 +54,7 @@ public class inventoryWriter : IWritable
         writer.EndObject();
       }      
       writer.EndArray();
+      writer.EndObject();
     }
     writer.EndArray();
     writer.EndObject();
