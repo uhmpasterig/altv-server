@@ -33,6 +33,8 @@ public class inventoryWriter : IWritable
       writer.Name("currentWeight");
       writer.Value(store.currentWeight);
       writer.Name("slots");
+      writer.Value(store.slots);
+      writer.Name("items");
       writer.BeginArray();
       foreach(InventoryItem item in store.items)
       {
