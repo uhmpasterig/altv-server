@@ -154,12 +154,13 @@ public class Items : ILoadEvent
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
+    _logger.Startup("Lade Items!");
     foreach (Models.Item item in serverContext.Items)
     {
       xItem iitem = new xItem(item);
       _items.Add(iitem.name, iitem);
-      _logger.Debug($"Loaded item {iitem.name}");
+      _logger.Debug($"Item {iitem.name} geladen");
     }
-    Alt.Emit("ItemsLoaded");
+    _logger.Startup($"x{_items.Count } items geladen");
   }
 }
