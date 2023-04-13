@@ -44,13 +44,6 @@ public class Server : IServer
   public void Start()
   {
     _logger.Startup("Server startet...");
-    _logger.Startup("Lade Handler...");
-    _eventHandler.LoadHandlers();
-    _logger.Startup("Handler Geladen!");
-    
-    _logger.Startup("Lade Timer...");
-    _logger.Startup("Timer Geladen!");
-
 
     _logger.Startup("AltEntitySync initialisieren...");
     AltEntitySync.Init(1, (threadId) => 100, (threadId) => false,
@@ -61,6 +54,12 @@ public class Server : IServer
       new IdProvider());
     _logger.Startup("AltEntitySync initialisiert!");
     
+    _logger.Startup("Lade Handler...");
+    _eventHandler.LoadHandlers();
+    _logger.Startup("Handler Geladen!");
+    
+    _logger.Startup("Lade Timer...");
+    _logger.Startup("Timer Geladen!");
 
     _logger.Startup("Spieler Daten setzen...");
     foreach(Models.Player player in _serverContext.Player)
