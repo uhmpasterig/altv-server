@@ -33,13 +33,14 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     if (player.IsInVehicle)
     {
       xVehicle vehicle = (xVehicle)player.Vehicle;
+      if(vehicle.storageIdTrunk == 0) return false;
       xStorage gloveStorage = await storageHandler.GetStorage(vehicle.storageIdGloveBox);
       openInventorys.Add(gloveStorage.id);
       uiStorages.Add(gloveStorage);
       goto load;
     }
     xVehicle closestVehicle = vehicleHandler.GetClosestVehicle(player.Position);
-    if (closestVehicle != null)
+    if (closestVehicle != null && (closestVehicle.storageIdTrunk != 0))
     {
       xStorage trunkStorage = await storageHandler.GetStorage(closestVehicle.storageIdTrunk);
       openInventorys.Add(trunkStorage.id);
