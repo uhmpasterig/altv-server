@@ -47,7 +47,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
     xEntity _currentEntity = null!;
     _currentSammler.Entities.ForEach((entity) =>
     {
-      if (entity.position.Distance(player.Position) < 2.5) {
+      if (entity.position.Distance(player.Position) < 2.50f) {
         _currentEntity = entity;
       }
     });
