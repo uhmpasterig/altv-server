@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using AltV.Net.Data;
 using System.ComponentModel.DataAnnotations.Schema;
+using AltV.Net.Elements.Entities;
+using server.Core;
 
 namespace server.Models;
 
@@ -59,8 +61,8 @@ public partial class sammler_farming_data
     }
   }
 
-  /* [NotMapped]
-  public List<IEntity> Entities { get; set; } = new List<IEntity>(); */
+  [NotMapped]
+  public List<xEntity> Entities { get; set; } = new List<xEntity>(); 
 
   public override string ToString()
   {

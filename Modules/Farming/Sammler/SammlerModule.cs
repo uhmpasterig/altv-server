@@ -5,15 +5,15 @@ using server.Handlers.Entities;
 using server.Models;
 using _logger = server.Logger.Logger;
 using AltV.Net.Async;
-using AltV.Net.Async.Elements.Entities;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
 
 namespace server.Modules.Farming.Sammler;
-public class SammlerMain : ILoadEvent
+public class SammlerMain : ILoadEvent, IPressedEEvent
 {
-  private readonly List<Models.sammler_farming_data> _sammler = new List<Models.sammler_farming_data>();
+  private readonly List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
 
-  public async void LoadSammler(Models.sammler_farming_data sammlerData)
+  public async void LoadSammler(sammler_farming_data sammlerData)
   {
     foreach(Position _pos in sammlerData.PropPositions)
     {
@@ -25,16 +25,42 @@ public class SammlerMain : ILoadEvent
       _entity.data.Add("model", sammlerData.prop);
       _entity.CreateEntity();
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
-      EntityHandler.Entities.Add(_entity.entity);
+      sammlerData.Entities.Add(_entity);
+
       _logger.Debug("Entity created");
     }
+  }
+
+  public async Task<bool> OnKeyPressE(xPlayer player) 
+  {
+    sammler_farming_data _currentSammler = null!;
+    // Get the Closest Sammler
+    _sammler.ForEach((sammler) =>
+    {
+      if (sammler.Position.Distance(player.Position) < 80) {
+        _currentSammler = sammler;
+      }
+    });
+    if (_currentSammler == null) return false;
+
+    // Get the Closest Prop of the closest Farming field
+    xEntity _currentEntity = null!;
+    _currentSammler.Entities.ForEach((entity) =>
+    {
+      if (entity.position.Distance(player.Position) < 3) {
+        _currentEntity = entity;
+      }
+    });
+    if (_currentEntity == null) return false;
+    
+    return true;
   }
 
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
     _logger.Startup("Lade Sammler!");
-    foreach (Models.sammler_farming_data sammler in serverContext.sammler_farming_data)
+    foreach (sammler_farming_data sammler in serverContext.sammler_farming_data)
     {
       _sammler.Add(sammler);
       LoadSammler(sammler);
