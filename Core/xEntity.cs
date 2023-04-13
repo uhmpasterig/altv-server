@@ -27,7 +27,7 @@ public class xEntity
   
   public void CreateEntity()
   {
-    this.entity = AltEntitySync.CreateEntity((ulong)this.entityType, this.position, this.dimension, this.range);
+    IEntity _entity = AltEntitySync.CreateEntity((ulong)this.entityType, this.position, this.dimension, this.range);
   }
 
   public void Destroy()
