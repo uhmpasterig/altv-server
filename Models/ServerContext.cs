@@ -56,6 +56,12 @@ public partial class ServerContext : DbContext
       entity.ToTable("fraktionen");
     });
 
+    modelBuilder.Entity<Models.sammler_farming_data>(entity =>
+    {
+      entity.HasNoKey();
+      entity.ToTable("sammler_farming_data");
+    });
+
     OnModelCreatingPartial(modelBuilder);
   }
 
