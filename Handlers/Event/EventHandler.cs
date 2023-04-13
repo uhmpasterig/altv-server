@@ -14,7 +14,7 @@ public class EventHandler : IEventHandler
   private readonly IEnumerable<IPlayerDisconnectEvent> _playerDisconnectedEvents;
   private readonly IEnumerable<ILoadEvent> _loadEvents;
 
-  private readonly IEnumerable<IItemsLoaded> _itemsLoadedEvent;
+  public readonly IEnumerable<IItemsLoaded> _itemsLoadedEvent;
 
 
   // keypress event

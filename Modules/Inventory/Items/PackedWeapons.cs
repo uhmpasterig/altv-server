@@ -19,7 +19,7 @@ class PackedWeapons : IItemsLoaded
         inv.AddItem(item, 1);
       }
     }
-
+    
     Items.RegisterUsableItem("packed_weapon_pistol_mk2", async (xPlayer player) =>
     {
       UnpackFunc(player, "packed_weapon_pistol_mk2", "weapon_pistol_mk2");

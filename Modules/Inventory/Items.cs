@@ -6,6 +6,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using server.Models;
 using server.Handlers.Storage;
+using server.Handlers.Event;
 
 namespace server.Modules.Items;
 
@@ -182,6 +183,7 @@ public class Items : ILoadEvent
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
+    
     _logger.Startup("Lade Items!");
     foreach (Models.Item item in serverContext.Items)
     {
@@ -189,6 +191,8 @@ public class Items : ILoadEvent
       _items.Add(iitem.name, iitem);
       _logger.Debug($"Item {iitem.name} geladen");
     }
+    
     _logger.Startup($"x{_items.Count } items geladen");
+    Alt.Emit("ItemsLoaded");
   }
 }
