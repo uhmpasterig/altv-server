@@ -59,6 +59,9 @@ public partial class sammler_farming_data
     }
   }
 
+  /* [NotMapped]
+  public List<IEntity> Entities { get; set; } = new List<IEntity>(); */
+
   public override string ToString()
   {
     return $"Name: {name}, Tool: {tool}, Time: {timeS}, Item: {item}, Amount: {amount}, Prop: {prop}, Position: {Position}, PropPositions: {PropPositions}, SideProducts: {SideProducts}";

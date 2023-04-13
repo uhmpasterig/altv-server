@@ -26,7 +26,7 @@ public class SammlerMain : ILoadEvent
       _entity.CreateEntity();
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
       EntityHandler.Entities.Add(_entity.entity);
-      _logger.Exception("Entity created");
+      _logger.Debug("Entity created");
     }
   }
 
