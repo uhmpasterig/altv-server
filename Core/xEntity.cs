@@ -28,8 +28,7 @@ public class xEntity
   
   public void CreateEntity()
   {
-    Alt.Log("CreateEntity");
-    this.entity = AltEntitySync.CreateEntity(1, new Vector3(0,0,0), 0, 80);
+    this.entity = AltEntitySync.CreateEntity((uint)this.entityType, this.position, this.dimension, this.range, this.data);
   }
 
   public void Destroy()
