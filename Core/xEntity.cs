@@ -1,4 +1,4 @@
-using AltV.Net.Async;
+using AltV.Net;
 using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Data;
 using AltV.Net.EntitySync.Events;
@@ -28,6 +28,7 @@ public class xEntity
   
   public void CreateEntity()
   {
+    Alt.Log("CreateEntity");
     this.entity = AltEntitySync.CreateEntity(1, new Vector3(0,0,0), 0, 80);
   }
 
