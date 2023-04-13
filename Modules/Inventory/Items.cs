@@ -71,6 +71,7 @@ public class Items : ILoadEvent
 
   public static void RegisterUsableItem(string itemname, Action<xPlayer> action)
   {
+    _logger.Startup($"Registering usable item {itemname}");
     if (!_items.ContainsKey(itemname))
     {
       _logger.Error($"Item {itemname} does not exist");
