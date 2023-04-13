@@ -11,6 +11,10 @@ class DeathModule : IPlayerDeadEvent
 {
   public void OnPlayerDeath(IPlayer iplayer, IEntity ikiller, uint weapon)
   {
+    Alt.Log("Player " + iplayer.Name + " is dead");
+    Alt.Log("Player " + iplayer.Name + " is dead");
+    Alt.Log("Player " + iplayer.Name + " is dead");
+    Alt.Log("Player " + iplayer.Name + " is dead");
     xPlayer player = (xPlayer)iplayer;
     xPlayer killer = (xPlayer)ikiller;
     player.SetDead(1);
