@@ -12,3 +12,10 @@ public enum ENTITY_TYPES : ulong
   PED = 1,
   VEHICLE = 2,
 }
+
+public class EntityHandler 
+{
+  public static List<IEntity> Entities = new List<IEntity>();
+
+  
+}

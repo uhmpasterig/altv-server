@@ -26,6 +26,7 @@ public class xEntity
   
   public void CreateEntity()
   {
+    AltAsync.Log("OMGGGGGGGGGG " + this.entityType);
     this.entity = AltEntitySync.CreateEntity((ulong)this.entityType, this.position, this.dimension, this.range);
   }
 
