@@ -47,12 +47,12 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
     xEntity _currentEntity = null!;
     _currentSammler.Entities.ForEach((entity) =>
     {
-      if (entity.position.Distance(player.Position) < 3) {
+      if (entity.position.Distance(player.Position) < 2.5) {
         _currentEntity = entity;
       }
     });
     if (_currentEntity == null) return false;
-    
+    _logger.Debug("Entity found");
     return true;
   }
 
