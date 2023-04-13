@@ -11,19 +11,6 @@ namespace server.Models;
 public partial class Player
 {
   public Player() { 
-    permaId = 0;
-    name = "";
-    health = 0;
-    armor = 0;
-    _playerInventorys = "";
-    _weapons = "";
-    job = "";
-    job_rank = 0;
-    job_perm = "";
-    _pos = "";
-    _rot = "";
-    lastLogin = DateTime.Now;
-    creationDate = DateTime.Now;
   }
 
   public bool isOnline { get; set; }

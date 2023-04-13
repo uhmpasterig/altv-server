@@ -9,13 +9,6 @@ namespace server.Models;
 public partial class BadFrak
 {
   public BadFrak() {
-    id = 0;
-    name = "";
-    weapon = "";
-    logo = "";
-    _pos = "";
-    _posLager = "";
-    money = 0;
   }
   
   public int id { get; set; }

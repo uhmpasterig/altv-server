@@ -14,6 +14,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Models.Item> Items { get; set; }
   public virtual DbSet<Models.BadFrak> BadFrak { get; set; }
+  public virtual DbSet<Models.sammler_farming_data> sammler_farming_data { get; set; }
 
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

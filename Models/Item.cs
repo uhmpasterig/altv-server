@@ -9,12 +9,6 @@ namespace server.Models;
 public partial class Item
 {
   public Item() {
-    id = 0;
-    name = "";
-    stackSize = 0;
-    weight = 0;
-    job = "";
-    data = "";
   }
   public int id { get; set; }
 

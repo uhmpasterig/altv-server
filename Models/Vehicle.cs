@@ -10,19 +10,6 @@ public partial class Vehicle
 {
   public Vehicle()
   {
-    id = 0;
-    ownerId = 0;
-    garageId = 0;
-    model = "";
-    storageIdTrunk = 0;
-    storageIdGloveBox = 0;
-    _pos = "";
-    _rot = "";
-    color = 0;
-    color2 = 0;
-    plate = "";
-    lastAction = DateTime.Now;
-    creationDate = DateTime.Now;
   }
 
   public int id { get; set; }
