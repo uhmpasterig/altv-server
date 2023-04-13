@@ -17,7 +17,7 @@ public class SammlerMain : ILoadEvent
     {
       _sammler.Add(sammler);
       _logger.Debug($"Sammler {sammler.name} geladen");
-      sammler.ToString();
+      _logger.Debug(sammler.ToString());
     }
     _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
   }
