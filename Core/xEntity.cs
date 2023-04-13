@@ -5,6 +5,7 @@ using AltV.Net.EntitySync.Events;
 using AltV.Net.EntitySync.ServerEvent;
 using AltV.Net.EntitySync;
 using server.Handlers.Entities;
+using System.Numerics;
 
 namespace server.Core;
 
@@ -27,7 +28,7 @@ public class xEntity
   
   public void CreateEntity()
   {
-    IEntity _entity = AltEntitySync.CreateEntity((ulong)this.entityType, this.position, this.dimension, this.range);
+    this.entity = AltEntitySync.CreateEntity(1, new Vector3(0,0,0), 0, 80);
   }
 
   public void Destroy()

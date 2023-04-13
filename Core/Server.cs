@@ -51,6 +51,7 @@ public class Server : IServer
     _logger.Startup("Lade Timer...");
     _logger.Startup("Timer Geladen!");
 
+
     _logger.Startup("AltEntitySync initialisieren...");
     AltEntitySync.Init(1, (threadId) => 100, (threadId) => false,
       (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
@@ -59,6 +60,7 @@ public class Server : IServer
       (threadId) => new LimitedGrid3(50_000, 50_000, 100, 10_000, 10_000, 300),
       new IdProvider());
     _logger.Startup("AltEntitySync initialisiert!");
+    
 
     _logger.Startup("Spieler Daten setzen...");
     foreach(Models.Player player in _serverContext.Player)
