@@ -124,6 +124,32 @@ public class Items : ILoadEvent
     }
   }
 
+  public async static void RemoveItemFromSlot(int slot, int storageId, int count)
+  {
+    IStorageHandler handler = new StorageHandler();
+    xStorage storage = await handler.GetStorage(storageId);
+    if (storage == null)
+    {
+      _logger.Error($"Storage with id {storageId} does not exist");
+      return;
+    }
+    InventoryItem item = storage.items.Find(x => x.slot == slot)!;
+    if (item == null)
+    {
+      _logger.Error($"Item with slot {slot} does not exist");
+      return;
+    }
+    if (!_items.ContainsKey(item.name))
+    {
+      _logger.Error($"Item {item.name} does not exist");
+      return;
+    }
+    if(!storage.RemoveItem(slot, count)) {
+      _logger.Error($"Could not remove item {item.name} from storage {storageId}");
+      return;
+    }
+  }
+
   
 
   public static xItem GetItem(string itemname)
