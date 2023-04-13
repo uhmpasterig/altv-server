@@ -22,16 +22,10 @@ public class SammlerMain : ILoadEvent
       _entity.dimension = (int)DIMENSIONEN.WORLD;
       _entity.position = _pos;
       _entity.range = 80;
+      _entity.data.Add("model", sammlerData.prop);
       _entity.CreateEntity();
-      /* _entity.SetSyncedData("model", sammlerData.prop);
-      _entity.SetSyncedData("name", sammlerData.name);
-      _entity.SetSyncedData("type", "sammler");
-      _entity.SetSyncedData("tool", sammlerData.tool);
-      _entity.SetSyncedData("item", sammlerData.item);
-      _entity.SetSyncedData("amount", sammlerData.amount);
-      _entity.SetSyncedData("time", sammlerData.timeS);
-      _entity.SetSyncedData("sideProducts", sammlerData.sideProducts); */
-      // EntityHandler.Entities.Add(_entity.entity);
+      // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
+      EntityHandler.Entities.Add(_entity.entity);
       _logger.Exception("Entity created");
     }
   }
