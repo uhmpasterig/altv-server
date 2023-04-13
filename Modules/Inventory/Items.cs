@@ -118,6 +118,7 @@ public class Items : ILoadEvent
       _logger.Error($"Could not remove item {item.name} from storage {storageId}");
       return;
     }
+    _logger.Debug($"Item {item.name} used");
     foreach (var action in _usableItems.Where(x => x.Key == item.name))
     {
       action.Value(player);
