@@ -16,7 +16,6 @@ class DeathModule : IPlayerDeadEvent
     Alt.Log("Player " + iplayer.Name + " is dead");
     Alt.Log("Player " + iplayer.Name + " is dead");
     xPlayer player = (xPlayer)iplayer;
-    xPlayer killer = (xPlayer)ikiller;
     player.SetDead(1);
   }
 }
