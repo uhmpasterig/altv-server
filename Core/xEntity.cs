@@ -15,7 +15,7 @@ public class xEntity
   {
     this.data = new Dictionary<string, object>();
   }
-  public IEntity entity = null!;
+  public IEntity entity { get; set; }
   
   public uint range { get; set; }
   public ENTITY_TYPES entityType { get; set; }
@@ -26,7 +26,7 @@ public class xEntity
   
   public void CreateEntity()
   {
-    // this.entity = AltEntitySync.CreateEntity((ulong)this.entityType, this.position, this.dimension, this.range);
+    this.entity = AltEntitySync.CreateEntity((ulong)this.entityType, this.position, this.dimension, this.range);
   }
 
   public void Destroy()
