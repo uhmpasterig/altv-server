@@ -108,7 +108,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           sammler.PropPositions.Add(_prop);
           sammler._propPositions = JsonConvert.SerializeObject(sammler.PropPositions);
           _logger.Debug("Prop added to route " + route);
-          _logger.Debug(sammler._propPositions)
+          _logger.Debug(sammler._propPositions);
           xEntity _entity = new xEntity();
           _entity.entityType = ENTITY_TYPES.PROP;
           _entity.dimension = (int)DIMENSIONEN.WORLD;
