@@ -15,6 +15,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Models.Item> Items { get; set; }
   public virtual DbSet<Models.BadFrak> BadFrak { get; set; }
   public virtual DbSet<Models.sammler_farming_data> sammler_farming_data { get; set; }
+  public virtual DbSet<Models.sammler_verarbeiter_data> sammler_verarbeiter_data { get; set; }
 
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -60,6 +61,11 @@ public partial class ServerContext : DbContext
     {
       entity.HasNoKey();
       entity.ToTable("sammler_farming_data");
+    });
+    modelBuilder.Entity<Models.sammler_verarbeiter_data>(entity =>
+    {
+      entity.HasNoKey();
+      entity.ToTable("sammler_verarbeiter_data");
     });
 
     OnModelCreatingPartial(modelBuilder);
