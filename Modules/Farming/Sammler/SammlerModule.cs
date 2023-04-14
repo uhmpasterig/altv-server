@@ -93,7 +93,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
     AltAsync.OnClient<xPlayer, string, string, string, string>("createroutenprop", async (player, route, pos, rot, prop) =>
     {
-      await using ServerContext serverContext = new ServerContext();
       _sammler.ForEach((sammler) =>
       {
         if (sammler.name == route)
@@ -107,7 +106,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           _entity.data.Add("model", prop);
           _entity.CreateEntity();
           sammler.Entities.Add(_entity);
-          serverContext.SaveChanges();
         }
       });
     });
