@@ -100,11 +100,9 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       {
         if (sammler.name == route)
         {
-          _logger.Debug("Prop added to route " + route);
-          _logger.Debug(pos);
           propData _prop = new propData(
-            JsonConvert.DeserializeObject<Position>(pos),
             JsonConvert.DeserializeObject<Rotation>(rot),
+            JsonConvert.DeserializeObject<Position>(pos),
             prop
           );
 
