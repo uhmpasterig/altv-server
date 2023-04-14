@@ -100,7 +100,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
         if (sammler.name == route)
         {
           _logger.Debug("Prop added to route " + route);
-          
+
           propData _prop = new propData(
             JsonConvert.DeserializeObject<Position>(pos),
             JsonConvert.DeserializeObject<Rotation>(rot),
@@ -109,8 +109,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
           sammler.PropPositions.Add(_prop);
           sammler._propPositions = JsonConvert.SerializeObject(sammler.PropPositions);
-          _logger.Debug("Prop added to route " + route);
-          _logger.Debug(sammler._propPositions);
           xEntity _entity = new xEntity();
           _entity.entityType = ENTITY_TYPES.PROP;
           _entity.dimension = (int)DIMENSIONEN.WORLD;
@@ -121,14 +119,8 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           sammler.Entities.Add(_entity);
 
           await using ServerContext serverContext = new ServerContext();
-          sammler_farming_data? __sammler = serverContext.sammler_farming_data.Where(x => x.name == route).FirstOrDefault();
-          if (__sammler != null)
-          {
-            __sammler._propPositions = sammler._propPositions;
-            serverContext.sammler_farming_data.Update(__sammler);
-            await serverContext.SaveChangesAsync();
-          }
-          _logger.Debug("Entity saved");
+          serverContext.sammler_farming_data.Update(sammler);
+          await serverContext.SaveChangesAsync();
         }
       });
     });
