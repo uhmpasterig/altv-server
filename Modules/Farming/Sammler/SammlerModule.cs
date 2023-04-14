@@ -9,7 +9,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
 
 namespace server.Modules.Farming.Sammler;
-public class SammlerMain : ILoadEvent, IPressedEEvent
+public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
   private readonly List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
 
@@ -55,6 +55,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
     player.Emit("playAnim","melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
+    
     return true;
   }
 
@@ -69,5 +70,10 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
       _logger.Debug($"Sammler {sammler.name} geladen");
     }
     _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
+  }
+
+  public async void OnFiveSecondsUpdate()
+  {
+    _logger.Debug("Five seconds update");
   }
 }

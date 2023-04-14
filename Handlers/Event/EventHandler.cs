@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using server.Handlers.Timer;
 using server.Core;
 using server.Events;
+using server.Extensions;
 using _logger = server.Logger.Logger;
 
 namespace server.Handlers.Event;
@@ -17,6 +18,8 @@ public class EventHandler : IEventHandler
 
   public readonly IEnumerable<IItemsLoaded> _itemsLoadedEvent;
 
+  // Timer event
+  private readonly IEnumerable<IFiveSecondsUpdateEvent> _fiveSecondsUpdateEvents;
 
   // keypress event
   private readonly IEnumerable<IPressedEEvent> _pressedEEvents;
@@ -30,9 +33,11 @@ public class EventHandler : IEventHandler
                       IEnumerable<IPlayerDisconnectEvent> playerDisconnectEvents,
                       IEnumerable<IPlayerDeadEvent> playerDeadEvents,
                       IEnumerable<ILoadEvent> loadEvents,
+                      IEnumerable<IItemsLoaded> itemsLoadedEvent,
+                      IEnumerable<IFiveSecondsUpdateEvent> fiveSecondsUpdateEvents,
+
                       IEnumerable<IPressedEEvent> pressedEEvents,
-                      IEnumerable<IPressedIEvent> pressedIEvents,
-                      IEnumerable<IItemsLoaded> itemsLoadedEvent
+                      IEnumerable<IPressedIEvent> pressedIEvents
                       )
   {
     AltAsync.OnClient<IPlayer>("PressE", OnKeyPressE);
@@ -44,7 +49,8 @@ public class EventHandler : IEventHandler
     _playerDeadEvents = playerDeadEvents;
     _loadEvents = loadEvents;
     _itemsLoadedEvent = itemsLoadedEvent;
-
+    _fiveSecondsUpdateEvents = fiveSecondsUpdateEvents;
+    
     _pressedEEvents = pressedEEvents;
     _pressedIEvents = pressedIEvents;
   }
@@ -56,28 +62,18 @@ public class EventHandler : IEventHandler
       loadEvent.OnLoad();
     }
     _logger.Debug("Loading event handlers");
+
     AltAsync.OnPlayerConnect += async (IPlayer player, string reason) =>
-    {
-      foreach (var playerConnectEvent in _playerConnectedEvents)
-      {
-        playerConnectEvent.OnPlayerConnect(player, reason);
-      }
-    };
+      _playerConnectedEvents?.ForEach(playerConnectEvent => playerConnectEvent.OnPlayerConnect(player, reason));
 
     AltAsync.OnPlayerDisconnect += async (IPlayer player, string reason) =>
-    {
-      foreach (var playerDisconnectEvent in _playerDisconnectedEvents)
-      {
-        playerDisconnectEvent.OnPlayerDisconnect(player, reason);
-      }
-    };
+      _playerDisconnectedEvents?.ForEach(playerDisconnectEvent => playerDisconnectEvent.OnPlayerDisconnect(player, reason));
 
-    AltAsync.OnPlayerDead += async (IPlayer player, IEntity killer, uint weapon) => {
-      foreach (var playerDeadEvent in _playerDeadEvents)
-      {
-        playerDeadEvent.OnPlayerDeath(player, killer, weapon);
-      }
-    };
+    AltAsync.OnPlayerDead += async (IPlayer player, IEntity killer, uint weapon) => 
+      _playerDeadEvents?.ForEach(playerDeadEvent => playerDeadEvent.OnPlayerDeath(player, killer, weapon));
+
+    _timerHandler.AddInterval(1000 * 5, async (s, e) => 
+      _fiveSecondsUpdateEvents?.ForEach(fiveSecondsUpdateEvent => fiveSecondsUpdateEvent.OnFiveSecondsUpdate()));
 
     return Task.CompletedTask;
   }
