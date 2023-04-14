@@ -21,12 +21,13 @@ public class propData
   }
 }
 
+[PrimaryKey("id")]
 public partial class sammler_farming_data
 {
   public sammler_farming_data()
   {
   }
-
+  public int id { get; set; }
   public string name { get; set; }
   public string tool { get; set; }
   public int timeS { get; set; }
