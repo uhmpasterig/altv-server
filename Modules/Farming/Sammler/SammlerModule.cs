@@ -94,7 +94,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     AltAsync.OnClient<xPlayer, string, string, string, string>("createroutenprop", async (player, route, pos, rot, prop) =>
     {
       _logger.Debug("Prop created");
-      _sammler.ForEach((sammler) =>
+      _sammler.ForEach(async (sammler) =>
       {
         if (sammler.name == route)
         {
@@ -109,6 +109,8 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           _entity.CreateEntity();
           sammler.Entities.Add(_entity);
           _logger.Debug("Entity created");
+          await using ServerContext serverContext = new ServerContext();
+          serverContext.sammler_farming_data.Update(sammler);
         }
       });
     });
