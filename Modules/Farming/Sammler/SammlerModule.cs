@@ -54,6 +54,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
     if (_currentEntity == null) return false;
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
+    player.Emit("playAnim","anim@move_m@trash", "pickup", -1, 1);
     return true;
   }
 
