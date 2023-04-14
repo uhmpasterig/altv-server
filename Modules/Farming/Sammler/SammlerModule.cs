@@ -93,10 +93,12 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
     AltAsync.OnClient<xPlayer, string, string, string, string>("createroutenprop", async (player, route, pos, rot, prop) =>
     {
+      _logger.Debug("Prop created");
       _sammler.ForEach((sammler) =>
       {
         if (sammler.name == route)
         {
+          _logger.Debug("Prop added to route " + route);
           sammler.PropPositions.Add(new propData(JsonConvert.DeserializeObject<Position>(rot), JsonConvert.DeserializeObject<Position>(pos), prop));
           xEntity _entity = new xEntity();
           _entity.entityType = ENTITY_TYPES.PROP;
@@ -106,6 +108,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           _entity.data.Add("model", prop);
           _entity.CreateEntity();
           sammler.Entities.Add(_entity);
+          _logger.Debug("Entity created");
         }
       });
     });
