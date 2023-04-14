@@ -17,7 +17,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public async void LoadSammler(sammler_farming_data sammlerData)
   {
-    foreach(Position _pos in sammlerData.PropPositions)
+    foreach (Position _pos in sammlerData.PropPositions)
     {
       xEntity _entity = new xEntity();
       _entity.entityType = ENTITY_TYPES.PROP;
@@ -33,9 +33,10 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     }
   }
 
-  public async Task<bool> OnKeyPressE(xPlayer player) 
+  public async Task<bool> OnKeyPressE(xPlayer player)
   {
-    if(_farmingPlayers.ContainsKey(player)) {
+    if (_farmingPlayers.ContainsKey(player))
+    {
       _farmingPlayers.Remove(player);
       player.Emit("stopAnim");
       return true;
@@ -44,24 +45,32 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     // Get the Closest Sammler
     _sammler.ForEach((sammler) =>
     {
-      if (sammler.Position.Distance(player.Position) < 80) {
+      if (sammler.Position.Distance(player.Position) < 80)
+      {
         _currentSammler = sammler;
       }
     });
     if (_currentSammler == null) return false;
-
     // Get the Closest Prop of the closest Farming field
     xEntity _currentEntity = null!;
     _currentSammler.Entities.ForEach((entity) =>
     {
-      if (entity.position.Distance(player.Position) < 2) {
+      if (entity.position.Distance(player.Position) < 2)
+      {
         _currentEntity = entity;
       }
     });
     if (_currentEntity == null) return false;
+
+    if(await player.HasItem(_currentSammler.tool) == false) {
+      player.SendMessage("Du benötigst ein " + _currentSammler.tool, NOTIFYS.ERROR);
+      return false;
+    };
+   
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
-    player.Emit("playAnim","melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
+    player.Emit("playAnim", "melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
+    
     _farmingPlayers.Add(player, _currentSammler.name);
     return true;
   }
@@ -83,18 +92,18 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public sammler_farming_data GetSammler(string name)
   {
-    foreach(sammler_farming_data sammler in _sammler)
+    foreach (sammler_farming_data sammler in _sammler)
     {
-      if(sammler.name == name) return sammler;
+      if (sammler.name == name) return sammler;
     }
     return null!;
   }
 
   public async Task<bool> FarmingStep(xPlayer player, sammler_farming_data feld)
   {
-    if(player == null) return false;
-    if(feld == null) return false;
-    IStorageHandler _storageHandler = new StorageHandler(); 
+    if (player == null) return false;
+    if (feld == null) return false;
+    IStorageHandler _storageHandler = new StorageHandler();
     xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["inventory"]!);
     int random = new Random().Next(feld.amountmin, feld.amountmax);
     inv.AddItem(feld.item, random);
@@ -112,14 +121,15 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public async void OnFiveSecondsUpdate()
   {
-    foreach(KeyValuePair<xPlayer, string> kvp in _farmingPlayers)
+    foreach (KeyValuePair<xPlayer, string> kvp in _farmingPlayers)
     {
-      if(kvp.Key == null) {
+      if (kvp.Key == null)
+      {
         _farmingPlayers.Remove(kvp.Key!);
         continue;
       };
       bool done = await FarmingStep(kvp.Key, GetSammler(kvp.Value));
-      if(!done) _farmingPlayers.Remove(kvp.Key!);
+      if (!done) _farmingPlayers.Remove(kvp.Key!);
     }
   }
 }

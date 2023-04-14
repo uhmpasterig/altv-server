@@ -192,6 +192,13 @@ public class xStorage : Models.Storage
     this.items.Remove(item);
   }
 
+  public bool HasItem(string name, int count = 1)
+  {
+    InventoryItem item = this.items.FirstOrDefault(x => x.name == name)!;
+    if (item == null) return false;
+    if (item.count < count) return false;
+    return true;
+  }
 
   public object GetData()
   {

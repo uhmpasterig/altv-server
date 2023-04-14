@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
 using AltV.Net.Resources.Chat.Api;
 using AltV.Net.Data;
+using server.Handlers.Storage;
 
 namespace server.Core;
 
@@ -128,6 +129,13 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.ClearBloodDamage();
     this.Spawn(this.Position, 0);
     this.Health = this.MaxHealth;
+  }
+
+  public async Task<bool> HasItem(string name, int count = 1)
+  {
+    IStorageHandler _storageHandler = new StorageHandler();
+    xStorage inv = await _storageHandler.GetStorage(this.playerInventorys["inventory"]);
+    return inv.HasItem(name, count);
   }
 
   public new IxPlayer ToAsync(IAsyncContext _) => this;
