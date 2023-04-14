@@ -115,6 +115,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           _entity.range = 20;
           _entity.data.Add("model", prop);
           _entity.CreateEntity();
+
           sammler.Entities.Add(_entity);
 
           await using ServerContext serverContext = new ServerContext();
