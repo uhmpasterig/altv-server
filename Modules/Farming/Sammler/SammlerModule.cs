@@ -21,7 +21,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
       _entity.entityType = ENTITY_TYPES.PROP;
       _entity.dimension = (int)DIMENSIONEN.WORLD;
       _entity.position = _pos;
-      _entity.range = 80;
+      _entity.range = 20;
       _entity.data.Add("model", sammlerData.prop);
       _entity.CreateEntity();
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
@@ -53,7 +53,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
     });
     if (_currentEntity == null) return false;
     _logger.Debug("Entity found");
-    
+    player.Emit("pointAtServerEntity", _currentEntity.entity.Id);
     return true;
   }
 
