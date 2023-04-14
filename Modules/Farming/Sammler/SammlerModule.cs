@@ -91,7 +91,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     }
     _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
 
-    AltAsync.OnClient<string, string, string, string>("createroutenprop", (route, pos, rot, prop) =>
+    AltAsync.OnClient<xPlayer, string, string, string, string>("createroutenprop", (player, route, pos, rot, prop) =>
     {
       _sammler.ForEach((sammler) =>
       {
