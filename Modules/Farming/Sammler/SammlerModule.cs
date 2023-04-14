@@ -110,7 +110,8 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           sammler.Entities.Add(_entity);
           _logger.Debug("Entity created");
           await using ServerContext serverContext = new ServerContext();
-          serverContext.sammler_farming_data.Update(sammler);
+          serverContext.SaveChangesAsync();
+          _logger.Debug("Entity saved");
         }
       });
     });
