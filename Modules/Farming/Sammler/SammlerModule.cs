@@ -99,7 +99,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
         if (sammler.name == route)
         {
           _logger.Debug("Prop added to route " + route);
-          sammler.PropPositions.Add(new propData(JsonConvert.DeserializeObject<Position>(rot), JsonConvert.DeserializeObject<Position>(pos), prop));
+          sammler._propPositions = JsonConvert.SerializeObject(sammler.PropPositions);
           xEntity _entity = new xEntity();
           _entity.entityType = ENTITY_TYPES.PROP;
           _entity.dimension = (int)DIMENSIONEN.WORLD;
@@ -110,7 +110,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           sammler.Entities.Add(_entity);
           _logger.Debug("Entity created");
           await using ServerContext serverContext = new ServerContext();
-          serverContext.SaveChangesAsync();
+          serverContext?.SaveChangesAsync();
           _logger.Debug("Entity saved");
         }
       });
