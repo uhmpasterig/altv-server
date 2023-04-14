@@ -59,7 +59,6 @@ public partial class ServerContext : DbContext
 
     modelBuilder.Entity<Models.sammler_farming_data>(entity =>
     {
-      entity.HasNoKey();
       entity.ToTable("sammler_farming_data");
     });
     modelBuilder.Entity<Models.sammler_verarbeiter_data>(entity =>

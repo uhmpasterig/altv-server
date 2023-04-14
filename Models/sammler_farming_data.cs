@@ -21,12 +21,13 @@ public class propData
   }
 }
 
+[PrimaryKey("id")]
 public partial class sammler_farming_data
 {
   public sammler_farming_data()
   {
   }
-
+  public int id { get; set; }
   public string name { get; set; }
   public string tool { get; set; }
   public int timeS { get; set; }
@@ -54,17 +55,7 @@ public partial class sammler_farming_data
 
 
   [NotMapped]
-  public List<propData> PropPositions
-  {
-    get
-    {
-      return JsonConvert.DeserializeObject<List<propData>>(_propPositions)!;
-    }
-    set
-    {
-      _propPositions = JsonConvert.SerializeObject(value);
-    }
-  }
+  public List<propData> PropPositions { get; set; } = new List<propData>();
 
   [NotMapped]
   public List<string> SideProducts

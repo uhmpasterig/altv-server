@@ -14,10 +14,12 @@ namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
   private List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
-  private Dictionary<xPlayer, string> _farmingPlayers;
+  private Dictionary<xPlayer, int> _farmingPlayers;
 
   public async void LoadSammler(sammler_farming_data sammlerData)
   {
+    sammlerData.PropPositions = JsonConvert.DeserializeObject<List<propData>>(sammlerData._propPositions)!;
+    
     foreach (propData prop in sammlerData.PropPositions)
     {
       xEntity _entity = new xEntity();
@@ -30,7 +32,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
       sammlerData.Entities.Add(_entity);
 
-      _logger.Debug("Entity created");
+      _logger.Debug("Entity created " + prop.position.ToString());
     }
   }
 
@@ -73,13 +75,13 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
     player.Emit("playAnim", "melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
 
-    _farmingPlayers.Add(player, _currentSammler.name);
+    _farmingPlayers.Add(player, _currentSammler.id);
     return true;
   }
 
   public async void OnLoad()
   {
-    _farmingPlayers = new Dictionary<xPlayer, string>();
+    _farmingPlayers = new Dictionary<xPlayer, int>();
 
     await using ServerContext serverContext = new ServerContext();
     _logger.Startup("Lade Sammler!");
@@ -98,7 +100,13 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       {
         if (sammler.name == route)
         {
-          _logger.Debug("Prop added to route " + route);
+          propData _prop = new propData(
+            JsonConvert.DeserializeObject<Rotation>(rot),
+            JsonConvert.DeserializeObject<Position>(pos),
+            prop
+          );
+
+          sammler.PropPositions.Add(_prop);
           sammler._propPositions = JsonConvert.SerializeObject(sammler.PropPositions);
           xEntity _entity = new xEntity();
           _entity.entityType = ENTITY_TYPES.PROP;
@@ -107,21 +115,22 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           _entity.range = 20;
           _entity.data.Add("model", prop);
           _entity.CreateEntity();
+
           sammler.Entities.Add(_entity);
-          
+
           await using ServerContext serverContext = new ServerContext();
-          serverContext?.SaveChangesAsync();
-          _logger.Debug("Entity saved");
+          serverContext.sammler_farming_data.Update(sammler);
+          await serverContext.SaveChangesAsync();
         }
       });
     });
   }
 
-  public sammler_farming_data GetSammler(string name)
+  public sammler_farming_data GetSammler(int id)
   {
     foreach (sammler_farming_data sammler in _sammler)
     {
-      if (sammler.name == name) return sammler;
+      if (sammler.id == id) return sammler;
     }
     return null!;
   }
@@ -136,19 +145,12 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     inv.AddItem(feld.item, random);
     player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);
 
-    /* if(inv.maxWeight >= inv.currentWeight + Items.Items.GetItem(feld.item).weight * random) {
-      player.Emit("notification", "Du hast nicht genug Platz im Inventar");
-    }
-    if(inv.slots <= inv.items.Count) {
-      player.Emit("notification", "Du hast nicht genug Platz im Inventar");
-    } */
-
     return true;
   }
 
   public async void OnFiveSecondsUpdate()
   {
-    foreach (KeyValuePair<xPlayer, string> kvp in _farmingPlayers)
+    foreach (KeyValuePair<xPlayer, int> kvp in _farmingPlayers)
     {
       if (kvp.Key == null)
       {
