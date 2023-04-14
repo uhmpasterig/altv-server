@@ -19,6 +19,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
   public async void LoadSammler(sammler_farming_data sammlerData)
   {
     sammlerData.PropPositions = JsonConvert.DeserializeObject<List<propData>>(sammlerData._propPositions)!;
+    
     foreach (propData prop in sammlerData.PropPositions)
     {
       xEntity _entity = new xEntity();
@@ -31,7 +32,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
       sammlerData.Entities.Add(_entity);
 
-      _logger.Debug("Entity created");
+      _logger.Debug("Entity created " + prop.position.ToString());
     }
   }
 
@@ -100,7 +101,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
         if (sammler.name == route)
         {
           _logger.Debug("Prop added to route " + route);
-
+          _logger.Debug(pos);
           propData _prop = new propData(
             JsonConvert.DeserializeObject<Position>(pos),
             JsonConvert.DeserializeObject<Rotation>(rot),
