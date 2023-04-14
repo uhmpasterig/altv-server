@@ -110,7 +110,13 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           sammler.Entities.Add(_entity);
           
           await using ServerContext serverContext = new ServerContext();
-          serverContext?.SaveChangesAsync();
+          sammler_farming_data? __sammler = serverContext.sammler_farming_data.Where(x => x.name == route).FirstOrDefault();
+          if (__sammler != null)
+          {
+            __sammler._propPositions = sammler._propPositions;
+            serverContext.sammler_farming_data.Update(__sammler);
+            await serverContext.SaveChangesAsync();
+          }
           _logger.Debug("Entity saved");
         }
       });
