@@ -7,11 +7,13 @@ using _logger = server.Logger.Logger;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
+using server.Handlers.Storage;
 
 namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
   private readonly List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
+  private Dictionary<xPlayer, string> _farmingPlayers;
 
   public async void LoadSammler(sammler_farming_data sammlerData)
   {
@@ -55,12 +57,14 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
     player.Emit("playAnim","melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
-    
+    _farmingPlayers.Add(player, _currentSammler.name);
     return true;
   }
 
   public async void OnLoad()
   {
+    _farmingPlayers = new Dictionary<xPlayer, string>();
+
     await using ServerContext serverContext = new ServerContext();
     _logger.Startup("Lade Sammler!");
     foreach (sammler_farming_data sammler in serverContext.sammler_farming_data)
@@ -72,8 +76,45 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
   }
 
+  public sammler_farming_data GetSammler(string name)
+  {
+    foreach(sammler_farming_data sammler in _sammler)
+    {
+      if(sammler.name == name) return sammler;
+    }
+    return null!;
+  }
+
+  public async Task<bool> FarmingStep(xPlayer player, sammler_farming_data feld)
+  {
+    if(player == null) return false;
+    if(feld == null) return false;
+    IStorageHandler _storageHandler = new StorageHandler(); 
+    xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["inventory"]!);
+    int random = new Random().Next(feld.amountmin, feld.amountmax);
+    inv.AddItem(feld.item, random);
+    player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);
+
+    /* if(inv.maxWeight >= inv.currentWeight + Items.Items.GetItem(feld.item).weight * random) {
+      player.Emit("notification", "Du hast nicht genug Platz im Inventar");
+    }
+    if(inv.slots <= inv.items.Count) {
+      player.Emit("notification", "Du hast nicht genug Platz im Inventar");
+    } */
+
+    return true;
+  }
+
   public async void OnFiveSecondsUpdate()
   {
-    _logger.Debug("Five seconds update");
+    foreach(KeyValuePair<xPlayer, string> kvp in _farmingPlayers)
+    {
+      if(kvp.Key == null) {
+        _farmingPlayers.Remove(kvp.Key!);
+        continue;
+      };
+      bool done = await FarmingStep(kvp.Key, GetSammler(kvp.Value));
+      if(!done) _farmingPlayers.Remove(kvp.Key!);
+    }
   }
 }

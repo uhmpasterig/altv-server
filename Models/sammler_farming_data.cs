@@ -16,7 +16,8 @@ public partial class sammler_farming_data
   public string tool { get; set; }
   public int timeS { get; set; }
   public string item { get; set; }
-  public int amount { get; set; }
+  public int amountmin { get; set; }
+  public int amountmax { get; set; }
   public string prop { get; set; }
   public string _pos { get; set; }
   public string _propPositions { get; set; }
@@ -66,6 +67,6 @@ public partial class sammler_farming_data
 
   public override string ToString()
   {
-    return $"Name: {name}, Tool: {tool}, Time: {timeS}, Item: {item}, Amount: {amount}, Prop: {prop}, Position: {Position}, PropPositions: {PropPositions}, SideProducts: {SideProducts}";
+    return $"Name: {name}, Tool: {tool}, Time: {timeS}, Item: {item}, Prop: {prop}, Position: {Position}, PropPositions: {PropPositions}, SideProducts: {SideProducts}";
   }
 }
