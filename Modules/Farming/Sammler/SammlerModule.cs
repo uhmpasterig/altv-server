@@ -18,6 +18,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public async void LoadSammler(sammler_farming_data sammlerData)
   {
+    sammlerData.PropPositions = JsonConvert.DeserializeObject<List<propData>>(sammlerData._propPositions)!;
     foreach (propData prop in sammlerData.PropPositions)
     {
       xEntity _entity = new xEntity();
@@ -105,6 +106,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
             JsonConvert.DeserializeObject<Rotation>(rot),
             prop
           );
+
           sammler.PropPositions.Add(_prop);
           sammler._propPositions = JsonConvert.SerializeObject(sammler.PropPositions);
           _logger.Debug("Prop added to route " + route);
@@ -150,13 +152,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     int random = new Random().Next(feld.amountmin, feld.amountmax);
     inv.AddItem(feld.item, random);
     player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);
-
-    /* if(inv.maxWeight >= inv.currentWeight + Items.Items.GetItem(feld.item).weight * random) {
-      player.Emit("notification", "Du hast nicht genug Platz im Inventar");
-    }
-    if(inv.slots <= inv.items.Count) {
-      player.Emit("notification", "Du hast nicht genug Platz im Inventar");
-    } */
 
     return true;
   }

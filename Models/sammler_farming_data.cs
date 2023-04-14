@@ -55,17 +55,7 @@ public partial class sammler_farming_data
 
 
   [NotMapped]
-  public List<propData> PropPositions
-  {
-    get
-    {
-      return JsonConvert.DeserializeObject<List<propData>>(_propPositions)!;
-    }
-    set
-    {
-      _propPositions = JsonConvert.SerializeObject(value);
-    }
-  }
+  public List<propData> PropPositions { get; set; } = new List<propData>();
 
   [NotMapped]
   public List<string> SideProducts
