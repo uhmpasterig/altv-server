@@ -114,7 +114,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           if (__sammler != null)
           {
             __sammler._propPositions = sammler._propPositions;
-            serverContext.sammler_farming_data.Update(__sammler);
             await serverContext.SaveChangesAsync();
           }
           _logger.Debug("Entity saved");
