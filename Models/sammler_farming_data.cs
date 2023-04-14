@@ -7,11 +7,26 @@ using server.Core;
 
 namespace server.Models;
 
+public class propData
+{
+  public Rotation rotation { get; set; }
+  public Position position { get; set; }
+  public string model { get; set; }
+
+  public propData(Rotation rotation, Position position, string model)
+  {
+    this.rotation = rotation;
+    this.position = position;
+    this.model = model;
+  }
+}
+
 public partial class sammler_farming_data
 {
-  public sammler_farming_data() {
+  public sammler_farming_data()
+  {
   }
-  
+
   public string name { get; set; }
   public string tool { get; set; }
   public int timeS { get; set; }
@@ -36,12 +51,14 @@ public partial class sammler_farming_data
     }
   }
 
+
+
   [NotMapped]
-  public Position[] PropPositions
+  public List<propData> PropPositions
   {
     get
     {
-      return JsonConvert.DeserializeObject<Position[]>(_propPositions)!;
+      return JsonConvert.DeserializeObject<List<propData>>(_propPositions)!;
     }
     set
     {
@@ -63,7 +80,7 @@ public partial class sammler_farming_data
   }
 
   [NotMapped]
-  public List<xEntity> Entities { get; set; } = new List<xEntity>(); 
+  public List<xEntity> Entities { get; set; } = new List<xEntity>();
 
   public override string ToString()
   {

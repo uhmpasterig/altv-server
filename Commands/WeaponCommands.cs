@@ -61,4 +61,10 @@ internal class WeaponCommands : IScript
     Models.BadFrak frak = FraktionsModuleMain.GetFrak(player.job);
     FraktionsModuleMain.FrakToString(frak);
   }
+
+  [Command("createroutenprop")]
+  public static void CreateRoutenProp(xPlayer player, string route, string prop = "prop_roadcone02a")
+  {
+    player.Emit("propCreator", "createroutenprop", route, prop);
+  }
 }

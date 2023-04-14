@@ -8,23 +8,24 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
 using server.Handlers.Storage;
+using Newtonsoft.Json;
 
 namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
-  private readonly List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
+  private List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
   private Dictionary<xPlayer, string> _farmingPlayers;
 
   public async void LoadSammler(sammler_farming_data sammlerData)
   {
-    foreach (Position _pos in sammlerData.PropPositions)
+    foreach (propData prop in sammlerData.PropPositions)
     {
       xEntity _entity = new xEntity();
       _entity.entityType = ENTITY_TYPES.PROP;
       _entity.dimension = (int)DIMENSIONEN.WORLD;
-      _entity.position = _pos;
+      _entity.position = prop.position;
       _entity.range = 20;
-      _entity.data.Add("model", sammlerData.prop);
+      _entity.data.Add("model", prop.model);
       _entity.CreateEntity();
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
       sammlerData.Entities.Add(_entity);
@@ -62,15 +63,16 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     });
     if (_currentEntity == null) return false;
 
-    if(await player.HasItem(_currentSammler.tool) == false) {
+    if (await player.HasItem(_currentSammler.tool) == false)
+    {
       player.SendMessage("Du benötigst ein " + _currentSammler.tool, NOTIFYS.ERROR);
       return false;
     };
-   
+
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
     player.Emit("playAnim", "melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
-    
+
     _farmingPlayers.Add(player, _currentSammler.name);
     return true;
   }
@@ -88,6 +90,26 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       _logger.Debug($"Sammler {sammler.name} geladen");
     }
     _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
+
+    AltAsync.OnClient<string, string, string, string>("createroutenprop", (route, pos, rot, prop) =>
+    {
+      _sammler.ForEach((sammler) =>
+      {
+        if (sammler.name == route)
+        {
+          sammler.PropPositions.Add(new propData(JsonConvert.DeserializeObject<Position>(rot), JsonConvert.DeserializeObject<Position>(pos), prop));
+          xEntity _entity = new xEntity();
+          _entity.entityType = ENTITY_TYPES.PROP;
+          _entity.dimension = (int)DIMENSIONEN.WORLD;
+          _entity.position = JsonConvert.DeserializeObject<Position>(rot);
+          _entity.range = 20;
+          _entity.data.Add("model", prop);
+          _entity.CreateEntity();
+          sammler.Entities.Add(_entity);
+          serverContext.SaveChanges();
+        }
+      });
+    });
   }
 
   public sammler_farming_data GetSammler(string name)
@@ -132,4 +154,5 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       if (!done) _farmingPlayers.Remove(kvp.Key!);
     }
   }
+
 }
