@@ -12,6 +12,9 @@ namespace server.Core;
 public class xStorage : Models.Storage
 {
   public List<InventoryItem> items = new List<InventoryItem>();
+  
+  public List<xPlayer> players = new List<xPlayer>();
+
   public float weight = 0;
 
   public xStorage(Models.Storage storage)
@@ -129,7 +132,6 @@ public class xStorage : Models.Storage
     }
 
   itemFinish:
-
     this.CalculateWeight();
   }
 
