@@ -53,7 +53,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
     });
     if (_currentEntity == null) return false;
     _logger.Debug("Entity found");
-    player.Emit("pointAtServerEntity", _currentEntity.entity.Id);
+    player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
     return true;
   }
 
