@@ -35,6 +35,11 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player) 
   {
+    if(_farmingPlayers.ContainsKey(player)) {
+      _farmingPlayers.Remove(player);
+      player.Emit("stopAnim");
+      return true;
+    };
     sammler_farming_data _currentSammler = null!;
     // Get the Closest Sammler
     _sammler.ForEach((sammler) =>
