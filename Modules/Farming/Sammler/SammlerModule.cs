@@ -14,7 +14,7 @@ namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
   private List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
-  private Dictionary<xPlayer, string> _farmingPlayers;
+  private Dictionary<xPlayer, int> _farmingPlayers;
 
   public async void LoadSammler(sammler_farming_data sammlerData)
   {
@@ -73,13 +73,13 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
     player.Emit("playAnim", "melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
 
-    _farmingPlayers.Add(player, _currentSammler.name);
+    _farmingPlayers.Add(player, _currentSammler.id);
     return true;
   }
 
   public async void OnLoad()
   {
-    _farmingPlayers = new Dictionary<xPlayer, string>();
+    _farmingPlayers = new Dictionary<xPlayer, int>();
 
     await using ServerContext serverContext = new ServerContext();
     _logger.Startup("Lade Sammler!");
@@ -123,11 +123,11 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     });
   }
 
-  public sammler_farming_data GetSammler(string name)
+  public sammler_farming_data GetSammler(int id)
   {
     foreach (sammler_farming_data sammler in _sammler)
     {
-      if (sammler.name == name) return sammler;
+      if (sammler.id == id) return sammler;
     }
     return null!;
   }
@@ -154,7 +154,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public async void OnFiveSecondsUpdate()
   {
-    foreach (KeyValuePair<xPlayer, string> kvp in _farmingPlayers)
+    foreach (KeyValuePair<xPlayer, int> kvp in _farmingPlayers)
     {
       if (kvp.Key == null)
       {
