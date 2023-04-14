@@ -108,7 +108,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           _entity.data.Add("model", prop);
           _entity.CreateEntity();
           sammler.Entities.Add(_entity);
-          _logger.Debug("Entity created");
+          
           await using ServerContext serverContext = new ServerContext();
           serverContext?.SaveChangesAsync();
           _logger.Debug("Entity saved");
