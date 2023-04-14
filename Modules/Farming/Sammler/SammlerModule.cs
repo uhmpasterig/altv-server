@@ -54,7 +54,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent
     if (_currentEntity == null) return false;
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
-    player.Emit("playAnim","mic_1_mcs_2-0", "prop_tool_pickaxe-0", -1, 1);
+    player.Emit("playAnim","melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
     return true;
   }
 
