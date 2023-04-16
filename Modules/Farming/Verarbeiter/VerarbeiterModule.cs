@@ -28,6 +28,8 @@ internal class ProcessData {
     if (!hasEnough) return;
     trunk.AddItem(verarbeiter.outputitem, amount);
     vehicle.isAccesable = true;
+    player.SendMessage("Verarbeitung abgeschlossen", NOTIFYS.INFO);
+    player.SendMessage($"Du hast {amount}x {verarbeiter.outputitem} erhalten", NOTIFYS.INFO);
   }
 
   public ProcessData(xVehicle vehicle, xPlayer player, verarbeiter_farming_data verarbeiter, xStorage trunk, int stepsToDo = 1)
@@ -59,7 +61,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     _processes.Add(processData);
     player.SendMessage("Verarbeitung gestartet", NOTIFYS.INFO);
     int timeInMin = 5000 * stepsToDo;
-    timeInMin = timeInMin / 1000;
+    timeInMin = timeInMin / 1000 / 60;
     player.SendMessage($"ETA: {timeInMin} Minuten", NOTIFYS.INFO);
   }
 
@@ -69,6 +71,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     {
       if (!processData.isRunning) continue;
       processData.stepsDone++;
+      _logger.Log($"Verarbeiter: {processData.stepsDone}/{processData.stepsToDo}");
       if (processData.stepsDone >= processData.stepsToDo)
       {
         processData.isRunning = false;
@@ -100,6 +103,6 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     _logger.Log("Player in verarbeiter is dead");
     if (vehicle == null) return;
     _logger.Log("Player in verarbeiter is dead2");
-    ProcessTrunk(vehicle, player, 2);
+    ProcessTrunk(vehicle, player, 10);
   }
 }
