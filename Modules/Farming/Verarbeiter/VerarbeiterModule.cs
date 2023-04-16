@@ -18,7 +18,7 @@ internal class ProcessData {
   public xPlayer player { get; set; }
   public verarbeiter_farming_data verarbeiter { get; set; }
   public xStorage trunk { get; set; }
-  public bool isRunning { get; set; }
+  public bool isRunning { get; set; } = true;
   public int stepsDone { get; set; } = 0;
   public int stepsToDo { get; set; } = 0;
 
@@ -38,7 +38,7 @@ internal class ProcessData {
     this.player = player;
     this.verarbeiter = verarbeiter;
     this.trunk = trunk;
-    this.isRunning = false;
+    this.isRunning = true;
     this.stepsToDo = stepsToDo;
   }
 }
