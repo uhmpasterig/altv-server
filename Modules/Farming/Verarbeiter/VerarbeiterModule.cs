@@ -103,6 +103,6 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     _logger.Log("Player in verarbeiter is dead");
     if (vehicle == null) return;
     _logger.Log("Player in verarbeiter is dead2");
-    ProcessTrunk(vehicle, player, 20);
+    ProcessTrunk(vehicle, player, 2);
   }
 }
