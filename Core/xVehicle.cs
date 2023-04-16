@@ -22,7 +22,7 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public string toString { get; }
 
   public bool isAccesable { get; set; } = true;
-  public bool isLocked { get; set; } = true;
+  public bool isLocked { get; set; } = false;
   public bool isEngineRunning { get; set; } = false;  
 
   public bool canTrunkBeOpened()
