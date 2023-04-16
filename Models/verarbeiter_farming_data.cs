@@ -8,13 +8,13 @@ using server.Core;
 namespace server.Models;
 
 
-
+[PrimaryKey("id")]
 public partial class verarbeiter_farming_data
 {
   public verarbeiter_farming_data()
   {
   }
-
+  public int id { get; set; }
   public string name { get; set; }
   public int time { get; set; }
   public string inputitem { get; set; }
