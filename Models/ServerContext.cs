@@ -12,10 +12,10 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Player> Player { get; set; }
   public virtual DbSet<Vehicle> Vehicle { get; set; }
   public virtual DbSet<Storage> Storages { get; set; }
-  public virtual DbSet<Models.Item> Items { get; set; }
-  public virtual DbSet<Models.BadFrak> BadFrak { get; set; }
-  public virtual DbSet<Models.sammler_farming_data> sammler_farming_data { get; set; }
-  public virtual DbSet<Models.sammler_verarbeiter_data> sammler_verarbeiter_data { get; set; }
+  public virtual DbSet<Item> Items { get; set; }
+  public virtual DbSet<BadFrak> BadFrak { get; set; }
+  public virtual DbSet<sammler_farming_data> sammler_farming_data { get; set; }
+  public virtual DbSet<verarbeiter_farming_data> sammler_verarbeiter_data { get; set; }
 
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -47,24 +47,24 @@ public partial class ServerContext : DbContext
       entity.ToTable("storages");
     });
 
-    modelBuilder.Entity<Models.Item>(entity =>
+    modelBuilder.Entity<Item>(entity =>
     {
       entity.ToTable("item_data");
     });
 
-    modelBuilder.Entity<Models.BadFrak>(entity =>
+    modelBuilder.Entity<BadFrak>(entity =>
     {
       entity.ToTable("fraktionen");
     });
 
-    modelBuilder.Entity<Models.sammler_farming_data>(entity =>
+    modelBuilder.Entity<sammler_farming_data>(entity =>
     {
       entity.ToTable("sammler_farming_data");
     });
-    modelBuilder.Entity<Models.sammler_verarbeiter_data>(entity =>
+    modelBuilder.Entity<verarbeiter_farming_data>(entity =>
     {
       entity.HasNoKey();
-      entity.ToTable("sammler_verarbeiter_data");
+      entity.ToTable("verarbeiter_farming_data");
     });
 
     OnModelCreatingPartial(modelBuilder);

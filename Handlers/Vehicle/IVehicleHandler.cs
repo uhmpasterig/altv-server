@@ -15,4 +15,5 @@ public interface IVehicleHandler
   bool SetModByType(xVehicle veh, VehicleModType modType, byte id);
   Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation);
   List<xVehicle> GetVehiclesInRadius(Position position, int range = 5);
+  xVehicle GetVehicle(int id);
 }

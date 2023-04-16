@@ -20,6 +20,17 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
   public string toString { get; }
+
+  public bool isAccesable { get; set; } = true;
+  public bool isLocked { get; set; } = true;
+  public bool isEngineRunning { get; set; } = false;  
+
+  public bool canTrunkBeOpened()
+  {
+    return isAccesable && !isLocked;    
+  }
+
+
   public new IxVehicle ToAsync(IAsyncContext _) => this;
 }
 
@@ -32,5 +43,4 @@ public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
   public string toString { get { return "OwnerID: "+ownerId; } }
-
 }

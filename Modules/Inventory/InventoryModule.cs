@@ -42,6 +42,9 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     xVehicle closestVehicle = vehicleHandler.GetClosestVehicle(player.Position);
     if (closestVehicle != null && (closestVehicle.storageIdTrunk != 0))
     {
+      if(closestVehicle.storageIdTrunk == 0) goto load;
+      if(closestVehicle.canTrunkBeOpened() == false) goto load;
+
       xStorage trunkStorage = await storageHandler.GetStorage(closestVehicle.storageIdTrunk);
       openInventorys.Add(trunkStorage.id);
       uiStorages.Add(trunkStorage);

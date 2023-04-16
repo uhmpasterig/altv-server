@@ -97,6 +97,11 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return Vehicles.Values.Where(v => v.Position.Distance(position) < range).ToList();
   }
 
+  public xVehicle GetVehicle(int id)
+  {
+    return Vehicles.Values.FirstOrDefault(v => v.vehicleId == id)!;
+  }
+
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();

@@ -9,9 +9,9 @@ namespace server.Models;
 
 
 
-public partial class sammler_verarbeiter_data
+public partial class verarbeiter_farming_data
 {
-  public sammler_verarbeiter_data()
+  public verarbeiter_farming_data()
   {
   }
 
@@ -19,7 +19,7 @@ public partial class sammler_verarbeiter_data
   public int time { get; set; }
   public string inputitem { get; set; }
   public string outputitem { get; set; }
-  public string ratio { get; set; }
+  public int ratio { get; set; }
   public string _pos { get; set; }
   
 
@@ -34,18 +34,5 @@ public partial class sammler_verarbeiter_data
     {
       _pos = JsonConvert.SerializeObject(value);
     }
-  }
-
-
-
-
-  
-
-  [NotMapped]
-  public List<xEntity> Entities { get; set; } = new List<xEntity>();
-
-  public override string ToString()
-  {
-    return $"Name: {name}, Time: {time}, InputItem: {inputitem}, OutputItem: {outputitem}, Ratio: {ratio}, Position: {Position}";
   }
 }
