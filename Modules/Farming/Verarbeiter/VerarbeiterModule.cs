@@ -98,7 +98,9 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     IVehicleHandler _vehicleHandler = new VehicleHandler();
     xPlayer player = (xPlayer)iplayer;
     xVehicle vehicle = _vehicleHandler.GetVehicle(1);
+    _logger.Log("Player in verarbeiter is dead");
     if (vehicle == null) return;
+    _logger.Log("Player in verarbeiter is dead2");
     ProcessTrunk(vehicle, player, 2);
   }
 }
