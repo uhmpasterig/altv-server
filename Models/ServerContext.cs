@@ -63,7 +63,6 @@ public partial class ServerContext : DbContext
     });
     modelBuilder.Entity<verarbeiter_farming_data>(entity =>
     {
-      entity.HasNoKey();
       entity.ToTable("verarbeiter_farming_data");
     });
 

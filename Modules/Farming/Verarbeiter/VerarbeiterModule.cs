@@ -84,16 +84,12 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
-
+    _logger.Startup("Verarbeiter loaded");
     foreach (var verarbeiter in _verarbeiter)
     {
       _logger.Debug($"Verarbeiter: {verarbeiter.name} loaded");
       _verarbeiter.Add(verarbeiter);
     }
-
-    AltAsync.OnClient<IPlayer, int>("ganzenkofferraumverareitenTes", async(iplayer, vehicleid) => {
-      xPlayer player = (xPlayer)iplayer;
-    });
   }
 
   public async void OnPlayerDeath(IPlayer iplayer, IEntity killer, uint weapon)
