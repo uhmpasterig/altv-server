@@ -85,7 +85,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
   {
     await using ServerContext serverContext = new ServerContext();
     _logger.Startup("Verarbeiter loaded");
-    foreach (var verarbeiter in _verarbeiter)
+    foreach (var verarbeiter in serverContext.verarbeiter_farming_data)
     {
       _logger.Debug($"Verarbeiter: {verarbeiter.name} loaded");
       _verarbeiter.Add(verarbeiter);
