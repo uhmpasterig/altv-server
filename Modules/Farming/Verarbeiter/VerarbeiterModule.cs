@@ -67,7 +67,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
 
   public async void OnFiveSecondsUpdate()
   {
-    foreach (ProcessData processData in _processes)
+    foreach (ProcessData processData in _processes.ToList())
     {
       if (!processData.isRunning) continue;
       processData.stepsDone++;
