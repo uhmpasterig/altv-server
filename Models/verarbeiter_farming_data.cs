@@ -15,7 +15,6 @@ public partial class verarbeiter_farming_data
   }
   public int id { get; set; }
   public string name { get; set; }
-  public int time { get; set; }
   public string inputitem { get; set; }
   public string outputitem { get; set; }
   public int ratio { get; set; }
