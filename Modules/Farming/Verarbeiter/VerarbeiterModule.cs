@@ -51,8 +51,10 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     IStorageHandler _storageHandler = new StorageHandler();
     xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
     vehicle.isAccesable = false;
-    verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 5000)!;
+    verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 100000)!;
+    _logger.Log("Player in verarbeiter is dead3");
     if (verarbeiter == null) return;
+    _logger.Log("Player in verarbeiter is dead4");
     ProcessData processData = new ProcessData(vehicle, player, verarbeiter, trunk, stepsToDo);
     _processes.Add(processData);
     player.SendMessage("Verarbeitung gestartet", NOTIFYS.INFO);
@@ -85,6 +87,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
 
     foreach (var verarbeiter in _verarbeiter)
     {
+      _logger.Debug($"Verarbeiter: {verarbeiter.name} loaded");
       _verarbeiter.Add(verarbeiter);
     }
 
