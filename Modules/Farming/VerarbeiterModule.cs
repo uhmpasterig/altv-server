@@ -113,7 +113,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       _verarbeiter.Add(verarbeiter);
       _logger.Debug($"Loaded Entity and Verarbeiter for {verarbeiter.name}");
     }
-    AltAsync.OnClient<IPlayer, int>("verarbeiter:process", async (iplayer, vehicleId) =>
+    AltAsync.OnClient<IPlayer, int>("verarbeiter:verarbeitenVehId", async (iplayer, vehicleId) =>
     {
       xPlayer player = (xPlayer)iplayer;
       xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
