@@ -96,6 +96,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
       ped.entityType = ENTITY_TYPES.PED;
       ped.range = 100;
       ped.data.Add("model", "u_m_y_babyd");
+      ped.CreateEntity();
       _verarbeiter.Add(verarbeiter);
       _logger.Debug($"Loaded Entity and Verarbeiter for {verarbeiter.name}");
     }
