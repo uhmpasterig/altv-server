@@ -112,7 +112,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
           _entity.entityType = ENTITY_TYPES.PROP;
           _entity.dimension = (int)DIMENSIONEN.WORLD;
           _entity.position = JsonConvert.DeserializeObject<Position>(pos);
-          _entity.range = 20;
+          _entity.range = 100;
           _entity.data.Add("model", prop);
           _entity.CreateEntity();
 
