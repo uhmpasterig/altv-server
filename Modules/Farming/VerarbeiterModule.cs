@@ -22,7 +22,7 @@ internal class ProcessData
 
   public void RemoveAndAddItems()
   {
-    int amount = stepsDone * verarbeiter.ratio;
+    int amount = stepsDone / verarbeiter.ratio;
     bool hasEnough = trunk.RemoveItem(verarbeiter.inputitem, amount);
     if (!hasEnough) return;
     trunk.AddItem(verarbeiter.outputitem, amount);
