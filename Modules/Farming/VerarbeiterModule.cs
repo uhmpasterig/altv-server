@@ -7,6 +7,8 @@ using server.Handlers.Storage;
 using server.Util.Farming;
 namespace server.Modules.Farming.Verarbeiter;
 using server.Handlers.Vehicle;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 
 internal class ProcessData
 {
@@ -43,24 +45,35 @@ internal class ProcessData
 public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
 {
   internal static IVehicleHandler _vehicleHandler = new VehicleHandler();
+  internal static IStorageHandler _storageHandler = new StorageHandler();
+
   private List<verarbeiter_farming_data> _verarbeiter = new List<verarbeiter_farming_data>();
   private List<ProcessData> _processes = new List<ProcessData>();
 
   public async void ProcessTrunk(xVehicle vehicle, xPlayer player, int stepsToDo = 1)
   {
-    IStorageHandler _storageHandler = new StorageHandler();
     xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
     vehicle.isAccesable = false;
-    verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 100000)!;
-    _logger.Log("Player in verarbeiter is dead3");
+    verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
     if (verarbeiter == null) return;
-    _logger.Log("Player in verarbeiter is dead4");
     ProcessData processData = new ProcessData(vehicle, player, verarbeiter, trunk, stepsToDo);
     _processes.Add(processData);
     player.SendMessage("Verarbeitung gestartet", NOTIFYS.INFO);
     int timeInMin = 5000 * stepsToDo;
     timeInMin = timeInMin / 1000 / 60;
     player.SendMessage($"ETA: {timeInMin} Minuten", NOTIFYS.INFO);
+  }
+
+  public async Task<int> StepsVehicleCanDo(xVehicle vehicle)
+  {
+    xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
+    int steps = 0;
+    verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(vehicle.Position) < 40)!;
+    if (verarbeiter == null) return 0;
+    int amount = trunk.GetItemAmount(verarbeiter.inputitem);
+    if (amount == 0) return 0;
+    steps = amount / verarbeiter.ratio;
+    return steps;
   }
 
   public async void OnFiveSecondsUpdate()
@@ -70,7 +83,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       if (!processData.isRunning) continue;
       processData.stepsDone++;
       _logger.Log($"Verarbeiter: {processData.stepsDone}/{processData.stepsToDo}");
-      if (processData.stepsDone >= processData.stepsToDo)
+      if (processData.stepsDone >= processData.stepsToDo || )
       {
         processData.isRunning = false;
         processData.RemoveAndAddItems();
@@ -100,6 +113,13 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       _verarbeiter.Add(verarbeiter);
       _logger.Debug($"Loaded Entity and Verarbeiter for {verarbeiter.name}");
     }
+    AltAsync.OnClient<IPlayer, int>("verarbeiter:process", async (iplayer, vehicleId) =>
+    {
+      xPlayer player = (xPlayer)iplayer;
+      xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
+      if (vehicle == null) return;
+      ProcessTrunk(vehicle, player, await StepsVehicleCanDo(vehicle));
+    });
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)
@@ -109,11 +129,11 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
     {
       if (verarbeiter.Position.Distance(player.Position) < 2)
       {
-        
+
         List<xVehicle> vehicles = new List<xVehicle>();
         foreach (xVehicle veh in _vehicleHandler.GetVehiclesInRadius(player.Position, 20))
         {
-          if(vehicles.Contains(veh)) continue;
+          if (vehicles.Contains(veh)) continue;
           vehicles.Add(veh);
         }
         player.Emit("frontend:open", "verarbeiter", new verarbeiterWriter(vehicles));

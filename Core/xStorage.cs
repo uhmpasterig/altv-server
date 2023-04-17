@@ -60,6 +60,19 @@ public class xStorage : Models.Storage
     return stacks;
   }
 
+  public int GetItemAmount(string itemname)
+  {
+    int count = 0;
+    foreach (var item in this.items)
+    {
+      if (item.name == itemname)
+      {
+        count += item.count;
+      }
+    }
+    return count;
+  }
+
   public int GetFreeSlot()
   {
     for (int i = 1; i <= this.slots; i++)
