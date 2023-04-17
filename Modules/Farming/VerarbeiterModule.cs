@@ -91,12 +91,14 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     foreach (verarbeiter_farming_data verarbeiter in serverContext.verarbeiter_farming_data)
     {
       xEntity ped = new xEntity();
+      _logger.Exception(verarbeiter._pos);
       ped.position = verarbeiter.Position;
       ped.dimension = (int)DIMENSIONEN.WORLD;
       ped.entityType = ENTITY_TYPES.PED;
       ped.range = 100;
       ped.data.Add("model", "u_m_y_babyd");
       ped.CreateEntity();
+
       _verarbeiter.Add(verarbeiter);
       _logger.Debug($"Loaded Entity and Verarbeiter for {verarbeiter.name}");
     }
