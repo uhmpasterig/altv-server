@@ -54,6 +54,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
   {
     xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
     vehicle.isAccesable = false;
+    if(_processes.Any(x => x.vehicle == vehicle)) return;
     verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
     if (verarbeiter == null) return;
     ProcessData processData = new ProcessData(vehicle, player, verarbeiter, trunk, stepsToDo);
