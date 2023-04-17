@@ -83,7 +83,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       if (!processData.isRunning) continue;
       processData.stepsDone++;
       _logger.Log($"Verarbeiter: {processData.stepsDone}/{processData.stepsToDo}");
-      if (processData.stepsDone >= processData.stepsToDo || )
+      if (processData.stepsDone >= processData.stepsToDo)
       {
         processData.isRunning = false;
         processData.RemoveAndAddItems();
