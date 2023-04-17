@@ -28,6 +28,7 @@ public class verarbeiterWriter : IWritable
       writer.Value(veh.vehicleId);
       writer.Name("model");
       writer.Value(veh.model);
+      writer.EndObject();
     }
     writer.EndArray();
     writer.EndObject();

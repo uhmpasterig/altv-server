@@ -105,10 +105,11 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
     if (player.IsDead) return false;
-    foreach (verarbeiter_farming_data verarbeiter in _verarbeiter)
+    foreach (verarbeiter_farming_data verarbeiter in _verarbeiter.ToList())
     {
       if (verarbeiter.Position.Distance(player.Position) < 2)
       {
+        
         List<xVehicle> vehicles = new List<xVehicle>();
         foreach (xVehicle veh in _vehicleHandler.GetVehiclesInRadius(player.Position, 20))
         {
@@ -116,6 +117,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
         }
         player.Emit("frontend:open", "verarbeiter", new verarbeiterWriter(vehicles));
         return true;
+
       }
     }
     return false;
