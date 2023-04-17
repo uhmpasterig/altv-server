@@ -15,6 +15,10 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public int vehicleId { get; set; }
   public int ownerId { get; set; }
   public int garageId { get; set; }
+
+  public string model { get; set; }
+  public string licensePlate { get; set; }
+  
   public int storageIdTrunk { get; set; } = 0;
   public int storageIdGloveBox { get; set; } = 0;
   public DateTime lastAction { get; set; }
@@ -36,8 +40,11 @@ public class xVehicle : AsyncVehicle, IxVehicle
 
 public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
 {
+  int vehicleId { get; set; }
   public int ownerId { get; set; }
   public int garageId { get; set; }
+  public string model { get; set; }
+  public string licensePlate { get; set; }
   public int storageIdTrunk { get; set; }
   public int storageIdGloveBox { get; set; }
   public DateTime lastAction { get; set; }

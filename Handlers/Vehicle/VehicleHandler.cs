@@ -41,6 +41,8 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     xvehicle.storageIdGloveBox = vehicle.storageIdGloveBox;
     xvehicle.storageIdTrunk = vehicle.storageIdTrunk;
 
+    xvehicle.model = vehicle.model;
+
     xvehicle.PrimaryColor = (byte)vehicle.color;
     xvehicle.SecondaryColor = (byte)vehicle.color2;
     await xvehicle.SetNumberplateTextAsync(vehicle.plate);

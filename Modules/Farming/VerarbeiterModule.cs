@@ -1,19 +1,15 @@
 using server.Core;
 using server.Events;
-using server.Handlers.Event;
 using server.Handlers.Entities;
 using server.Models;
 using _logger = server.Logger.Logger;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Data;
 using server.Handlers.Storage;
-using server.Handlers.Vehicle;
-using Newtonsoft.Json;
-
+using server.Util.Farming;
 namespace server.Modules.Farming.Verarbeiter;
+using server.Handlers.Vehicle;
 
-internal class ProcessData {
+internal class ProcessData
+{
   public xVehicle vehicle { get; set; }
   public xPlayer player { get; set; }
   public verarbeiter_farming_data verarbeiter { get; set; }
@@ -22,7 +18,8 @@ internal class ProcessData {
   public int stepsDone { get; set; } = 0;
   public int stepsToDo { get; set; } = 0;
 
-  public void RemoveAndAddItems() {
+  public void RemoveAndAddItems()
+  {
     int amount = stepsDone * verarbeiter.ratio;
     bool hasEnough = trunk.RemoveItem(verarbeiter.inputitem, amount);
     if (!hasEnough) return;
@@ -43,11 +40,12 @@ internal class ProcessData {
   }
 }
 
-public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadEvent
+public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
 {
+  internal static IVehicleHandler _vehicleHandler = new VehicleHandler();
   private List<verarbeiter_farming_data> _verarbeiter = new List<verarbeiter_farming_data>();
   private List<ProcessData> _processes = new List<ProcessData>();
-  
+
   public async void ProcessTrunk(xVehicle vehicle, xPlayer player, int stepsToDo = 1)
   {
     IStorageHandler _storageHandler = new StorageHandler();
@@ -104,14 +102,22 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPlayerDeadE
     }
   }
 
-  public async void OnPlayerDeath(IPlayer iplayer, IEntity killer, uint weapon)
+  public async Task<bool> OnKeyPressE(xPlayer player)
   {
-    IVehicleHandler _vehicleHandler = new VehicleHandler();
-    xPlayer player = (xPlayer)iplayer;
-    xVehicle vehicle = _vehicleHandler.GetVehicle(1);
-    _logger.Log("Player in verarbeiter is dead");
-    if (vehicle == null) return;
-    _logger.Log("Player in verarbeiter is dead2");
-    ProcessTrunk(vehicle, player, 2);
+    if (player.IsDead) return false;
+    foreach (verarbeiter_farming_data verarbeiter in _verarbeiter)
+    {
+      if (verarbeiter.Position.Distance(player.Position) < 2)
+      {
+        List<xVehicle> vehicles = new List<xVehicle>();
+        foreach (xVehicle veh in _vehicleHandler.GetVehiclesInRadius(player.Position, 20))
+        {
+          vehicles.Add(veh);
+        }
+        player.Emit("frontend:open", "verarbeiter", new verarbeiterWriter(vehicles));
+        return true;
+      }
+    }
+    return false;
   }
 }
