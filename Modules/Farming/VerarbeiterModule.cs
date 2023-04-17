@@ -22,10 +22,10 @@ internal class ProcessData
 
   public void RemoveAndAddItems()
   {
-    int amount = stepsDone / verarbeiter.ratio;
+    int amount = stepsDone * verarbeiter.ratio;
     bool hasEnough = trunk.RemoveItem(verarbeiter.inputitem, amount);
     if (!hasEnough) return;
-    trunk.AddItem(verarbeiter.outputitem, amount);
+    trunk.AddItem(verarbeiter.outputitem, stepsDone);
     vehicle.isAccesable = true;
     player.SendMessage("Verarbeitung abgeschlossen", NOTIFYS.INFO);
     player.SendMessage($"Du hast {amount}x {verarbeiter.outputitem} erhalten", NOTIFYS.INFO);
