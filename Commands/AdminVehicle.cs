@@ -8,6 +8,7 @@ using AltV.Net.Data;
 using AltV.Net;
 using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
+using server.Models;
 
 namespace server.Commands;
 
@@ -95,6 +96,24 @@ internal class AdminVehicle : IScript
       _logger.Log(vehPos);
       _logger.Info("Vehicle Rotation: ");
       _logger.Log(vehRot);
+    }
+  }
+
+  [Command("addgaragespawn")]
+  public async static void AddGarageSpawn(xPlayer player, int garage_id = 1)
+  {
+
+    xVehicle veh = (xVehicle)player.Vehicle;
+
+    if (veh.Exists)
+    {
+      Models.GarageSpawns spawn = new Models.GarageSpawns();
+      spawn.Position = player.Vehicle.Position;
+      spawn.Rotation = player.Vehicle.Rotation;
+      spawn.garage_id = garage_id;
+      ServerContext dbContext = new ServerContext();
+      dbContext.GarageSpawns.Add(spawn);
+      await dbContext.SaveChangesAsync();
     }
   }
 }
