@@ -31,7 +31,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<xVehicle> SetVehicleData(xVehicle xvehicle, Models.Vehicle vehicle)
   {
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
-    Vehicles.Add(vehicle.id, xvehicle);
 
     xvehicle.vehicleId = vehicle.id;
 
