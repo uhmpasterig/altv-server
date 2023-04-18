@@ -36,7 +36,7 @@ public class garagenWriter : IWritable
       writer.Name("id");
       writer.Value(veh.id);
       writer.Name("model");
-      writer.Value(veh.model);
+      writer.Value(veh.model.ToUpper());
       writer.EndObject();
     }
     writer.EndArray();
@@ -49,7 +49,7 @@ public class garagenWriter : IWritable
       writer.Name("id");
       writer.Value(veh.vehicleId);
       writer.Name("model");
-      writer.Value(veh.model);
+      writer.Value(veh.model.ToUpper());
       writer.EndObject();
     }
     writer.EndArray();
