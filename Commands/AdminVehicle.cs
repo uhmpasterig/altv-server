@@ -103,17 +103,19 @@ internal class AdminVehicle : IScript
   public async static void AddGarageSpawn(xPlayer player, int garage_id = 1)
   {
 
+    ServerContext _serverContext = new ServerContext();
     xVehicle veh = (xVehicle)player.Vehicle;
 
     if (veh.Exists)
     {
-      Models.GarageSpawns spawn = new Models.GarageSpawns();
-      spawn.Position = player.Vehicle.Position;
-      spawn.Rotation = player.Vehicle.Rotation;
-      spawn.garage_id = garage_id;
-      ServerContext dbContext = new ServerContext();
-      dbContext.GarageSpawns.Add(spawn);
-      await dbContext.SaveChangesAsync();
+      Models.GarageSpawns spawn = new Models.GarageSpawns()
+      {
+        Position = player.Vehicle.Position,
+        Rotation = player.Vehicle.Rotation,
+        garage_id = garage_id
+      };
+      _serverContext.GarageSpawns.Add(spawn);
+      await _serverContext.SaveChangesAsync();
     }
   }
 }
