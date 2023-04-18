@@ -125,6 +125,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     await using ServerContext serverContext = new ServerContext();
     foreach (Models.Vehicle vehicle in serverContext.Vehicle.Where(v => v.garageId == -1))
     {
+      _logger.Debug($"Loading vehicle with id {vehicle.id} from database");
       await CreateVehicleFromDb(vehicle);
     }
   }
