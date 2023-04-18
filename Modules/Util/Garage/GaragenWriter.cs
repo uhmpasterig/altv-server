@@ -41,7 +41,7 @@ public class garagenWriter : IWritable
     }
     writer.EndArray();
 
-    writer.Name("int");
+    writer.Name("in");
     writer.BeginArray();
     foreach (xVehicle veh in invehicles.ToList())
     {
