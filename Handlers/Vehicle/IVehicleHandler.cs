@@ -9,6 +9,7 @@ public interface IVehicleHandler
 {
 
   Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle);
+  Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle, Position position, Rotation rotation);
 
   Task SaveAllVehicles();
   xVehicle GetClosestVehicle(Position position, int range = 2);

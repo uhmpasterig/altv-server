@@ -42,6 +42,37 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
       garageList.Add(garage);
     }
+
+
+    AltAsync.OnClient<xPlayer, string, int>("parkVehicle", async (player, type, vehicleId) =>
+    {
+      Models.Garage? garage = garageList.FirstOrDefault(x => x.Position.Distance(player.Position) < 30);
+      if (type == "einparken")
+      {
+
+        xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
+        if (vehicle == null) return;
+        vehicle.storeInGarage(garage.id);
+      }
+      else if (type == "ausparken")
+      {
+        Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehicleId);
+        if (vehicle == null) return;
+        Models.GarageSpawns spawn = await GetFreeSpawn(garage!);
+        await _vehicleHandler.CreateVehicleFromDb(vehicle, spawn.Position, spawn.Rotation);
+      }
+    });
+  }
+
+  public async Task<Models.GarageSpawns> GetFreeSpawn(Models.Garage garage)
+  {
+    if (garage.garageSpawns.Count == 0) return null;
+    foreach (Models.GarageSpawns spawn in garage.garageSpawns.ToList())
+    {
+      if (_vehicleHandler.GetClosestVehicle(spawn.Position, 1) == null)
+        return spawn;
+    }
+    return null;
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)

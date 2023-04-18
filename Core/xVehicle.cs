@@ -2,6 +2,7 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async.Elements.Entities;
+using AltV.Net.Data;
 
 namespace server.Core;
 
@@ -34,6 +35,13 @@ public class xVehicle : AsyncVehicle, IxVehicle
     return isAccesable && !isLocked;    
   }
 
+  public void storeInGarage(int gid)
+  {
+    this.garageId = gid;
+    this.Position = new Position(0, 0, 0);
+    this.Rotation = new Rotation(0, 0, 0);
+    this.Destroy();
+  }
 
   public new IxVehicle ToAsync(IAsyncContext _) => this;
 }

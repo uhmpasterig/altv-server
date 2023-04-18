@@ -23,7 +23,12 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle)
   {
     xVehicle xvehicle = await CreateVehicle(vehicle.model, vehicle.Position, vehicle.Rotation);
-    _logger.Debug($"Created vehicle with model {vehicle.model} at {vehicle.Position}");
+    return await SetVehicleData(xvehicle, vehicle);
+  }
+
+  public async Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle, Position position, Rotation rotation)
+  {
+    xVehicle xvehicle = await CreateVehicle(vehicle.model, position, rotation);
     return await SetVehicleData(xvehicle, vehicle);
   }
 
