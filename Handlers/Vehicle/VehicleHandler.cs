@@ -95,7 +95,15 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async Task<List<xVehicle>> GetVehiclesInRadius(Position position, int range = 5)
   {
-    return Vehicles.Values.Where(v => v.Position.Distance(position) < range).ToList();
+    List<xVehicle> vehicles = new List<xVehicle>();
+    foreach (var vehicle in Vehicles.Values)
+    {
+      if (vehicle.Position.Distance(position) < range)
+      {
+        vehicles.Add(vehicle);
+      }
+    }
+    return vehicles;
   }
 
   public xVehicle GetVehicle(int id)
