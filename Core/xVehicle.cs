@@ -3,6 +3,8 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Data;
+using server.Models;
+using server.Handlers.Vehicle;
 
 namespace server.Core;
 
@@ -19,7 +21,7 @@ public class xVehicle : AsyncVehicle, IxVehicle
 
   public string model { get; set; }
   public string licensePlate { get; set; }
-  
+
   public int storageIdTrunk { get; set; } = 0;
   public int storageIdGloveBox { get; set; } = 0;
   public DateTime lastAction { get; set; }
@@ -28,19 +30,23 @@ public class xVehicle : AsyncVehicle, IxVehicle
 
   public bool isAccesable { get; set; } = true;
   public bool isLocked { get; set; } = false;
-  public bool isEngineRunning { get; set; } = false;  
+  public bool isEngineRunning { get; set; } = false;
 
   public bool canTrunkBeOpened()
   {
-    return isAccesable && !isLocked;    
+    return isAccesable && !isLocked;
   }
 
   public void storeInGarage(int gid)
   {
-    this.garageId = gid;
-    this.Position = new Position(0, 0, 0);
-    this.Rotation = new Rotation(0, 0, 0);
+    ServerContext _serverContext = new ServerContext();
+    var svehicle = _serverContext.Vehicle.Find(this.vehicleId);
+    if (svehicle == null) return;
+    svehicle.garageId = gid;
+    _serverContext.SaveChanges();
     this.Destroy();
+    //Todo : Unload Inventory
+    VehicleHandler.Vehicles.Remove(this.vehicleId);
   }
 
   public new IxVehicle ToAsync(IAsyncContext _) => this;
@@ -57,5 +63,5 @@ public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
   public int storageIdGloveBox { get; set; }
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
-  public string toString { get { return "OwnerID: "+ownerId; } }
+  public string toString { get { return "OwnerID: " + ownerId; } }
 }
