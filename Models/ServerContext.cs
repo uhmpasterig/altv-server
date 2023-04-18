@@ -17,6 +17,9 @@ public partial class ServerContext : DbContext
   public virtual DbSet<sammler_farming_data> sammler_farming_data { get; set; }
   public virtual DbSet<verarbeiter_farming_data> verarbeiter_farming_data { get; set; }
 
+  public virtual DbSet<Garage> Garage { get; set; }
+  public virtual DbSet<GarageSpawns> GarageSpawns { get; set; }
+
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
@@ -61,9 +64,20 @@ public partial class ServerContext : DbContext
     {
       entity.ToTable("sammler_farming_data");
     });
+
     modelBuilder.Entity<verarbeiter_farming_data>(entity =>
     {
       entity.ToTable("verarbeiter_farming_data");
+    });
+
+    modelBuilder.Entity<Garage>(entity =>
+    {
+      entity.ToTable("garage");
+    });
+
+    modelBuilder.Entity<GarageSpawns>(entity =>
+    {
+      entity.ToTable("garage_spawns");
     });
 
     OnModelCreatingPartial(modelBuilder);
