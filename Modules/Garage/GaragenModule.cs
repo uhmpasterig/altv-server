@@ -9,13 +9,19 @@ namespace server.Modules.Garage;
 class GaragenModule : ILoadEvent, IPressedEEvent
 {
   public static List<Models.Garage> garageList = new List<Models.Garage>();
-  
+
   public async void OnLoad()
   {
+    _logger.Warning("GaragenModule geladen");
     ServerContext _serverContext = new ServerContext();
-    foreach(Models.Garage garage in _serverContext.Garage.ToList())
+    foreach (Models.Garage garage in _serverContext.Garage.ToList())
     {
-      garage.ToString();
+      _logger.Warning("GaragenModule geladen1");
+      foreach (Models.GarageSpawns spawn in _serverContext.GarageSpawns.Where(x => x.garage_id == garage.id).ToList())
+      {
+        _logger.Warning("GaragenSpawn geladen2");
+        garage.garageSpawns.Add(spawn);
+      }
       garageList.Add(garage);
     }
   }

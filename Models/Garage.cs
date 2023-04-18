@@ -9,6 +9,7 @@ namespace server.Models;
 public partial class Garage
 {
   public Garage() {
+    garageSpawns = new List<GarageSpawns>();
   }
 
   public int id { get; set; }
@@ -27,4 +28,7 @@ public partial class Garage
       _pos = JsonConvert.SerializeObject(value);
     }
   }
+
+  [NotMapped]
+  public List<GarageSpawns> garageSpawns { get; set; }
 }
