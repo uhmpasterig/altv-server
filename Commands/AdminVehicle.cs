@@ -6,6 +6,7 @@ using AltV.Net.Resources.Chat.Api;
 using server.Handlers.Vehicle;
 using AltV.Net.Data;
 using AltV.Net;
+using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
 
 namespace server.Commands;
@@ -49,6 +50,7 @@ internal class AdminVehicle : IScript
     }
   }
 
+
   [Command("fulltune")]
   public static void FullTune(xPlayer player, int range = 5)
   {
@@ -68,5 +70,17 @@ internal class AdminVehicle : IScript
       _vehicleHandler.SetModByType(veh, VehicleModType.Plate, 3);
       _vehicleHandler.SetModByType(veh, VehicleModType.WindowTint, 2);
     }
+  }
+
+  [Command("coords")]
+  public static void GetCoords(xPlayer player, int range = 5)
+  {
+    string pos = JsonConvert.SerializeObject(player.Position);
+    string rot = JsonConvert.SerializeObject(player.Rotation);
+
+    _logger.Info("Position: ");
+    _logger.Log(pos);
+    _logger.Info("Rotation: ");
+    _logger.Log(rot);
   }
 }
