@@ -17,7 +17,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation)
   {
     xVehicle vehicle = (xVehicle)await AltAsync.CreateVehicle(model, position, rotation);
-    _logger.Debug($"Created vehicle with model {model} at {position}");
     Vehicles.Add(vehicle.Id, vehicle);
     return vehicle;
   }
