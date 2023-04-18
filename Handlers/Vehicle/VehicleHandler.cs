@@ -23,19 +23,18 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle)
   {
     xVehicle xvehicle = await CreateVehicle(vehicle.model, vehicle.Position, vehicle.Rotation);
-    vehicle.garageId = -1;
     return await SetVehicleData(xvehicle, vehicle);
   }
 
   public async Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle, Position position, Rotation rotation)
   {
     xVehicle xvehicle = await CreateVehicle(vehicle.model, position, rotation);
-    vehicle.garageId = -1;
     return await SetVehicleData(xvehicle, vehicle);
   }
 
   public async Task<xVehicle> SetVehicleData(xVehicle xvehicle, Models.Vehicle vehicle)
   {
+    await using ServerContext serverContext = new ServerContext();
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
     Vehicles.Add(vehicle.id, xvehicle);
     xvehicle.vehicleId = vehicle.id;
@@ -50,6 +49,9 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     xvehicle.SecondaryColor = (byte)vehicle.color2;
     await xvehicle.SetNumberplateTextAsync(vehicle.plate);
 
+    vehicle.garageId = -1;
+    await serverContext.SaveChangesAsync();
+    
     return xvehicle;
   }
 

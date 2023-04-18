@@ -59,6 +59,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
         Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehicleId);
         if (vehicle == null) return;
         Models.GarageSpawns spawn = await GetFreeSpawn(garage!);
+        if (spawn == null) return;
         await _vehicleHandler.CreateVehicleFromDb(vehicle, spawn.Position, spawn.Rotation);
       }
     });
