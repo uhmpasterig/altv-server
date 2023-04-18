@@ -6,6 +6,7 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using AltV.Net.Async;
 using server.Handlers.Entities;
+using server.Handlers.Vehicle;
 using server.Util.Garage;
 
 namespace server.Modules.Garage;
@@ -18,11 +19,12 @@ enum GARAGE_TYPES
 
 class GaragenModule : ILoadEvent, IPressedEEvent
 {
+  ServerContext _serverContext = new ServerContext();
+  IVehicleHandler _vehicleHandler = new VehicleHandler();
   public static List<Models.Garage> garageList = new List<Models.Garage>();
 
   public async void OnLoad()
   {
-    ServerContext _serverContext = new ServerContext();
     foreach (Models.Garage garage in _serverContext.Garage.ToList())
     {
       foreach (Models.GarageSpawns spawn in _serverContext.GarageSpawns.Where(x => x.garage_id == garage.id).ToList())
@@ -49,9 +51,12 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       if (garage.Position.Distance(player.Position) < 2)
       {
+        List<xVehicle> inVeh = _vehicleHandler.GetVehiclesInRadius(garage.Position, 20);
+        List<Models.Vehicle> outVeh = await _vehicleHandler.GetVehiclesInGarage(garage.id);
+
         player.Emit("frontend:open", "garage", new garagenWriter(
-          new List<xVehicle>(),
-          new List<xVehicle>(),
+          inVeh,
+          outVeh,
           garage.name));
         return true;
       }

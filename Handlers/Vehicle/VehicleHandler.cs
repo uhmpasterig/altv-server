@@ -7,7 +7,6 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using AltV.Net.Async;
 
-
 namespace server.Handlers.Vehicle;
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
@@ -49,7 +48,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
     return xvehicle;
   }
-  
+
   public async Task SaveVehicle(xVehicle xvehicle)
   {
     await using ServerContext serverContext = new ServerContext();
@@ -102,6 +101,13 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public xVehicle GetVehicle(int id)
   {
     return Vehicles.Values.FirstOrDefault(v => v.vehicleId == id)!;
+  }
+
+  public async Task<List<Models.Vehicle>> GetVehiclesInGarage(int garageId)
+  {
+    await using ServerContext serverContext = new ServerContext();
+    List<Models.Vehicle> vehicles = serverContext.Vehicle.Where(v => v.garageId == garageId).ToList();
+    return vehicles;
   }
 
   public async void OnLoad()

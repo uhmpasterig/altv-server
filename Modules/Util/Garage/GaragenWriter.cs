@@ -11,9 +11,9 @@ namespace server.Util.Garage;
 public class garagenWriter : IWritable
 {
   private readonly List<xVehicle> invehicles;
-  private readonly List<xVehicle> outvehicles;
+  private readonly List<Models.Vehicle> outvehicles;
   public string garage = "Garage";
-  public garagenWriter(List<xVehicle> _invehicles, List<xVehicle> _outvehicles, string _garage)
+  public garagenWriter(List<xVehicle> _invehicles, List<Models.Vehicle> _outvehicles, string _garage)
   {
     this.invehicles = _invehicles;
     this.outvehicles = _outvehicles;
@@ -30,11 +30,11 @@ public class garagenWriter : IWritable
 
     writer.Name("out");
     writer.BeginArray();
-    foreach (xVehicle veh in outvehicles.ToList())
+    foreach (Models.Vehicle veh in outvehicles.ToList())
     {
       writer.BeginObject();
       writer.Name("id");
-      writer.Value(veh.vehicleId);
+      writer.Value(veh.id);
       writer.Name("model");
       writer.Value(veh.model);
       writer.EndObject();
