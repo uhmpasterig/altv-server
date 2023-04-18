@@ -17,7 +17,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation)
   {
     xVehicle vehicle = (xVehicle)await AltAsync.CreateVehicle(model, position, rotation);
-    Vehicles.Add(vehicle.Id, vehicle);
     return vehicle;
   }
 
@@ -31,7 +30,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<xVehicle> SetVehicleData(xVehicle xvehicle, Models.Vehicle vehicle)
   {
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
-
+    Vehicles.Add(vehicle.id, xvehicle);
     xvehicle.vehicleId = vehicle.id;
 
     xvehicle.ownerId = vehicle.ownerId;
