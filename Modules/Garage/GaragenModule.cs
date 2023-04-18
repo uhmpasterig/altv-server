@@ -6,6 +6,7 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using AltV.Net.Async;
 using server.Handlers.Entities;
+using server.Util.Garage;
 
 namespace server.Modules.Garage;
 
@@ -48,7 +49,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       if (garage.Position.Distance(player.Position) < 2)
       {
-
+        player.Emit("frontend:open", "garage", new garagenWriter(
+          new List<xVehicle>(),
+          new List<xVehicle>(),
+          garage.name));
         return true;
       }
     }

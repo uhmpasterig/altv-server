@@ -103,7 +103,6 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
     foreach (verarbeiter_farming_data verarbeiter in serverContext.verarbeiter_farming_data)
     {
       xEntity ped = new xEntity();
-      _logger.Exception(verarbeiter._pos);
       ped.position = verarbeiter.Position;
       ped.dimension = (int)DIMENSIONEN.WORLD;
       ped.entityType = ENTITY_TYPES.PED;
@@ -112,7 +111,6 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       ped.CreateEntity();
 
       _verarbeiter.Add(verarbeiter);
-      _logger.Debug($"Loaded Entity and Verarbeiter for {verarbeiter.name}");
     }
     AltAsync.OnClient<IPlayer, int>("verarbeiter:verarbeitenVehId", async (iplayer, vehicleId) =>
     {
