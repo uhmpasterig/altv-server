@@ -95,6 +95,8 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async Task<List<xVehicle>> GetVehiclesInRadius(Position position, int range = 5)
   {
+    _logger.Exception($"GetVehiclesInRadius({position}, {range})");
+    _logger.Exception($"GetVehiclesInRadius({Vehicles.Count})");
     List<xVehicle> vehicles = new List<xVehicle>();
     foreach (var vehicle in Vehicles.Values)
     {
