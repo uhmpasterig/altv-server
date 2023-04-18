@@ -130,7 +130,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       {
 
         List<xVehicle> vehicles = new List<xVehicle>();
-        foreach (xVehicle veh in _vehicleHandler.GetVehiclesInRadius(player.Position, 20))
+        foreach (xVehicle veh in await _vehicleHandler.GetVehiclesInRadius(player.Position, 20))
         {
           if (vehicles.Contains(veh)) continue;
           vehicles.Add(veh);

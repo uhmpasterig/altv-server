@@ -28,10 +28,10 @@ internal class AdminVehicle : IScript
   }
 
   [Command("dv")]
-  public static void DeleteVehicle(xPlayer player, int range = 5)
+  public async static void DeleteVehicle(xPlayer player, int range = 5)
   {
     Position pos = player.Position;
-    List<xVehicle> vehicles = _vehicleHandler.GetVehiclesInRadius(pos, range);
+    List<xVehicle> vehicles = await _vehicleHandler.GetVehiclesInRadius(pos, range);
 
     foreach(xVehicle veh in vehicles){
       veh.Destroy();
