@@ -5,12 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace server.Models;
 
-[Keyless]
+[PrimaryKey("id")]
 public partial class GarageSpawns
 {
   public GarageSpawns() {
   }
 
+  public int id { get; set; }
   public int garage_id { get; set; }
   public string _pos { get; set; }
   public string _rot { get; set; }
