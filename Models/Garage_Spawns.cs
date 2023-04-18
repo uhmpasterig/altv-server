@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace server.Models;
 
-[PrimaryKey("id")]
+[Keyless]
 public partial class GarageSpawns
 {
   public GarageSpawns() {
