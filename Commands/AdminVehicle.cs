@@ -34,7 +34,8 @@ internal class AdminVehicle : IScript
     Position pos = player.Position;
     List<xVehicle> vehicles = await _vehicleHandler.GetVehiclesInRadius(pos, range);
 
-    foreach(xVehicle veh in vehicles){
+    foreach (xVehicle veh in vehicles)
+    {
       veh.Destroy();
     }
   }
@@ -45,7 +46,8 @@ internal class AdminVehicle : IScript
     Position pos = player.Position;
     xVehicle veh = (xVehicle)player.Vehicle;
 
-    if(veh.Exists){
+    if (veh.Exists)
+    {
       veh.Repair();
     }
   }
@@ -57,9 +59,10 @@ internal class AdminVehicle : IScript
     Position pos = player.Position;
     xVehicle veh = (xVehicle)player.Vehicle;
 
-    player.SendChatMessage("Vehicle Exists: "+veh.Exists);
-    if(veh.Exists){
-    player.SendChatMessage("Set Fulltune");
+    player.SendChatMessage("Vehicle Exists: " + veh.Exists);
+    if (veh.Exists)
+    {
+      player.SendChatMessage("Set Fulltune");
       _vehicleHandler.SetModByType(veh, VehicleModType.Horns, 20);
       _vehicleHandler.SetModByType(veh, VehicleModType.Spoilers, 2);
       _vehicleHandler.SetModByType(veh, VehicleModType.Engine, 3);
@@ -82,5 +85,16 @@ internal class AdminVehicle : IScript
     _logger.Log(pos);
     _logger.Info("Rotation: ");
     _logger.Log(rot);
+
+    if (player.Vehicle.Exists)
+    {
+      string vehPos = JsonConvert.SerializeObject(player.Vehicle.Position);
+      string vehRot = JsonConvert.SerializeObject(player.Vehicle.Rotation);
+
+      _logger.Info("Vehicle Position: ");
+      _logger.Log(vehPos);
+      _logger.Info("Vehicle Rotation: ");
+      _logger.Log(vehRot);
+    }
   }
 }
