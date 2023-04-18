@@ -43,13 +43,11 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       garageList.Add(garage);
     }
 
-
     AltAsync.OnClient<xPlayer, string, int>("parkVehicle", async (player, type, vehicleId) =>
     {
       Models.Garage? garage = garageList.FirstOrDefault(x => x.Position.Distance(player.Position) < 30);
       if (type == "einparken")
       {
-
         xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
         if (vehicle == null) return;
         vehicle.storeInGarage(garage.id);
@@ -83,7 +81,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       if (garage.Position.Distance(player.Position) < 2)
       {
-        List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 20);
+        List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 30);
         List<Models.Vehicle> outVeh = await _vehicleHandler.GetVehiclesInGarage(garage.id);
 
         player.Emit("frontend:open", "garage", new garagenWriter(

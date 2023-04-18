@@ -12,7 +12,6 @@ public class xVehicle : AsyncVehicle, IxVehicle
 {
   public xVehicle(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
-    toString = "OwnerID: " + ownerId;
   }
 
   public int vehicleId { get; set; }
@@ -26,7 +25,6 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public int storageIdGloveBox { get; set; } = 0;
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
-  public string toString { get; }
 
   public bool isAccesable { get; set; } = true;
   public bool isLocked { get; set; } = false;
@@ -63,5 +61,4 @@ public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
   public int storageIdGloveBox { get; set; }
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
-  public string toString { get { return "OwnerID: " + ownerId; } }
 }

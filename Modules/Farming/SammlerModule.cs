@@ -95,7 +95,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
     AltAsync.OnClient<xPlayer, string, string, string, string>("createroutenprop", async (player, route, pos, rot, prop) =>
     {
-      _logger.Debug("Prop created");
       _sammler.ForEach(async (sammler) =>
       {
         if (sammler.name == route)
