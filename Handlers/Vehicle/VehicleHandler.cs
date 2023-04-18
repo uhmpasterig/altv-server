@@ -49,7 +49,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
     return xvehicle;
   }
-
+  
   public async Task SaveVehicle(xVehicle xvehicle)
   {
     await using ServerContext serverContext = new ServerContext();
