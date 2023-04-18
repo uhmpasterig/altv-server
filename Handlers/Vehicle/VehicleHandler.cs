@@ -49,7 +49,13 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     xvehicle.SecondaryColor = (byte)vehicle.color2;
     await xvehicle.SetNumberplateTextAsync(vehicle.plate);
 
-    vehicle.garageId = -1;
+    Models.Vehicle dbVehicle = await serverContext.Vehicle.FindAsync(vehicle.id);
+    if (dbVehicle != null)
+    {
+      dbVehicle.Position = xvehicle.Position;
+      dbVehicle.Rotation = xvehicle.Rotation;
+      dbVehicle.garageId = -1;
+    }
     await serverContext.SaveChangesAsync();
     
     return xvehicle;
