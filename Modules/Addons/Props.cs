@@ -5,6 +5,7 @@ using server.Handlers.Entities;
 using AltV.Net.Data;
 using AltV.Net.Async;
 using Newtonsoft.Json;
+using _logger = server.Logger.Logger;
 
 namespace server.Modules.Props;
 
@@ -19,6 +20,7 @@ public class Props : ILoadEvent
 
     AltAsync.OnClient<xPlayer, string, string, string>("createprop", async (player, prop, _position, _rotation) =>
     {
+      _logger.Exception("createprop :" + _rotation);
       Position pos = JsonConvert.DeserializeObject<Position>(_position);
       Rotation rot = JsonConvert.DeserializeObject<Rotation>(_rotation);
       CreateDbProp(pos, rot, prop);
@@ -33,7 +35,10 @@ public class Props : ILoadEvent
     _entity.position = _prop.Position;
     _entity.range = 250;
     _entity.data.Add("model", _prop.prop);
-    _entity.data.Add("rotation", JsonConvert.SerializeObject(_prop.Rotation));
+    
+    _logger.Exception(_prop._rot);
+
+    _entity.data.Add("rotation", _prop._rot);
     _entity.CreateEntity();
   }
 

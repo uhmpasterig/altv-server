@@ -28,6 +28,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       _entity.position = prop.position;
       _entity.range = 20;
       _entity.data.Add("model", prop.model);
+      _entity.data.Add("rotation", JsonConvert.SerializeObject(prop.rotation));
       _entity.CreateEntity();
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
       sammlerData.Entities.Add(_entity);

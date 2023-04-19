@@ -12,7 +12,7 @@ namespace server.Core;
 public class xStorage : Models.Storage
 {
   public List<InventoryItem> items = new List<InventoryItem>();
-  
+
   public List<xPlayer> players = new List<xPlayer>();
 
   public float weight = 0;
@@ -171,23 +171,28 @@ public class xStorage : Models.Storage
 
   public bool RemoveItem(int slot, int count = 1)
   {
-    InventoryItem item = this.items.FirstOrDefault(x => x.slot == slot)!;
-    if (item == null) return false;
-    if (item.count < count)
+
+    while (count > 0)
     {
-      _logger.Error($"Storage {this.name} does not have enough items");
-      return false;
+      InventoryItem item = this.items.FirstOrDefault(x => x.slot == slot)!;
+      if (item == null) return false;
+      if (item.count == count)
+      {
+        this.items.Remove(item);
+        return true;
+      }
+      else if (item.count > count)
+      {
+        item.count -= count;
+        return true;
+      }
+      else
+      {
+        count -= item.count;
+        this.items.Remove(item);
+      }
     }
-    if (item.count == count)
-    {
-      this.items.Remove(item);
-      return true;
-    }
-    else
-    {
-      item.count -= count;
-      return true;
-    }
+    return true;
   }
 
   public InventoryItem GetItemFromSlot(int slot)
