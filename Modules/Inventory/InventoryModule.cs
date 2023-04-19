@@ -66,6 +66,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {
+      _logger.Log($"inventory:moveItem {fslot} {tslot} {fromStorage} {toStorage} {count}");
       xPlayer playerr = (xPlayer)player;
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
