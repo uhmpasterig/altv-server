@@ -34,9 +34,6 @@ public class PlayerLoadedWriter : IWritable
     int hour = DateTime.Now.Hour;
     int minute = DateTime.Now.Minute;
     int second = DateTime.Now.Second;
-    Console.WriteLine($"hour: {hour}, minute: {minute}, second: {second}");
-    Console.WriteLine($"hour: {hour}, minute: {minute}, second: {second}");
-    Console.WriteLine($"hour: {hour}, minute: {minute}, second: {second}");
     writer.Name("hour");
     writer.Value(hour);
     writer.Name("minute");
