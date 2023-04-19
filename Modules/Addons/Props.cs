@@ -33,6 +33,7 @@ public class Props : ILoadEvent
     _entity.position = _prop.Position;
     _entity.range = 250;
     _entity.data.Add("model", _prop.prop);
+    _entity.data.Add("rotation", JsonConvert.SerializeObject(_prop.Rotation));
     _entity.CreateEntity();
   }
 
