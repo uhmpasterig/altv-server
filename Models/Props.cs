@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace server.Models;
 
-[PrimaryKey("permaId")]
+[PrimaryKey("id")]
 public partial class Prop
 {
   public Prop() { 
