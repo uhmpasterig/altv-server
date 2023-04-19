@@ -98,12 +98,12 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         uiStorages.Add(storage);
       }
 
+      player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
+      watch.Stop();
       var elapsedTicks = watch.ElapsedTicks;
       var elapsedMs = watch.ElapsedMilliseconds;
       var additonalInfo = $"Ticks: {elapsedTicks} | Milliseconds: {elapsedMs}";
       _logger.Log(additonalInfo);
-      player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
-      watch.Stop();
     });
 
     AltAsync.OnClient<xPlayer, int, int>("inventory:useItem", (player, slot, storageId) =>
