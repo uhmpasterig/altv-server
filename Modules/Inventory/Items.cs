@@ -122,6 +122,11 @@ public class Items : ILoadEvent
       _logger.Error($"Item {item.name} does not exist");
       return;
     }
+    if (!_usableItems.ContainsKey(item.name))
+    {
+      _logger.Error($"Item {item.name} is not usable");
+      return;
+    }
     if (!storage.RemoveItem(slot))
     {
       _logger.Error($"Could not remove item {item.name} from storage {storageId}");
