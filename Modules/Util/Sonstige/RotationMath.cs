@@ -2,16 +2,12 @@ namespace server.Core;
 
 class RotationMath
 {
+
+  // jaw is -pi to pi and heading should be 0.0 to 360.0
   public static float JawToHeading(float jaw)
   {
-    jaw = jaw * 180 / 3.14159265358979323846f;
-    jaw = jaw + 90;
-    if (jaw < 0)
-    {
-      jaw = jaw + 360;
-    }
-    jaw = jaw % 360;
-    jaw = jaw * 3.14159265358979323846f / 180;
-    return jaw;
+    jaw = jaw + (float)Math.PI;
+    float heading = (float)(jaw * (180.0 / Math.PI));
+    return heading;
   }
 }
