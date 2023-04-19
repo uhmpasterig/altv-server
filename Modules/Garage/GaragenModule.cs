@@ -14,8 +14,20 @@ namespace server.Modules.Garage;
 
 enum GARAGE_TYPES
 {
-  pkw = 1,
-  lkw = 2
+  PKW = 1,
+  LKW = 2
+}
+
+enum GARAGE_SPRITES : int
+{
+  PKW = 357,
+  LKW = 477
+}
+
+enum GARAGE_COLORS : int
+{
+  PKW = 3,
+  LKW = 3
 }
 
 class GaragenModule : ILoadEvent, IPressedEEvent
@@ -23,6 +35,16 @@ class GaragenModule : ILoadEvent, IPressedEEvent
   ServerContext _serverContext = new ServerContext();
   IVehicleHandler _vehicleHandler = new VehicleHandler();
   public static List<Models.Garage> garageList = new List<Models.Garage>();
+
+  public static Dictionary<string, int> GetGarageBlipByType(int type)
+  {
+    string typeName = Enum.GetName(typeof(GARAGE_TYPES), type)!;
+
+    Dictionary<string, int> dict = new Dictionary<string, int>();
+    dict.Add("sprite", (int)Enum.Parse(typeof(GARAGE_SPRITES), typeName));
+    dict.Add("color", (int)Enum.Parse(typeof(GARAGE_COLORS), typeName));
+    return dict;
+  }
 
   public async void OnLoad()
   {
@@ -40,7 +62,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       ped.range = 100;
       ped.data.Add("model", garage.ped);
       ped.CreateEntity();
-      Blip.Blip.Create(garage.name, 357, 3, 0.7f, garage.Position);
+
+      Dictionary<string, int> blip = GetGarageBlipByType(garage.type);
+      Blip.Blip.Create(garage.name, blip["sprite"], blip["color"], 1, garage.Position);
+
       garageList.Add(garage);
     }
 

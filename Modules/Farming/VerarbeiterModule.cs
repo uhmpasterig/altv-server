@@ -5,10 +5,11 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Handlers.Storage;
 using server.Util.Farming;
-namespace server.Modules.Farming.Verarbeiter;
 using server.Handlers.Vehicle;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+
+namespace server.Modules.Farming.Verarbeiter;
 
 internal class ProcessData
 {
@@ -108,6 +109,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       ped.entityType = ENTITY_TYPES.PED;
       ped.range = 100;
       ped.data.Add("model", "u_m_y_babyd");
+
       ped.CreateEntity();
 
       _verarbeiter.Add(verarbeiter);
