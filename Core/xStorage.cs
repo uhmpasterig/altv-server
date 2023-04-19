@@ -148,33 +148,31 @@ public class xStorage : Models.Storage
     this.CalculateWeight();
   }
 
-  public bool RemoveItem(string name, int count = 1, int slot = -1)
+  public bool RemoveItem(int slot, int count = 1)
   {
-    InventoryItem item = this.items.FirstOrDefault(x => x.name == name)!;
+    InventoryItem item = this.items.FirstOrDefault(x => x.slot == slot)!;
     if (item == null) return false;
-    if (item.count < count)
-    {
-      _logger.Error($"Storage {this.name} does not have enough items");
-      return false;
-    }
     if (item.count == count)
     {
       this.items.Remove(item);
       return true;
     }
-    else
+    else if (item.count > count)
     {
       item.count -= count;
       return true;
     }
+    else
+    {
+      return false;
+    }
   }
 
-  public bool RemoveItem(int slot, int count = 1)
+  public bool RemoveItem(string itemname, int count = 1)
   {
-
     while (count > 0)
     {
-      InventoryItem item = this.items.FirstOrDefault(x => x.slot == slot)!;
+      InventoryItem item = this.items.FirstOrDefault(x => x.name.ToLower() == itemname.ToLower())!;
       if (item == null) return false;
       if (item.count == count)
       {
