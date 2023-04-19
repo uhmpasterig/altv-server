@@ -66,10 +66,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {
-      _logger.Log($"inventory:moveItem {fslot} {tslot} {fromStorage} {toStorage} {count}");
-      // check the time the function takes 
       var watch = System.Diagnostics.Stopwatch.StartNew();
-      // the code that you want to measure comes here
       xPlayer playerr = (xPlayer)player;
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
@@ -85,7 +82,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       }
       try
       {
-        _logger.Log($"inventory:moveItem2");
         await DragCheck(item!, item2, from, to, fslot, tslot, count);
       }
       catch (Exception e)
@@ -102,9 +98,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         uiStorages.Add(storage);
       }
 
-      _logger.Log($"inventory:moveItem3");
+      var elapsedTicks = watch.ElapsedTicks;
       var elapsedMs = watch.ElapsedMilliseconds;
-      _logger.Log($"inventory:moveItem {elapsedMs}");
+      var additonalInfo = $"Ticks: {elapsedTicks} | Milliseconds: {elapsedMs}";
+      _logger.Log(additonalInfo);
       player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
       watch.Stop();
     });
