@@ -137,7 +137,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         if (fromi.count + toi.count <= toi.stackSize)
         {
           toi.count += count;
-          from.items.Remove(fromi);
+          fromi.count -= count;
         }
         else
         {
