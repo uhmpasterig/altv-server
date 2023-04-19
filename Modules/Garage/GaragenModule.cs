@@ -21,13 +21,13 @@ enum GARAGE_TYPES
 enum GARAGE_SPRITES : int
 {
   PKW = 357,
-  LKW = 473
+  LKW = 357
 }
 
 enum GARAGE_COLORS : int
 {
   PKW = 3,
-  LKW = 3
+  LKW = 81
 }
 
 class GaragenModule : ILoadEvent, IPressedEEvent
