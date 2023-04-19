@@ -30,6 +30,20 @@ public class PlayerLoadedWriter : IWritable
     writer.Name("health");
     writer.Value(player.Health);
 
+    // time in 0-24
+    int hour = DateTime.Now.Hour;
+    int minute = DateTime.Now.Minute;
+    int second = DateTime.Now.Second;
+    Console.WriteLine($"hour: {hour}, minute: {minute}, second: {second}");
+    Console.WriteLine($"hour: {hour}, minute: {minute}, second: {second}");
+    Console.WriteLine($"hour: {hour}, minute: {minute}, second: {second}");
+    writer.Name("hour");
+    writer.Value(hour);
+    writer.Name("minute");
+    writer.Value(minute);
+    writer.Name("second");
+    writer.Value(second);
+
 
     /* writer.BeginArray();
     foreach (var value in _rpPlayer.EquippedClothes)
