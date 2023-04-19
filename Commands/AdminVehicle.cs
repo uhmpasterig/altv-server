@@ -101,6 +101,26 @@ internal class AdminVehicle : IScript
     }
   }
 
+  [Command("addgarage")]
+  public async static void AddGarage(xPlayer player, string name, int type = 1)
+  {
+    ServerContext _serverContext = new ServerContext();
+    Position pos = player.Position;
+    Rotation rot = player.Rotation;
+
+    Models.Garage garage = new Models.Garage()
+    {
+      name = name,
+      type = type,
+      Position = player.Position,
+      heading = RotationMath.YawToHeading(player.Rotation.Yaw)
+
+    };
+    _serverContext.Garage.Add(garage);
+    await _serverContext.SaveChangesAsync();
+  }
+
+
   [Command("addgaragespawn")]
   public async static void AddGarageSpawn(xPlayer player, int garage_id = 1)
   {
