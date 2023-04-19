@@ -31,7 +31,9 @@ public class PlayerLoadedWriter : IWritable
     writer.Value(player.Health);
 
     // time in 0-24
-    int hour = DateTime.Now.Hour;
+    // int hour = DateTime.Now.Hour;
+    //TODO: dectivate only day
+    int hour = 12;
     int minute = DateTime.Now.Minute;
     int second = DateTime.Now.Second;
     writer.Name("hour");
