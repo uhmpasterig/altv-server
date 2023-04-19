@@ -18,6 +18,8 @@ public partial class verarbeiter_farming_data
   public string inputitem { get; set; }
   public string outputitem { get; set; }
   public int ratio { get; set; }
+  public string ped { get; set; }
+  public float heading { get; set; }
   public string _pos { get; set; }
 
   [NotMapped]

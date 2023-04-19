@@ -108,7 +108,8 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
       ped.dimension = (int)DIMENSIONEN.WORLD;
       ped.entityType = ENTITY_TYPES.PED;
       ped.range = 100;
-      ped.data.Add("model", "u_m_y_babyd");
+      ped.data.Add("model", verarbeiter.ped);
+      ped.data.Add("heading", verarbeiter.heading);
 
       ped.CreateEntity();
 
