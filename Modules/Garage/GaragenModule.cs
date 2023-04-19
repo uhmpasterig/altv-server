@@ -30,6 +30,20 @@ enum GARAGE_COLORS : int
   LKW = 81
 }
 
+class GARAGE_NAMES
+{
+  static Dictionary<string, string> _names = new Dictionary<string, string>()
+  {
+    { "PKW", "PKW-Garage" },
+    { "LKW", "LKW-Garage" }
+  };
+
+  public static string GetName(string name)
+  {
+    return _names[name];
+  }
+}
+
 class GaragenModule : ILoadEvent, IPressedEEvent
 {
   ServerContext _serverContext = new ServerContext();
@@ -64,7 +78,8 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       ped.CreateEntity();
 
       Dictionary<string, int> blip = GetGarageBlipByType(garage.type);
-      Blip.Blip.Create(garage.name, blip["sprite"], blip["color"], 1, garage.Position);
+      Blip.Blip.Create(GARAGE_NAMES.GetName(Enum.GetName(typeof(GARAGE_TYPES), garage.type)!), 
+        blip["sprite"], blip["color"], 1, garage.Position);
 
       garageList.Add(garage);
     }
