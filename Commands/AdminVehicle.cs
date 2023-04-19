@@ -86,6 +86,8 @@ internal class AdminVehicle : IScript
     _logger.Log(pos);
     _logger.Info("Rotation: ");
     _logger.Log(rot);
+    _logger.Info("Heading: ");
+    _logger.Log(RotationMath.JawToHeading(player.Rotation.Yaw).ToString());
 
     if (player.Vehicle != null)
     {
