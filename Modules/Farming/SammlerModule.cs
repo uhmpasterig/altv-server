@@ -92,37 +92,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       _logger.Debug($"Sammler {sammler.name} geladen");
     }
     _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
-
-    AltAsync.OnClient<xPlayer, string, string, string, string>("createroutenprop", async (player, route, pos, rot, prop) =>
-    {
-      _sammler.ForEach(async (sammler) =>
-      {
-        if (sammler.name == route)
-        {
-          propData _prop = new propData(
-            JsonConvert.DeserializeObject<Rotation>(rot),
-            JsonConvert.DeserializeObject<Position>(pos),
-            prop
-          );
-
-          sammler.PropPositions.Add(_prop);
-          sammler._propPositions = JsonConvert.SerializeObject(sammler.PropPositions);
-          xEntity _entity = new xEntity();
-          _entity.entityType = ENTITY_TYPES.PROP;
-          _entity.dimension = (int)DIMENSIONEN.WORLD;
-          _entity.position = JsonConvert.DeserializeObject<Position>(pos);
-          _entity.range = 100;
-          _entity.data.Add("model", prop);
-          _entity.CreateEntity();
-
-          sammler.Entities.Add(_entity);
-
-          await using ServerContext serverContext = new ServerContext();
-          serverContext.sammler_farming_data.Update(sammler);
-          await serverContext.SaveChangesAsync();
-        }
-      });
-    });
   }
 
   public sammler_farming_data GetSammler(int id)
@@ -143,7 +112,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     int random = new Random().Next(feld.amountmin, feld.amountmax);
     inv.AddItem(feld.item, random);
     player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);
-
+    
     return true;
   }
 
@@ -160,5 +129,4 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       if (!done) _farmingPlayers.Remove(kvp.Key!);
     }
   }
-
 }

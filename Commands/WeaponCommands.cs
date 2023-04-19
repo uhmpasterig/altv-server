@@ -62,9 +62,9 @@ internal class WeaponCommands : IScript
     FraktionsModuleMain.FrakToString(frak);
   }
 
-  [Command("createroutenprop")]
-  public static void CreateRoutenProp(xPlayer player, string route, string prop = "prop_roadcone02a")
+  [Command("createprop")]
+  public static void CreateProp(xPlayer player, string prop = "prop_roadcone02a")
   {
-    player.Emit("propCreator", "createroutenprop", route, prop);
+    player.Emit("propCreator", "createprop", prop);
   }
 }

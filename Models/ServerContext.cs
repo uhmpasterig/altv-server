@@ -6,20 +6,23 @@ namespace server.Models;
 
 public partial class ServerContext : DbContext
 {
-  public ServerContext() {}
+  public ServerContext() { }
   public ServerContext(DbContextOptions<ServerContext> options) : base(options) { }
 
   public virtual DbSet<Player> Player { get; set; }
   public virtual DbSet<Vehicle> Vehicle { get; set; }
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Item> Items { get; set; }
+
   public virtual DbSet<BadFrak> BadFrak { get; set; }
+
   public virtual DbSet<sammler_farming_data> sammler_farming_data { get; set; }
   public virtual DbSet<verarbeiter_farming_data> verarbeiter_farming_data { get; set; }
 
   public virtual DbSet<Garage> Garage { get; set; }
   public virtual DbSet<GarageSpawns> GarageSpawns { get; set; }
 
+  public virtual DbSet<Prop> Props { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
@@ -78,6 +81,11 @@ public partial class ServerContext : DbContext
     modelBuilder.Entity<GarageSpawns>(entity =>
     {
       entity.ToTable("garage_spawns");
+    });
+
+    modelBuilder.Entity<Prop>(entity =>
+    {
+      entity.ToTable("custom_props");
     });
 
     OnModelCreatingPartial(modelBuilder);
