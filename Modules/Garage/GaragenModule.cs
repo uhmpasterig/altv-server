@@ -8,6 +8,7 @@ using AltV.Net.Async;
 using server.Handlers.Entities;
 using server.Handlers.Vehicle;
 using server.Util.Garage;
+using server.Modules.Blip;
 
 namespace server.Modules.Garage;
 
@@ -39,7 +40,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       ped.range = 100;
       ped.data.Add("model", garage.ped);
       ped.CreateEntity();
-
+      Blip.Blip.Create(garage.name, 357, 3, 0.7f, garage.Position);
       garageList.Add(garage);
     }
 
