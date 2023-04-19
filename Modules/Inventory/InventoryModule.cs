@@ -103,10 +103,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       }
 
       _logger.Log($"inventory:moveItem3");
-      player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
-      watch.Stop();
       var elapsedMs = watch.ElapsedMilliseconds;
       _logger.Log($"inventory:moveItem {elapsedMs}");
+      player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
+      watch.Stop();
     });
 
     AltAsync.OnClient<xPlayer, int, int>("inventory:useItem", (player, slot, storageId) =>
