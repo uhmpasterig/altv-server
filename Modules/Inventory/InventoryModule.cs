@@ -33,7 +33,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     if (player.IsInVehicle)
     {
       xVehicle vehicle = (xVehicle)player.Vehicle;
-      if(vehicle.storageIdTrunk == 0) return false;
+      if (vehicle.storageIdTrunk == 0) return false;
       xStorage gloveStorage = await storageHandler.GetStorage(vehicle.storageIdGloveBox);
       openInventorys.Add(gloveStorage.id);
       uiStorages.Add(gloveStorage);
@@ -42,8 +42,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     xVehicle closestVehicle = vehicleHandler.GetClosestVehicle(player.Position);
     if (closestVehicle != null && (closestVehicle.storageIdTrunk != 0))
     {
-      if(closestVehicle.storageIdTrunk == 0) goto load;
-      if(closestVehicle.canTrunkBeOpened() == false) goto load;
+      if (closestVehicle.storageIdTrunk == 0) goto load;
+      if (closestVehicle.canTrunkBeOpened() == false) goto load;
 
       xStorage trunkStorage = await storageHandler.GetStorage(closestVehicle.storageIdTrunk);
       openInventorys.Add(trunkStorage.id);
@@ -67,6 +67,9 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {
       _logger.Log($"inventory:moveItem {fslot} {tslot} {fromStorage} {toStorage} {count}");
+      // check the time the function takes 
+      var watch = System.Diagnostics.Stopwatch.StartNew();
+      // the code that you want to measure comes here
       xPlayer playerr = (xPlayer)player;
       IStorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
@@ -99,6 +102,9 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       }
 
       player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
+      watch.Stop();
+      var elapsedMs = watch.ElapsedMilliseconds;
+      _logger.Log($"inventory:moveItem {elapsedMs}");
     });
 
     AltAsync.OnClient<xPlayer, int, int>("inventory:useItem", (player, slot, storageId) =>
@@ -127,9 +133,13 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if (fromi.name == toi.name) goto move;
     };
   move:
-    if(count == 0 && fromi != null)
+    if (count == 0 && fromi != null)
     {
       count = fromi!.count;
+    }
+    else if (fromi!.count < count)
+    {
+      return false;
     }
     if (fromi != null && toi != null)
     {
@@ -139,7 +149,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         {
           toi.count += count;
           fromi.count -= count;
-          if(fromi.count <= 0)
+          if (fromi.count <= 0)
           {
             from.items.Remove(fromi);
           }
