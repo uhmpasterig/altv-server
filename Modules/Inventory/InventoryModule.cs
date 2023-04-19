@@ -138,6 +138,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         {
           toi.count += count;
           fromi.count -= count;
+          if(fromi.count <= 0)
+          {
+            from.items.Remove(fromi);
+          }
         }
         else
         {
