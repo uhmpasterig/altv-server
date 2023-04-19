@@ -85,6 +85,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       }
       try
       {
+        _logger.Log($"inventory:moveItem2");
         await DragCheck(item!, item2, from, to, fslot, tslot, count);
       }
       catch (Exception e)
@@ -101,6 +102,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         uiStorages.Add(storage);
       }
 
+      _logger.Log($"inventory:moveItem3");
       player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
       watch.Stop();
       var elapsedMs = watch.ElapsedMilliseconds;
