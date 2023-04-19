@@ -159,6 +159,10 @@ public class Items : ILoadEvent
       _logger.Error($"Item {item.name} does not exist");
       return;
     }
+    if (count == 0)
+    {
+      count = item.count;
+    }
     if (!storage.RemoveItem(slot, count))
     {
       _logger.Error($"Could not remove item {item.name} from storage {storageId}");
