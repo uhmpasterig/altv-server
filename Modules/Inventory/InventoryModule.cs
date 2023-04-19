@@ -107,6 +107,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
     AltAsync.OnClient<xPlayer, int, int, int>("inventory:throwItem", (player, slot, storageId, count) =>
     {
+      _logger.Exception($"inventory:throwItem {slot} {storageId} {count}");
       _items.RemoveItemFromSlot(slot, storageId, count);
     });
   }
