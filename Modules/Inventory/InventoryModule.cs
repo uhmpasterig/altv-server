@@ -117,8 +117,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   {
     if (fromi == null && toi == null) return false;
     if (to.id == from.id) goto move;
-    _logger.Debug($"check1: {to.weight} + ({fromi?.weight} * {count}) > {to.maxWeight}");
-    _logger.Debug($"check2: {from.weight} + ({toi?.weight} * {toi?.count}) > {from.maxWeight}");
 
     if (to.weight + (fromi?.weight * count) > to.maxWeight) return false;
     if (from.weight + (toi?.weight * toi?.count) > from.maxWeight)
@@ -128,14 +126,17 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if (fromi.name == toi.name) goto move;
     };
   move:
-    _logger.Debug("In check1");
+    if(count == 0)
+    {
+      count = fromi!.count;
+    }
     if (fromi != null && toi != null)
     {
       if (fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize))
       {
         if (fromi.count + toi.count <= toi.stackSize)
         {
-          toi.count += fromi.count;
+          toi.count += count;
           from.items.Remove(fromi);
         }
         else
@@ -148,13 +149,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       }
     }
     if (from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
-    _logger.Debug("In check2");
     if (fromi != null)
     {
-      _logger.Debug("In check3");
       if (count != fromi.count)
       {
-        _logger.Debug("In check4");
         if (fromi.count - count <= 0) return false;
         fromi.count -= count;
         InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.stackSize, fromi.weight, fromi.job, fromi.data, tslot, count);
