@@ -21,7 +21,7 @@ enum GARAGE_TYPES
 enum GARAGE_SPRITES : int
 {
   PKW = 357,
-  LKW = 477
+  LKW = 473
 }
 
 enum GARAGE_COLORS : int
