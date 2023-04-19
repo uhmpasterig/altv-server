@@ -13,9 +13,12 @@ class UsabelMedikit : IItemsLoaded
       _logger.Debug("Medikit used");
     });
 
-    Items.RegisterUsableItem("weste", (xPlayer player) =>
+    Items.RegisterUsableItem("weste", async (xPlayer player) =>
     {
-      _logger.Debug("Weste used");
+      player.Emit("playAnim", "anim@heists@narcotics@funding@gang_idle", "gang_chatting_idle01", -1, 1);
+      await Task.Delay(5000);
+      player.Emit("stopAnim");
+      player.Armor = 100;
     });
   }
 }
