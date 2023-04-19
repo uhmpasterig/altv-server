@@ -75,6 +75,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       ped.entityType = ENTITY_TYPES.PED;
       ped.range = 100;
       ped.data.Add("model", garage.ped);
+      ped.data.Add("heading", garage.heading);
       ped.CreateEntity();
 
       Dictionary<string, int> blip = GetGarageBlipByType(garage.type);
