@@ -126,7 +126,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if (fromi.name == toi.name) goto move;
     };
   move:
-    if(count == 0)
+    if(count == 0 && fromi != null)
     {
       count = fromi!.count;
     }
