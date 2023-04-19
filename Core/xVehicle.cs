@@ -5,6 +5,7 @@ using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Data;
 using server.Models;
 using server.Handlers.Vehicle;
+using _logger = server.Logger.Logger;
 
 namespace server.Core;
 
@@ -37,14 +38,19 @@ public class xVehicle : AsyncVehicle, IxVehicle
 
   public void storeInGarage(int gid)
   {
-    ServerContext _serverContext = new ServerContext();
-    var svehicle = _serverContext.Vehicle.Find(this.vehicleId);
-    if (svehicle == null) return;
-    svehicle.garageId = gid;
-    _serverContext.SaveChanges();
-    this.Destroy();
     //Todo : Unload Inventory
-    VehicleHandler.Vehicles.Remove(this.vehicleId);
+    try{
+      VehicleHandler.Vehicles.Remove(this.vehicleId);
+      ServerContext _serverContext = new ServerContext();
+      var svehicle = _serverContext.Vehicle.Find(this.vehicleId);
+      if (svehicle == null) return;
+      svehicle.garageId = gid;
+      _serverContext.SaveChanges();
+      this.Destroy();
+    } catch (Exception e)
+    {
+      _logger.Exception(e.Message);
+    }
   }
 
   public new IxVehicle ToAsync(IAsyncContext _) => this;
