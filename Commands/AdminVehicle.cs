@@ -87,7 +87,7 @@ internal class AdminVehicle : IScript
     _logger.Info("Rotation: ");
     _logger.Log(rot);
 
-    if (player.Vehicle.Exists)
+    if (player.Vehicle != null)
     {
       string vehPos = JsonConvert.SerializeObject(player.Vehicle.Position);
       string vehRot = JsonConvert.SerializeObject(player.Vehicle.Rotation);
