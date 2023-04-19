@@ -33,7 +33,7 @@ public class InventoryItem
   public string data { get; set; }
   public int slot { get; set; }
   public int count { get; set; }
-  
+
   public InventoryItem()
   {
   }
@@ -90,6 +90,12 @@ public class Items : ILoadEvent
       return;
     }
 
+    if (!_usableItems.ContainsKey(itemname))
+    {
+      _logger.Error($"Item {itemname} is not usable");
+      return;
+    }
+
     foreach (var action in _usableItems.Where(x => x.Key == itemname))
     {
       action.Value(player);
@@ -116,7 +122,8 @@ public class Items : ILoadEvent
       _logger.Error($"Item {item.name} does not exist");
       return;
     }
-    if(!storage.RemoveItem(slot)) {
+    if (!storage.RemoveItem(slot))
+    {
       _logger.Error($"Could not remove item {item.name} from storage {storageId}");
       return;
     }
@@ -147,13 +154,14 @@ public class Items : ILoadEvent
       _logger.Error($"Item {item.name} does not exist");
       return;
     }
-    if(!storage.RemoveItem(slot, count)) {
+    if (!storage.RemoveItem(slot, count))
+    {
       _logger.Error($"Could not remove item {item.name} from storage {storageId}");
       return;
     }
   }
 
-  
+
 
   public static xItem GetItem(string itemname)
   {
@@ -183,7 +191,7 @@ public class Items : ILoadEvent
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
-    
+
     _logger.Startup("Lade Items!");
     foreach (Models.Item item in serverContext.Items)
     {
@@ -191,8 +199,8 @@ public class Items : ILoadEvent
       _items.Add(iitem.name, iitem);
       _logger.Debug($"Item {iitem.name} geladen");
     }
-    
-    _logger.Startup($"x{_items.Count } items geladen");
+
+    _logger.Startup($"x{_items.Count} items geladen");
     Alt.Emit("ItemsLoaded");
   }
 }
