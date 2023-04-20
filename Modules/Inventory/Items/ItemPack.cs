@@ -17,6 +17,7 @@ class UsabelMedikit : IItemsLoaded, IPressedEEvent
     
     foreach (KeyValuePair<int, string> item in playerUsedItems[player])
     {
+      _logger.Exception(item.Value);
       player.GiveItem(item.Value, 1);
       playerUsedItems[player][item.Key] = "";
     }
