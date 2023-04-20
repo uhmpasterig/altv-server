@@ -9,7 +9,11 @@ using _logger = server.Logger.Logger;
 
 namespace server.Modules.xMenu;
 
-public class xMenu
+public class xMenu : IPressedEEvent
 {
-
+  async void OnKeyPressE(xPlayer player) 
+  {
+    player.SendMessage("Vehicle", "Du hast E gedrückt", 5000, NOTIFYS.INFO);
+    player.SendMessage("Vehicle", "Du hast E gedrückt", 5000, NOTIFYS.ERROR);
+  }
 }
