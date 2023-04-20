@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Data;
+using AltV.Net.Enums;
 using server.Models;
 using server.Handlers.Vehicle;
 using _logger = server.Logger.Logger;
@@ -30,12 +31,50 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public DateTime creationDate { get; set; }
 
   public bool isAccesable { get; set; } = true;
-  public bool isLocked { get; set; } = false;
-  public bool isEngineRunning { get; set; } = false;
+
+  // States
+  private bool _isLocked = false;
+  private bool _isTrunkOpen = false;
+  private bool _isEngineRunning = false;
+
+  public bool Locked
+  {
+    get => _isLocked;
+    set
+    {
+      this.LockState = value ? VehicleLockState.Locked : VehicleLockState.Unlocked;
+      _isLocked = value;
+    }
+  }
+
+  public bool Trunk
+  {
+    get => _isTrunkOpen;
+    set
+    {
+      this.SetDoorState((byte)VehicleDoor.Trunk, value ? (byte)VehicleDoorState.OpenedLevel7 : (byte)VehicleDoorState.Closed);
+      _isTrunkOpen = value;
+    }
+  }
+
+  public bool Engine
+  {
+    get => _isEngineRunning;
+    set
+    {
+      this.EngineOn = value;
+      _isEngineRunning = value;
+    }
+  }
 
   public bool canTrunkBeOpened()
   {
-    return isAccesable && !isLocked;
+    return isAccesable && !Locked && !Engine && Trunk;
+  }
+
+  public bool hasControl(xPlayer player)
+  {
+    return player.Id == this.ownerId;
   }
 
   public void storeInGarage(int gid)
