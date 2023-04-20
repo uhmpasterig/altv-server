@@ -11,9 +11,10 @@ namespace server.Modules.xMenu;
 
 public class xMenu : IPressedEEvent
 {
-  async void OnKeyPressE(xPlayer player) 
+  public async Task<bool> OnKeyPressE(xPlayer player) 
   {
     player.SendMessage("Vehicle", "Du hast E gedrückt", 5000, NOTIFYS.INFO);
     player.SendMessage("Vehicle", "Du hast E gedrückt", 5000, NOTIFYS.ERROR);
+    return false;
   }
 }
