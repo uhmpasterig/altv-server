@@ -74,7 +74,8 @@ public class xVehicle : AsyncVehicle, IxVehicle
 
   public bool hasControl(xPlayer player)
   {
-    return player.Id == this.ownerId;
+    _logger.Log("Vehicle OwnerId: " + this.ownerId + " | PlayerId: " + player.id);
+    return player.id == this.ownerId;
   }
 
   public void storeInGarage(int gid)
