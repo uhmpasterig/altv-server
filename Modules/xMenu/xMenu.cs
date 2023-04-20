@@ -23,7 +23,15 @@ public class xMenu : ILoadEvent
     player.SendMessage("Vehicle", $"Das Fahrzeug ist nun {(veh.Locked ? "geschlossen" : "geöffnet")} [{veh.vehicleId}]", 5000, NOTIFYS.INFO);
   }
   private void ToggleEngine(xPlayer player) { }
-  private void ToggleTrunk(xPlayer player) { }
+  private void ToggleTrunk(xPlayer player)
+  {
+    xVehicle veh = _vehicleHandler.GetClosestVehicle(player.Position, 5);
+    if (veh == null) return;
+    if (!veh.hasControl(player)) return;
+
+    veh.Trunk = !veh.Trunk;
+    player.SendMessage("Vehicle", $"Das Fahrzeug ist nun {(veh.Trunk ? "geöffnet" : "geschlossen")} [{veh.vehicleId}]", 5000, NOTIFYS.INFO);
+  }
 
   public void OnLoad()
   {
