@@ -17,6 +17,8 @@ public partial class Vehicle
   public int garageId { get; set; }
 
   public string model { get; set; }
+  public string name { get; set; }
+  public string keyword { get; set; }
 
   public int storageIdTrunk { get; set; }
   public int storageIdGloveBox { get; set; }

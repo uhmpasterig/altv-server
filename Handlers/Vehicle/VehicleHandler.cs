@@ -44,12 +44,14 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     xvehicle.storageIdTrunk = vehicle.storageIdTrunk;
 
     xvehicle.model = vehicle.model;
+    xvehicle.name = vehicle.name;
+    xvehicle.keyword = vehicle.keyword;
 
     xvehicle.PrimaryColor = (byte)vehicle.color;
     xvehicle.SecondaryColor = (byte)vehicle.color2;
     await xvehicle.SetNumberplateTextAsync(vehicle.plate);
 
-    Models.Vehicle dbVehicle = await serverContext.Vehicle.FindAsync(vehicle.id);
+    Models.Vehicle? dbVehicle = await serverContext.Vehicle.FindAsync(vehicle.id);
     if (dbVehicle != null)
     {
       dbVehicle.Position = xvehicle.Position;
@@ -57,14 +59,14 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
       dbVehicle.garageId = -1;
     }
     await serverContext.SaveChangesAsync();
-    
+
     return xvehicle;
   }
 
   public async Task SaveVehicle(xVehicle xvehicle)
   {
     await using ServerContext serverContext = new ServerContext();
-    Models.Vehicle vehicle = await serverContext.Vehicle.FindAsync(xvehicle.vehicleId);
+    Models.Vehicle? vehicle = await serverContext.Vehicle.FindAsync(xvehicle.vehicleId);
     if (vehicle != null)
     {
       vehicle.Position = xvehicle.Position;
@@ -83,7 +85,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     _logger.Log($"Found {Vehicles.Count} vehicles in memory");
     foreach (var vehicle in Vehicles.Values)
     {
-      Models.Vehicle dbVehicle = serverContext.Vehicle.Find(vehicle.vehicleId);
+      Models.Vehicle? dbVehicle = serverContext.Vehicle.Find(vehicle.vehicleId);
 
       if (dbVehicle == null) continue;
       dbVehicle.Position = vehicle.Position;

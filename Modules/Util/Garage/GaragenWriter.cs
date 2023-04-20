@@ -34,9 +34,9 @@ public class garagenWriter : IWritable
       writer.Name("model");
       writer.Value(veh.model.ToUpper());
       writer.Name("name");
-      writer.Value("Unbenannt");
+      writer.Value(veh.name);
       writer.Name("keyword");
-      writer.Value("Unbenannt");
+      writer.Value(veh.keyword);
       writer.EndObject();
     }
     writer.EndArray();

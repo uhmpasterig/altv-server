@@ -98,6 +98,15 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       //   if (vehicle == null) return;
       //   vehicle.storeInGarage(garage.id);
     });
+
+    AltAsync.OnClient<xPlayer, int, string, string>("garageOverwriteVehicle", async (player, vehid, name, keyword) =>
+    {
+      Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehid);
+      if (vehicle == null) return;
+      vehicle.name = name;
+      vehicle.keyword = keyword;
+      _serverContext.SaveChanges();
+    });
   }
 
   public async Task<Models.GarageSpawns> GetFreeSpawn(Models.Garage garage)

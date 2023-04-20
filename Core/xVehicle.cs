@@ -20,6 +20,8 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public int garageId { get; set; }
 
   public string model { get; set; }
+  public string name { get; set; }
+  public string keyword { get; set; }
   public string licensePlate { get; set; }
 
   public int storageIdTrunk { get; set; } = 0;
@@ -39,7 +41,8 @@ public class xVehicle : AsyncVehicle, IxVehicle
   public void storeInGarage(int gid)
   {
     //Todo : Unload Inventory
-    try{
+    try
+    {
       VehicleHandler.Vehicles.Remove(this.vehicleId);
       ServerContext _serverContext = new ServerContext();
       var svehicle = _serverContext.Vehicle.Find(this.vehicleId);
@@ -47,7 +50,8 @@ public class xVehicle : AsyncVehicle, IxVehicle
       svehicle.garageId = gid;
       _serverContext.SaveChanges();
       this.Destroy();
-    } catch (Exception e)
+    }
+    catch (Exception e)
     {
       _logger.Exception(e.Message);
     }
@@ -62,6 +66,8 @@ public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
   public int ownerId { get; set; }
   public int garageId { get; set; }
   public string model { get; set; }
+  public string name { get; set; }
+  public string keyword { get; set; }
   public string licensePlate { get; set; }
   public int storageIdTrunk { get; set; }
   public int storageIdGloveBox { get; set; }
