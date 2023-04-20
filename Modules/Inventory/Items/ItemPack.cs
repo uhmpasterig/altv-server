@@ -11,7 +11,6 @@ class UsabelMedikit : IItemsLoaded, IPressedEEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
-    if (player.isDead) return false;
     if(playerUsedItems.ContainsKey(player) == false) return false;
 
     foreach (KeyValuePair<int, string> item in playerUsedItems[player])
