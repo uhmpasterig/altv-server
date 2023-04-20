@@ -7,7 +7,7 @@ namespace server.Modules.Items;
 class UsabelMedikit : IItemsLoaded, IPressedEEvent
 {
   public static string usedItems { get; set; }
-  public static Dictionary<xPlayer, Dictionary<int, string>> playerUsedItems { get; set; }
+  public static Dictionary<xPlayer, Dictionary<int, string>> playerUsedItems  = new Dictionary<xPlayer, Dictionary<int, string>>();
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
