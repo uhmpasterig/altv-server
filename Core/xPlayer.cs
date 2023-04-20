@@ -84,7 +84,6 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
       this.SendMessage("Du hast kein Inventar!", NOTIFYS.ERROR);
       return;
     }
-    _logger.Log($"GiveItem: {name} {count}");
     inv.AddItem(name, count);
   }
 

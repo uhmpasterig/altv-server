@@ -4,12 +4,12 @@ using _logger = server.Logger.Logger;
 
 namespace server.Modules.Items;
 
-class UsabelMedikit : IItemsLoaded, IPressedEEvent
+class UsabelMedikit : IItemsLoaded
 {
   public static string usedItems { get; set; }
   public static Dictionary<xPlayer, Dictionary<int, string>> playerUsedItems  = new Dictionary<xPlayer, Dictionary<int, string>>();
 
-  public async Task<bool> OnKeyPressE(xPlayer player)
+ /*  public async Task<bool> OnKeyPressE(xPlayer player)
   {
     _logger.Debug("OnKeyPressE");
     if(playerUsedItems.ContainsKey(player) == false) return false;
@@ -23,7 +23,7 @@ class UsabelMedikit : IItemsLoaded, IPressedEEvent
     }
     player.Emit("stopAnim");
     return true;
-  }
+  } */
 
   static int DefaultFunc(xPlayer player, string item)
   {
