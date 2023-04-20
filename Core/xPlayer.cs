@@ -36,10 +36,10 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public Dictionary<string, int> playerInventorys { get; set; }
 
   public List<xWeapon> weapons { get; set; }
-  
+
   public string job { get; set; }
   public int job_rank { get; set; }
-  public Dictionary<string, bool> job_perm { get; set; } 
+  public Dictionary<string, bool> job_perm { get; set; }
 
   public DateTime creationDate { get; set; }
   public DateTime lastLogin { get; set; }
@@ -66,13 +66,25 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public bool CanInteract()
   {
-    if(this.isDead == 1)
+    if (this.isDead == 1)
     {
       this.SendMessage("Du kannst nichts machen, während du tot bist!", NOTIFYS.ERROR);
       return false;
     }
 
     return true;
+  }
+
+  public async void GiveItem(string name, int count)
+  {
+    IStorageHandler storageHandler = new StorageHandler();
+    xStorage inv = await storageHandler.GetStorage(this.playerInventorys["inventory"]);
+    if (inv == null)
+    {
+      this.SendMessage("Du hast kein Inventar!", NOTIFYS.ERROR);
+      return;
+    }
+    inv.AddItem(name, count);
   }
 
   public void SetPlayerInventoryId(string key, int value)
@@ -91,7 +103,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   {
     _logger.Log($"LoadWeaponsFromDb: {weapons}");
     this.weapons = JsonConvert.DeserializeObject<List<xWeapon>>(weapons)!;
-    foreach(xWeapon weapon in this.weapons)
+    foreach (xWeapon weapon in this.weapons)
     {
       this.GiveWeapon(Alt.Hash(weapon.name), weapon.ammo, false);
     }
@@ -99,13 +111,13 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public Task<bool> GiveSavedWeapon(string name, int ammo = 100, bool hold = false, string job = null!)
   {
-    if(Server._serverWeapons.Find(x => x == name) == null)
+    if (Server._serverWeapons.Find(x => x == name) == null)
     {
       this.SendMessage("Dieses Waffe existiert nicht!", NOTIFYS.ERROR);
       return Task.FromResult(false);
     }
 
-    if(weapons.Find(x => x.name == name.ToLower()) != null)
+    if (weapons.Find(x => x.name == name.ToLower()) != null)
     {
       this.SendMessage("Du hast dieses Waffe bereits!", NOTIFYS.ERROR);
       return Task.FromResult(false);
