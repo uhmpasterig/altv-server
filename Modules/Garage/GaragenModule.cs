@@ -79,29 +79,24 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       ped.CreateEntity();
 
       Dictionary<string, int> blip = GetGarageBlipByType(garage.type);
-      Blip.Blip.Create(GARAGE_NAMES.GetName(Enum.GetName(typeof(GARAGE_TYPES), garage.type)!), 
+      Blip.Blip.Create(GARAGE_NAMES.GetName(Enum.GetName(typeof(GARAGE_TYPES), garage.type)!),
         blip["sprite"], blip["color"], 1, garage.Position);
 
       garageList.Add(garage);
     }
 
-    AltAsync.OnClient<xPlayer, string, int>("parkVehicle", async (player, type, vehicleId) =>
+    AltAsync.OnClient<xPlayer, int>("parkVehicle", async (player, vehicleId) =>
     {
       Models.Garage? garage = garageList.FirstOrDefault(x => x.Position.Distance(player.Position) < 30);
-      if (type == "einparken")
-      {
-        xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
-        if (vehicle == null) return;
-        vehicle.storeInGarage(garage.id);
-      }
-      else if (type == "ausparken")
-      {
-        Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehicleId);
-        if (vehicle == null) return;
-        Models.GarageSpawns spawn = await GetFreeSpawn(garage!);
-        if (spawn == null) return;
-        await _vehicleHandler.CreateVehicleFromDb(vehicle, spawn.Position, spawn.Rotation);
-      }
+      Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehicleId);
+      if (vehicle == null) return;
+      Models.GarageSpawns spawn = await GetFreeSpawn(garage!);
+      if (spawn == null) return;
+      await _vehicleHandler.CreateVehicleFromDb(vehicle, spawn.Position, spawn.Rotation);
+      // if (type == "einparken")
+      //   xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
+      //   if (vehicle == null) return;
+      //   vehicle.storeInGarage(garage.id);
     });
   }
 
@@ -123,11 +118,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       if (garage.Position.Distance(player.Position) < 2)
       {
-        List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 30);
+        // List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 30);
         List<Models.Vehicle> outVeh = await _vehicleHandler.GetVehiclesInGarage(garage.id);
 
         player.Emit("frontend:open", "garage", new garagenWriter(
-          inVeh,
           outVeh,
           garage.name));
         return true;
