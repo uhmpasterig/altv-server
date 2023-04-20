@@ -30,6 +30,8 @@ public enum NOTIFYS
 
 public partial class xPlayer : AsyncPlayer, IxPlayer
 {
+  private string[] _notifys = new string[] { "default", "error", "success", "warning" };
+
   public int id { get; set; }
   public string name { get; set; }
 
@@ -62,6 +64,11 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public void SendMessage(string message, NOTIFYS notifyType)
   {
     this.SendChatMessage(message);
+  }
+
+  public void SendMessage(string title, string text, int time, NOTIFYS notifyType)
+  {
+    this.Emit("clientNotify", title, text, time, _notifys[(int)notifyType]);
   }
 
   public bool CanInteract()
