@@ -105,7 +105,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       if (vehicle == null) return;
       vehicle.name = name;
       vehicle.keyword = keyword;
-      _serverContext.Vehicle.Update(vehicle);
+      await _serverContext.SaveChangesAsync();
     });
   }
 
