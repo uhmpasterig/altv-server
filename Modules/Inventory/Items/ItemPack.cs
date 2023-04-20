@@ -11,8 +11,10 @@ class UsabelMedikit : IItemsLoaded, IPressedEEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
+    _logger.Debug("OnKeyPressE");
     if(playerUsedItems.ContainsKey(player) == false) return false;
-
+    _logger.Debug("OnKeyPressE2");
+    
     foreach (KeyValuePair<int, string> item in playerUsedItems[player])
     {
       player.GiveItem(item.Value, 1);
