@@ -55,7 +55,7 @@ class UsabelMedikit : IItemsLoaded, IPressedEEvent
 
     Items.RegisterUsableItem("weste", async (xPlayer player) =>
     {
-      int randomNumber = DefaultFunc(player, "medikit");
+      int randomNumber = DefaultFunc(player, "weste");
       player.Emit("playAnim", "anim@heists@narcotics@funding@gang_idle", "gang_chatting_idle01", -1, 1);
       await Task.Delay(5000);
 
