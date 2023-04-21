@@ -35,6 +35,7 @@ public class StorageHandler : IStorageHandler
       return false;
 
     Storages.Add(storage.id, new xStorage(storage));
+    _logger.Debug($"Storage {storageId} loaded into memory.");
     return true;
   }
 
@@ -45,6 +46,7 @@ public class StorageHandler : IStorageHandler
 
     await _serverContext.SaveChangesAsync();
     Storages.Remove(storageId);
+    _logger.Debug($"Storage {storageId} unloaded from memory.");
   }
 
   public async Task<int> CreateStorage(string name, int slots, float maxWeight)
