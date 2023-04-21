@@ -6,7 +6,7 @@ public class shopWriter : IWritable
 {
   public Models.Shop shop { get; set; }
 
-  public shopWriter(Models.Shop _shop) 
+  public shopWriter(Models.Shop _shop)
   {
     this.shop = _shop;
   }
@@ -23,7 +23,6 @@ public class shopWriter : IWritable
     foreach (Models.ShopItems item in shop.items.ToList())
     {
       writer.BeginObject();
-      _logger.Log($"Item: {item.item} Price: {item.price}");
       writer.Name("name");
       writer.Value(item.item);
       writer.Name("price");

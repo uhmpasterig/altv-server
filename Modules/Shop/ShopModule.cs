@@ -94,7 +94,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       if (shop.Position.Distance(player.Position) < 2)
       {
-        player.Emit("frontend:open", "garage", new shopWriter(shop));
+        player.Emit("frontend:open", "shop", new shopWriter(shop));
         return true;
       }
     }
