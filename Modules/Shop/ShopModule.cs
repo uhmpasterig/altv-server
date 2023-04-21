@@ -4,6 +4,7 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Handlers.Entities;
 using server.Util.Shop;
+using AltV.Net.Async;
 
 namespace server.Modules.Shop;
 
@@ -86,6 +87,11 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
       shopList.Add(shop);
     }
+
+    AltAsync.OnClient<xPlayer, string>("frontend:shop:buyWarenkorb", async (player, warenkorb) => {
+      _logger.Exception("frontend:shop:buyWarenkorb");
+      _logger.Log(warenkorb);
+    });
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)
