@@ -41,6 +41,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.playerInventorys = dbPlayer.playerInventorys;
 
       await _storageHandler.CreateAllStorages(player);
+      _logger.Info($"Player {player.Name} loaded all storages");
+      _logger.Info(JsonConvert.SerializeObject(player.playerInventorys));
       foreach (var playerInventory in player.playerInventorys)
       {
         await _storageHandler.LoadStorage(playerInventory.Value);

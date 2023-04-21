@@ -95,6 +95,7 @@ public class StorageHandler : IStorageHandler
 
       int storageId = await CreateStorage(storageData.name, storageData.slots, storageData.maxWeight, storageData.position, player.id);
       storageIds.Add(storageData.name, storageId);
+      player.playerInventorys = storageIds;
       await _serverContext.SaveChangesAsync();
     }
   }
