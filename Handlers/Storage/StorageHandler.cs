@@ -87,7 +87,7 @@ public class StorageHandler : IStorageHandler
       _logger.Log($"Distance: {player.Position.Distance(storage.Position)}");
       _logger.Log($"Range: {range}.");
       _logger.Log($"Owner: {storage.ownerId}.");
-      _logger.Log($"Is player owner: {storage.ownerId == player.id}.")
+      _logger.Log($"Is player owner: {storage.ownerId == player.id}.");
       if (player.Position.Distance(storage.Position) < range)
       {
         _logger.Log($"Player {player.Name} [{player.id}] found a storage.");
