@@ -95,7 +95,6 @@ public class EventHandler : IEventHandler
 
   public async void OnKeyPressI(IPlayer iplayer)
   {
-    _logger.Info("OnKeyPressI");
     xPlayer player = (xPlayer)iplayer;
     if (!player.CanInteract()) return;
     foreach (var pressedIEvent in _pressedIEvents)
