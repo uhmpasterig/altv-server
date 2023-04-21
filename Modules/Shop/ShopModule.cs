@@ -46,7 +46,7 @@ class SHOP_NAMES
   }
 }
 
-class GaragenModule : ILoadEvent, IPressedEEvent
+class GaragenModule : IItemsLoaded, IPressedEEvent
 {
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Shop> shopList = new List<Models.Shop>();
@@ -61,7 +61,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     return dict;
   }
 
-  public async void OnLoad()
+  public async void ItemsLoaded()
   {
     foreach (Models.Shop shop in _serverContext.Shop.ToList())
     {

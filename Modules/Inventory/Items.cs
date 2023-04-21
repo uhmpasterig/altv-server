@@ -78,7 +78,7 @@ public class Items : ILoadEvent
     _logger.Startup($"Registering usable item {itemname}");
     if (!_items.ContainsKey(itemname))
     {
-      _logger.Error($"Item {itemname} does not exist");
+      _logger.Error($"Item {itemname} does not exist (RegisterUsableItem)");
       return;
     }
 
@@ -89,7 +89,7 @@ public class Items : ILoadEvent
   {
     if (!_items.ContainsKey(itemname))
     {
-      _logger.Error($"Item {itemname} does not exist");
+      _logger.Error($"Item {itemname} does not exist (GetItemLabel)");
       return null;
     }
     _logger.Log(JsonConvert.SerializeObject(_items[itemname]));

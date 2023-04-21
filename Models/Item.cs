@@ -13,7 +13,7 @@ public partial class Item
   public int id { get; set; }
 
   public string name { get; set; }  
-  public string label { get; set; }  
+  public string label { get; set; } = "Kein Label"; 
   public int stackSize { get; set; }
   public float weight { get; set; }
   public string job { get; set; }
