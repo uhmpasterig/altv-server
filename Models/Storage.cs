@@ -22,7 +22,7 @@ public partial class Storage
   public string _items { get; set; }
 
   [NotMapped]
-  public Position Position
+  public Position? Position
   {
     get
     {
