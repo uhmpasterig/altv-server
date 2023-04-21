@@ -50,7 +50,7 @@ public class EventHandler : IEventHandler
     _loadEvents = loadEvents;
     _itemsLoadedEvent = itemsLoadedEvent;
     _fiveSecondsUpdateEvents = fiveSecondsUpdateEvents;
-    
+
     _pressedEEvents = pressedEEvents;
     _pressedIEvents = pressedIEvents;
   }
@@ -59,6 +59,7 @@ public class EventHandler : IEventHandler
   {
     foreach (var loadEvent in _loadEvents)
     {
+      _logger.Debug($"Loading event handler: {loadEvent.GetType().Name}");
       loadEvent.OnLoad();
     }
     _logger.Debug("Loading event handlers");
@@ -69,10 +70,10 @@ public class EventHandler : IEventHandler
     AltAsync.OnPlayerDisconnect += async (IPlayer player, string reason) =>
       _playerDisconnectedEvents?.ForEach(playerDisconnectEvent => playerDisconnectEvent.OnPlayerDisconnect(player, reason));
 
-    AltAsync.OnPlayerDead += async (IPlayer player, IEntity killer, uint weapon) => 
+    AltAsync.OnPlayerDead += async (IPlayer player, IEntity killer, uint weapon) =>
       _playerDeadEvents?.ForEach(playerDeadEvent => playerDeadEvent.OnPlayerDeath(player, killer, weapon));
 
-    _timerHandler.AddInterval(1000 * 5, async (s, e) => 
+    _timerHandler.AddInterval(1000 * 5, async (s, e) =>
       _fiveSecondsUpdateEvents?.ForEach(fiveSecondsUpdateEvent => fiveSecondsUpdateEvent.OnFiveSecondsUpdate()));
 
     return Task.CompletedTask;
