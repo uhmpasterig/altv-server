@@ -20,6 +20,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
   IStorageHandler _storageHandler = new StorageHandler();
   ServerContext _serverContext = new ServerContext();
 
+  #region Player Functions
   public async Task<xPlayer?> LoadPlayerFromDatabase(xPlayer player)
   {
     try
@@ -120,6 +121,16 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     await _serverContext.SaveChangesAsync();
   }
 
+  public async Task<xPlayer> GetPlayer(int id)
+  {
+    xPlayer? player = Players.Find(p => p.id == id);
+    return player!;
+  }
+
+  #endregion Player Functions
+
+  #region Player Events
+
   public async void OnPlayerConnect(IPlayer iplayer, string reason)
   {
     // new stopwatch to measure the time it takes to load the player
@@ -148,9 +159,5 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     Players.Remove((xPlayer)player);
   }
 
-  public async Task<xPlayer> GetPlayer(int id)
-  {
-    xPlayer? player = Players.Find(p => p.id == id);
-    return player!;
-  }
+  #endregion Player Events
 }
