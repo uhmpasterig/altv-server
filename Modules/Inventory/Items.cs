@@ -7,6 +7,7 @@ using AltV.Net.Elements.Entities;
 using server.Models;
 using server.Handlers.Storage;
 using server.Handlers.Event;
+using Newtonsoft.Json;
 
 namespace server.Modules.Items;
 
@@ -91,7 +92,7 @@ public class Items : ILoadEvent
       _logger.Error($"Item {itemname} does not exist");
       return null;
     }
-
+    _logger.Log(JsonConvert.SerializeObject(_items[itemname]));
     return _items[itemname].label;
   }
 
