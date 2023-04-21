@@ -19,6 +19,7 @@ public partial class Shop
   public string _pos { get; set; }
   public float heading { get; set; }
   public string ped { get; set; }
+  public float tax { get; set; }
 
   [NotMapped]
   public Position Position

@@ -67,9 +67,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
   {
     foreach (Models.Shop shop in _serverContext.Shop.ToList())
     {
-      foreach (Models.ShopItems shopItems in _serverContext.ShopItems.Where(x => x.type == shop.type).ToList())
+      foreach (Models.ShopItems shopItem in _serverContext.ShopItems.Where(x => x.type == shop.type).ToList())
       {
-        shop.items.Add(shopItems);
+        shopItem.price = (int)(shopItem.price * shop.tax);
+        shop.items.Add(shopItem);
       }
 
       xEntity ped = new xEntity();
