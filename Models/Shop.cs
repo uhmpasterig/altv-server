@@ -22,6 +22,9 @@ public partial class Shop
   public float tax { get; set; }
 
   [NotMapped]
+  public string typeString { get; set; }
+
+  [NotMapped]
   public Position Position
   {
     get

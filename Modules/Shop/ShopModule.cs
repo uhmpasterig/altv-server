@@ -1,14 +1,9 @@
 using server.Core;
-using AltV.Net;
 using server.Events;
-using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
-using AltV.Net.Async;
 using server.Handlers.Entities;
-using server.Handlers.Vehicle;
-using server.Util.Garage;
-using server.Modules.Blip;
+using server.Util.Shop;
 
 namespace server.Modules.Shop;
 
@@ -83,7 +78,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       ped.CreateEntity();
 
       Dictionary<string, int> blip = GetShopBlipByType(shop.type);
-      Blip.Blip.Create(SHOP_NAMES.GetName(Enum.GetName(typeof(SHOP_TYPES), shop.type)!),
+      string name = SHOP_NAMES.GetName(Enum.GetName(typeof(SHOP_TYPES), shop.type)!);
+      shop.typeString = name;
+
+      Blip.Blip.Create(name,
         blip["sprite"], blip["color"], 1, shop.Position);
 
       shopList.Add(shop);
@@ -96,12 +94,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       if (shop.Position.Distance(player.Position) < 2)
       {
-        // List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 30);
-        _logger.Log($"Player {player.name} pressed E on shop {shop.name}");
-        foreach (Models.ShopItems shopItems in shop.items.ToList())
-        {
-          _logger.Log($"Item in Shop: {shopItems.item} - {shopItems.price}");
-        }
+        player.Emit("frontend:open", "garage", new shopWriter(shop));
         return true;
       }
     }
