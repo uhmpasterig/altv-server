@@ -16,10 +16,13 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation)
   {
-    try{
+    try
+    {
       xVehicle vehicle = (xVehicle)await AltAsync.CreateVehicle(model, position, rotation);
       return vehicle;
-    } catch (System.Exception e) {
+    }
+    catch (System.Exception e)
+    {
       _logger.Error($"Create Vehicle Error: {model} !maybe invalid Hash!");
       _logger.Error(e.Message);
       return null!;

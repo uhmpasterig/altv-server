@@ -22,7 +22,12 @@ internal class AdminVehicle : IScript
     Position pos = player.Position;
     Rotation rot = player.Rotation;
 
-    xVehicle veh = await _vehicleHandler.CreateVehicle(model, pos, rot);
+    xVehicle? veh = await _vehicleHandler.CreateVehicle(model, pos, rot);
+    if(veh == null)
+    {
+      player.SendChatMessage("Invalid Model");
+    }
+
     if (veh.Exists)
     {
       player.SendChatMessage("Spawned Vehicle: " + model);
