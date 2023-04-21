@@ -38,9 +38,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.creationDate = dbPlayer.creationDate;
 
       // STORAGES
-      await _storageHandler.CreateAllStorages(player);
-
       player.playerInventorys = dbPlayer.playerInventorys;
+
+      await _storageHandler.CreateAllStorages(player);
       foreach (var playerInventory in player.playerInventorys)
       {
         await _storageHandler.LoadStorage(playerInventory.Value);
