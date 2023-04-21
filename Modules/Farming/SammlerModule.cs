@@ -32,8 +32,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       _entity.CreateEntity();
       // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
       sammlerData.Entities.Add(_entity);
-
-      _logger.Debug("Entity created " + prop.position.ToString());
     }
   }
 

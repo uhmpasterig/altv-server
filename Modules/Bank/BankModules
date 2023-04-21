@@ -17,7 +17,7 @@ class BankModule : ILoadEvent
 
   public async void OnLoad()
   {
-    _logger.Startup("BankModule loaded");
+    _logger.Startup("Lade Sammler!!!!!!!!!!!!!!!!!");
     foreach (Models.Bank bank in _serverContext.Banks)
     {
       xEntity ped = new xEntity();
