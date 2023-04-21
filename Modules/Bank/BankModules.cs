@@ -24,7 +24,7 @@ class BankModuleMain : ILoadEvent
       ped.data.Add("heading", bank.heading);
       ped.CreateEntity();
       _logger.Exception($"Bank {bank.name} created");
-      Blip.Blip.Create("Bank", 276, 2, 1, bank.Position);
+      Blip.Blip.Create("Bank", 108, 2, 1, bank.Position);
 
       bankList.Add(bank);
     }
