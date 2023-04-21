@@ -48,7 +48,7 @@ class SHOP_NAMES
   }
 }
 
-class GaragenModule : ILoadEvent
+class GaragenModule : ILoadEvent, IPressedEEvent
 {
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Shop> shopList = new List<Models.Shop>();
@@ -87,5 +87,23 @@ class GaragenModule : ILoadEvent
 
       shopList.Add(shop);
     }
+  }
+
+  public async Task<bool> OnKeyPressE(xPlayer player)
+  {
+    foreach (Models.Shop shop in shopList.ToList())
+    {
+      if (shop.Position.Distance(player.Position) < 2)
+      {
+        // List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 30);
+        _logger.Log($"Player {player.name} pressed E on shop {shop.name}");
+        foreach (Models.ShopItems shopItems in shop.items.ToList())
+        {
+          _logger.Log($"Item in Shop: {shopItems.item} - {shopItems.price}");
+        }
+        return true;
+      }
+    }
+    return false;
   }
 }
