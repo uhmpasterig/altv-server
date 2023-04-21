@@ -22,6 +22,9 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Garage> Garage { get; set; }
   public virtual DbSet<GarageSpawns> GarageSpawns { get; set; }
 
+  public virtual DbSet<Shop> Shop { get; set; }
+  public virtual DbSet<ShopItems> ShopItems { get; set; }
+
   public virtual DbSet<Prop> Props { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -86,6 +89,16 @@ public partial class ServerContext : DbContext
     modelBuilder.Entity<Prop>(entity =>
     {
       entity.ToTable("custom_props");
+    });
+
+    modelBuilder.Entity<Shop>(entity =>
+    {
+      entity.ToTable("shops");
+    });
+
+    modelBuilder.Entity<ShopItems>(entity =>
+    {
+      entity.ToTable("shop_items");
     });
 
     OnModelCreatingPartial(modelBuilder);
