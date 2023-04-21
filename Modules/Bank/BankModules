@@ -14,7 +14,7 @@ class BankModule : ILoadEvent
   public async void OnLoad()
   {
     _logger.Startup("Lade Sammler!!!!!!!!!!!!!!!!!");
-    foreach (Models.Bank bank in _serverContext.Banks)
+    /* foreach (Models.Bank bank in _serverContext.Banks)
     {
       xEntity ped = new xEntity();
       ped.position = bank.Position;
@@ -28,19 +28,6 @@ class BankModule : ILoadEvent
       Blip.Blip.Create("Bank", 276, 2, 1, bank.Position);
 
       bankList.Add(bank);
-    }
-  }
-
-  public async Task<bool> OnKeyPressE(xPlayer player)
-  {
-    foreach (Models.Bank bank in bankList.ToList())
-    {
-      if (bank.Position.Distance(player.Position) < 2)
-      {
-        _logger.Log($"Open Bank {bank.name}");
-        return true;
-      }
-    }
-    return false;
+    } */
   }
 }
