@@ -9,6 +9,7 @@ namespace server.Handlers.Storage;
 
 public class StorageHandler : IStorageHandler
 {
+  ServerContext _serverContext = new ServerContext();
   public static readonly Dictionary<int, xStorage> Storages = new Dictionary<int, xStorage>();
 
   public StorageHandler()
@@ -28,8 +29,8 @@ public class StorageHandler : IStorageHandler
 
   public async Task<bool> LoadStorage(int storageId)
   {
-    using var serverContext = new ServerContext();
-    var storage = await serverContext.Storages.FindAsync(storageId);
+
+    var storage = await _serverContext.Storages.FindAsync(storageId);
     if (storage == null)
       return false;
 
@@ -37,17 +38,17 @@ public class StorageHandler : IStorageHandler
     return true;
   }
 
-  public void UnloadStorage(int storageId)
+  public async Task UnloadStorage(int storageId)
   {
     if (!Storages.TryGetValue(storageId, out var storage))
       return;
 
+    await _serverContext.SaveChangesAsync();
     Storages.Remove(storageId);
   }
 
   public async Task<int> CreateStorage(string name, int slots, float maxWeight)
   {
-    using var serverContext = new ServerContext();
     var storage = new Models.Storage
     {
       name = name,
@@ -55,27 +56,23 @@ public class StorageHandler : IStorageHandler
       maxWeight = maxWeight
     };
 
-    await serverContext.Storages.AddAsync(storage);
-    await serverContext.SaveChangesAsync();
+    await _serverContext.Storages.AddAsync(storage);
+    await _serverContext.SaveChangesAsync();
     return storage.id;
   }
 
   public async Task SaveAllStorages()
   {
-    _logger.Log("Saving all storages");
-    await using var serverContext = new ServerContext();
     foreach (var storage in Storages.Values)
     {
-      var dbStorage = await serverContext.Storages.FindAsync(storage.id);
+      var dbStorage = await _serverContext.Storages.FindAsync(storage.id);
 
       dbStorage!.name = storage.name;
       dbStorage.slots = storage.slots;
       dbStorage.maxWeight = storage.maxWeight;
       dbStorage._items = JsonConvert.SerializeObject(storage.items);
-
-      _logger.Log($"Saved storage {storage.id}");
     }
-    await serverContext.SaveChangesAsync();
+    await _serverContext.SaveChangesAsync();
   }
 
   public xStorage GetClosestxStorage(Position position, int range = 2)

@@ -11,6 +11,7 @@ public partial class Storage
   public Storage() {
   }
   public int id { get; set; }
+  public int ownerId { get; set; }
 
   public string name { get; set; }  
   public float maxWeight { get; set; }
