@@ -20,4 +20,17 @@ public partial class Storage
   public string _pos { get; set; }
   public bool usePos { get; set; }
   public string _items { get; set; }
+
+  [NotMapped]
+  public Position Position
+  {
+    get
+    {
+      return JsonConvert.DeserializeObject<Position>(_pos);
+    }
+    set
+    {
+      _pos = JsonConvert.SerializeObject(value);
+    }
+  }
 }

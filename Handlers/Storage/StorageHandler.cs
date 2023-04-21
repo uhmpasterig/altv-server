@@ -3,12 +3,14 @@ using server.Core;
 using server.Models;
 using AltV.Net.Data;
 using Newtonsoft.Json;
+using server.Util.Config;
 using _logger = server.Logger.Logger;
 
 namespace server.Handlers.Storage;
 
 public class StorageHandler : IStorageHandler
 {
+
   ServerContext _serverContext = new ServerContext();
   public static readonly Dictionary<int, xStorage> Storages = new Dictionary<int, xStorage>();
 
@@ -49,13 +51,19 @@ public class StorageHandler : IStorageHandler
     _logger.Debug($"Storage {storageId} unloaded from memory.");
   }
 
-  public async Task<int> CreateStorage(string name, int slots, float maxWeight)
+  public async Task<int> CreateStorage(string name, int slots, float maxWeight, Position? position, int ownerId = -1)
   {
+    bool usePos = position == null ? false : true;
+    if (position == null) position = new Position(0, 0, 0);
+
     var storage = new Models.Storage
     {
       name = name,
       slots = slots,
-      maxWeight = maxWeight
+      maxWeight = maxWeight,
+      ownerId = ownerId,
+      Position = position,
+      usePos = usePos
     };
 
     await _serverContext.Storages.AddAsync(storage);
@@ -75,6 +83,20 @@ public class StorageHandler : IStorageHandler
       dbStorage._items = JsonConvert.SerializeObject(storage.items);
     }
     await _serverContext.SaveChangesAsync();
+  }
+
+  public async Task CreateAllStorages(xPlayer player)
+  {
+    Dictionary<string, int> storageIds = player.playerInventorys;
+    foreach (StorageConfig.StorageData storageData in StorageConfig.StoragesDieJederHabenSollte)
+    {
+      if (storageIds.ContainsKey(storageData.name)) continue;
+      _logger.Debug($"Creating storage {storageData.name} for player {player.name}.");
+
+      int storageId = await CreateStorage(storageData.name, storageData.slots, storageData.maxWeight, storageData.position, player.id);
+      storageIds.Add(storageData.name, storageId);
+      await _serverContext.SaveChangesAsync();
+    }
   }
 
   public xStorage GetClosestxStorage(xPlayer player, int range = 2)
