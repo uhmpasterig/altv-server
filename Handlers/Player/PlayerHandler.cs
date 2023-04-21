@@ -55,6 +55,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         await _storageHandler.LoadStorage(playerInventory.Value);
       }
 
+      player.cash = dbPlayer.cash;
+      player.bank = dbPlayer.bank;
+
       // JOB
       player.job = dbPlayer.job;
       player.job_rank = dbPlayer.job_rank;

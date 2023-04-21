@@ -17,6 +17,9 @@ public partial class Player
   public int permaId { get; set; }
   public string name { get; set; }
 
+
+  public int cash { get; set; }
+  public int bank { get; set; }
   public ushort health { get; set; }
   public ushort armor { get; set; }
 

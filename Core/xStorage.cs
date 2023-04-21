@@ -85,18 +85,18 @@ public class xStorage : Models.Storage
     return -1;
   }
 
-  public void AddItem(string itemname, int count = 1)
+  public bool AddItem(string itemname, int count = 1)
   {
     xItem item = Items.GetItem(itemname);
     if (this.items.Count > this.slots)
     {
       _logger.Error($"Storage {this.name} is full");
-      return;
+      return false;
     }
     if (this.weight + item.weight > this.maxWeight)
     {
       _logger.Error($"Storage {this.name} is full");
-      return;
+      return false;
     }
     Dictionary<int, int> stacks = this.GetIncompleteStacks(itemname);
     int toAdd = count;
@@ -110,7 +110,7 @@ public class xStorage : Models.Storage
       if (this.items.Count + slotsNeeded > this.slots)
       {
         _logger.Error($"Storage {this.name} is full");
-        return;
+        return false;
       }
     }
 
@@ -145,6 +145,7 @@ public class xStorage : Models.Storage
 
   itemFinish:
     this.CalculateWeight();
+    return true;
   }
 
   public bool RemoveItem(int slot, int count = 1)

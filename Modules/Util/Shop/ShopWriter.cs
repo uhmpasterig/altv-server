@@ -23,8 +23,12 @@ public class shopWriter : IWritable
     foreach (Models.ShopItems item in shop.items.ToList())
     {
       writer.BeginObject();
+      writer.Name("id");
+      writer.Value(item.id);
       writer.Name("name");
       writer.Value(item.item);
+      writer.Name("type");
+      writer.Value(item.type);
       writer.Name("price");
       writer.Value(item.price);
       writer.EndObject();

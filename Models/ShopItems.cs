@@ -16,4 +16,7 @@ public partial class ShopItems
   public string item { get; set; }
   public int type { get; set; }
   public int price { get; set; }
+
+  [NotMapped]
+  public int count { get; set; } = 0;
 }

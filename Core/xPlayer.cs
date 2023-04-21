@@ -35,6 +35,9 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public int id { get; set; }
   public string name { get; set; }
 
+  public int cash { get; set; }
+  public int bank { get; set; }
+
   public Dictionary<string, int> playerInventorys { get; set; }
 
   public List<xWeapon> weapons { get; set; }
@@ -82,16 +85,16 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     return true;
   }
 
-  public async void GiveItem(string name, int count)
+  public async Task<bool> GiveItem(string name, int count)
   {
     IStorageHandler storageHandler = new StorageHandler();
     xStorage inv = await storageHandler.GetStorage(this.playerInventorys["Inventar"]);
     if (inv == null)
     {
       this.SendMessage("Du hast kein Inventar!", NOTIFYS.ERROR);
-      return;
+      return false;
     }
-    inv.AddItem(name, count);
+    return inv.AddItem(name, count);
   }
 
   public void SetPlayerInventoryId(string key, int value)
@@ -155,6 +158,21 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     IStorageHandler _storageHandler = new StorageHandler();
     xStorage inv = await _storageHandler.GetStorage(this.playerInventorys["Inventar"]);
     return inv.HasItem(name, count);
+  }
+
+  public async void GiveMoney(int amount)
+  {
+    this.cash += amount;
+  }
+
+  public async void RemoveMoney(int amount)
+  {
+    this.cash -= amount;
+  }
+
+  public async Task<bool> HasMoney(int amount)
+  {
+    return this.cash >= amount;
   }
 
   public new IxPlayer ToAsync(IAsyncContext _) => this;
