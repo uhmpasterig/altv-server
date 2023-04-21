@@ -86,7 +86,7 @@ class GaragenModule : IItemsLoaded, IPressedEEvent
       shop.typeString = name;
 
       Blip.Blip.Create(name,
-        blip["sprite"], blip["color"], 1, shop.Position);
+        blip["sprite"], blip["color"], .75f, shop.Position);
 
       shopList.Add(shop);
     }

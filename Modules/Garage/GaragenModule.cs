@@ -80,7 +80,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
       Dictionary<string, int> blip = GetGarageBlipByType(garage.type);
       Blip.Blip.Create(GARAGE_NAMES.GetName(Enum.GetName(typeof(GARAGE_TYPES), garage.type)!),
-        blip["sprite"], blip["color"], 1, garage.Position);
+        blip["sprite"], blip["color"], .75f, garage.Position);
 
       garageList.Add(garage);
     }
