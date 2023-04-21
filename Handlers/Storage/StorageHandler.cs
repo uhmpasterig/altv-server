@@ -77,8 +77,8 @@ public class StorageHandler : IStorageHandler
     await _serverContext.SaveChangesAsync();
   }
 
-  public xStorage GetClosestxStorage(Position position, int range = 2)
+  public xStorage GetClosestxStorage(xPlayer player, int range = 2)
   {
-    return Storages.Values.FirstOrDefault(v => position.Distance(v.Position) < range)!;
+    return Storages.Values.FirstOrDefault(v => player.Position.Distance(v.Position) < range && v.ownerId == player.id);
   }
 }

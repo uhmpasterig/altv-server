@@ -50,7 +50,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       uiStorages.Add(trunkStorage);
       goto load;
     }
-    xStorage closestStorage = storageHandler.GetClosestxStorage(player.Position);
+    xStorage closestStorage = storageHandler.GetClosestxStorage(player);
     if (closestStorage != null)
     {
       openInventorys.Add(closestStorage.id);

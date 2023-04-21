@@ -11,6 +11,6 @@ public interface IStorageHandler
   Task<bool> LoadStorage(int storageId);
   Task UnloadStorage(int storageId);
   Task<int> CreateStorage(string name, int slots, float maxWeight);
-  xStorage GetClosestxStorage(Position position, int range = 2);
+  xStorage GetClosestxStorage(xPlayer player, int range = 2);
   Task SaveAllStorages();
 }
