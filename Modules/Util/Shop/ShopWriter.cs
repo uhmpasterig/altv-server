@@ -26,7 +26,7 @@ public class shopWriter : IWritable
       writer.Name("id");
       writer.Value(item.id);
       writer.Name("name");
-      writer.Value(item.item);
+      writer.Value(item.label);
       writer.Name("type");
       writer.Value(item.type);
       writer.Name("price");

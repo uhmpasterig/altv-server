@@ -6,6 +6,7 @@ using server.Handlers.Entities;
 using server.Util.Shop;
 using AltV.Net.Async;
 using Newtonsoft.Json;
+using server.Modules.Items;
 
 namespace server.Modules.Shop;
 
@@ -67,6 +68,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       foreach (Models.ShopItems shopItem in _serverContext.ShopItems.Where(x => x.type == shop.type).ToList())
       {
         shopItem.price = (int)(shopItem.price * shop.tax);
+        shopItem.label = Items.Items.GetItemLabel(shopItem.item);
         shop.items.Add(shopItem);
       }
 
@@ -89,7 +91,8 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       shopList.Add(shop);
     }
 
-    AltAsync.OnClient<xPlayer, string>("frontend:shop:buyWarenkorb", async (player, warenkorb) => {
+    AltAsync.OnClient<xPlayer, string>("frontend:shop:buyWarenkorb", async (player, warenkorb) =>
+    {
       CheckOut(player, warenkorb);
     });
   }
@@ -97,19 +100,21 @@ class GaragenModule : ILoadEvent, IPressedEEvent
   public async void CheckOut(xPlayer player, string warenkorb)
   {
     List<Models.ShopItems>? items = JsonConvert.DeserializeObject<List<Models.ShopItems>>(warenkorb);
-    if(items == null) return;
-    foreach(Models.ShopItems _item in items)
+    if (items == null) return;
+    foreach (Models.ShopItems _item in items)
     {
       Models.ShopItems? item = shopList.Find(x => x.Position.Distance(player.Position) < 10).items.Find(x => x.id == _item.id);
-      if(item == null) continue;
-      bool hasMoney = await player.HasMoney(item.price * _item.count); 
-      if(!hasMoney) {
+      if (item == null) continue;
+      bool hasMoney = await player.HasMoney(item.price * _item.count);
+      if (!hasMoney)
+      {
         _logger.Log($"{player.Name} hat nicht genug Geld für {item.item} ({item.price})");
         continue;
       };
 
       bool hasSpace = await player.GiveItem(item.item, _item.count);
-      if(!hasSpace) {
+      if (!hasSpace)
+      {
         _logger.Log($"{player.Name} hat nicht genug Platz für {item.item} ({_item.count})");
         continue;
       };

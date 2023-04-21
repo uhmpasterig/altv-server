@@ -16,6 +16,7 @@ public class xItem : Models.Item
   {
     this.id = item.id;
     this.name = item.name;
+    this.label = item.label;
     this.stackSize = item.stackSize;
     this.weight = item.weight;
     this.job = item.job;
@@ -27,6 +28,7 @@ public class InventoryItem
 {
   public int id { get; set; }
   public string name { get; set; }
+  public string label { get; set; }
   public int stackSize { get; set; }
   public float weight { get; set; }
   public string job { get; set; }
@@ -80,6 +82,17 @@ public class Items : ILoadEvent
     }
 
     _usableItems.Add(itemname, action);
+  }
+
+  public static string GetItemLabel(string itemname)
+  {
+    if (!_items.ContainsKey(itemname))
+    {
+      _logger.Error($"Item {itemname} does not exist");
+      return null;
+    }
+
+    return _items[itemname].label;
   }
 
   public static void UseItem(xPlayer player, string itemname)

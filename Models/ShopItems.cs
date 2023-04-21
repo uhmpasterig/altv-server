@@ -19,4 +19,7 @@ public partial class ShopItems
 
   [NotMapped]
   public int count { get; set; } = 0;
+
+  [NotMapped]
+  public string label { get; set; } = "";
 }
