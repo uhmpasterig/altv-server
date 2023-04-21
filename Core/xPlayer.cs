@@ -85,7 +85,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public async void GiveItem(string name, int count)
   {
     IStorageHandler storageHandler = new StorageHandler();
-    xStorage inv = await storageHandler.GetStorage(this.playerInventorys["inventory"]);
+    xStorage inv = await storageHandler.GetStorage(this.playerInventorys["Inventar"]);
     if (inv == null)
     {
       this.SendMessage("Du hast kein Inventar!", NOTIFYS.ERROR);
@@ -153,7 +153,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public async Task<bool> HasItem(string name, int count = 1)
   {
     IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(this.playerInventorys["inventory"]);
+    xStorage inv = await _storageHandler.GetStorage(this.playerInventorys["Inventar"]);
     return inv.HasItem(name, count);
   }
 

@@ -109,7 +109,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     if (player == null) return false;
     if (feld == null) return false;
     IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["inventory"]!);
+    xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]!);
     int random = new Random().Next(feld.amountmin, feld.amountmax);
     inv.AddItem(feld.item, random);
     player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);

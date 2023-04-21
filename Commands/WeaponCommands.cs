@@ -33,7 +33,7 @@ internal class WeaponCommands : IScript
     IStorageHandler _storageHandler = new StorageHandler();
     
     Models.BadFrak frak = FraktionsModuleMain.GetFrak(player.job);
-    xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["inventory"]);
+    xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     if(frak == null) return;
     inventory.AddItem(frak.weapon, 1);
     inventory.AddItem("packed_weapon_pistol_mk2", 1);
@@ -50,7 +50,7 @@ internal class WeaponCommands : IScript
   public async static void GiveItem(xPlayer player, string name, int amount = 1)
   {
     IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["inventory"]);
+    xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     inventory.AddItem(name, amount);
   }
 

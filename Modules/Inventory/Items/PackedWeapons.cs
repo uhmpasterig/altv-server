@@ -12,7 +12,7 @@ class PackedWeapons : IItemsLoaded
   {
     async void UnpackFunc(xPlayer player, string item, string weapon)
     {
-      xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["inventory"]);
+      xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
       bool succ = await player.GiveSavedWeapon(weapon, 100, true);
       if(!succ){
         player.SendMessage($"Du hast kein Platz fuer {item}", NOTIFYS.ERROR);
