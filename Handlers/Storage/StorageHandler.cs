@@ -87,15 +87,13 @@ public class StorageHandler : IStorageHandler
 
   public async Task CreateAllStorages(xPlayer player)
   {
-    Dictionary<string, int> storageIds = player.playerInventorys;
     foreach (StorageConfig.StorageData storageData in StorageConfig.StoragesDieJederHabenSollte)
     {
-      if (storageIds.ContainsKey(storageData.name)) continue;
+      if (player.playerInventorys.ContainsKey(storageData.name)) continue;
       _logger.Debug($"Creating storage {storageData.name} for player {player.name}.");
 
       int storageId = await CreateStorage(storageData.name, storageData.slots, storageData.maxWeight, storageData.position, player.id);
-      storageIds.Add(storageData.name, storageId);
-      player.playerInventorys = storageIds;
+      player.playerInventorys.Add(storageData.name, storageId);
       await _serverContext.SaveChangesAsync();
     }
   }
