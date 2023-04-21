@@ -41,10 +41,11 @@ public class InventoryItem
   {
   }
 
-  public InventoryItem(int id, string name, int stackSize, float weight, string job, string data, int slot, int count)
+  public InventoryItem(int id, string name, string label, int stackSize, float weight, string job, string data, int slot, int count)
   {
     this.id = id;
     this.name = name;
+    this.label = label;
     this.stackSize = stackSize;
     this.weight = weight;
     this.job = job;
@@ -58,6 +59,7 @@ public class InventoryItem
   {
     this.id = item.id;
     this.name = item.name;
+    this.label = item.label;
     this.stackSize = item.stackSize;
     this.weight = item.weight;
     this.job = item.job;
@@ -215,7 +217,6 @@ public class Items : ILoadEvent
   {
     await using ServerContext serverContext = new ServerContext();
 
-    _logger.Startup("Lade Items!");
     foreach (Models.Item item in serverContext.Items)
     {
       xItem iitem = new xItem(item);

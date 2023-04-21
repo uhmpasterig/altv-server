@@ -21,7 +21,7 @@ public class inventoryWriter : IWritable
     writer.BeginObject();
     writer.Name("storages");
     writer.BeginArray();
-    foreach(xStorage store in storages) 
+    foreach (xStorage store in storages)
     {
       writer.BeginObject();
       writer.Name("id");
@@ -36,7 +36,7 @@ public class inventoryWriter : IWritable
       writer.Value(store.slots);
       writer.Name("items");
       writer.BeginArray();
-      foreach(InventoryItem item in store.items)
+      foreach (InventoryItem item in store.items)
       {
         writer.BeginObject();
         writer.Name("id");
@@ -46,13 +46,13 @@ public class inventoryWriter : IWritable
         writer.Name("weight");
         writer.Value(item.weight);
         writer.Name("data");
-        writer.Value("Heyy");
+        writer.Value($"{item.label} {item.count * item.weight}KG");
         writer.Name("count");
         writer.Value(item.count);
         writer.Name("slot");
         writer.Value(item.slot);
         writer.EndObject();
-      }      
+      }
       writer.EndArray();
       writer.EndObject();
     }

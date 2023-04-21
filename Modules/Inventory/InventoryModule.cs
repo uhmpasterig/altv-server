@@ -33,7 +33,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     if (player.IsInVehicle)
     {
       xVehicle vehicle = (xVehicle)player.Vehicle;
-      if (vehicle.storageIdTrunk == 0) return false;
+      if (vehicle.storageIdTrunk == 0) goto load;
       xStorage gloveStorage = await storageHandler.GetStorage(vehicle.storageIdGloveBox);
       openInventorys.Add(gloveStorage.id);
       uiStorages.Add(gloveStorage);
@@ -63,6 +63,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
     return true;
   }
+
+  #region Events
   public void OnLoad()
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
@@ -117,7 +119,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       _items.RemoveItemFromSlot(slot, storageId, count);
     });
   }
-
+  #endregion Events
+  #region DragCheck
   // Ich weis das ist scheiße aber ich hab keine Lust mehr
   public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count)
   {
@@ -169,7 +172,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       {
         if (fromi.count - count <= 0) return false;
         fromi.count -= count;
-        InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.stackSize, fromi.weight, fromi.job, fromi.data, tslot, count);
+        InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.label, fromi.stackSize, fromi.weight, fromi.job, fromi.data, tslot, count);
         to.items.Add(item);
         return true;
       }
@@ -192,5 +195,5 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     }
     return true;
   }
-
+  #endregion
 }
