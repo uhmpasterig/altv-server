@@ -116,7 +116,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
     if (xplayer == null)
     {
-      iplayer.Kick("Du bist nicht in der Datenbank! \nFalls du bereits registriert bist, versuche Vor_Nachname als Launchername zu benutzen. \nFalls du noch nicht registriert bist, registriere dich auf unserem Discord!");
+      iplayer.Kick("Du bist nicht in der Datenbank! " +
+        "Falls du bereits registriert bist, versuche Vor_Nachname als Launchername zu benutzen. " +
+        "Falls du noch nicht registriert bist, registriere dich auf unserem Discord!");
       return;
     }
     _logger.Info($"{xplayer.Name} connected to the server!");

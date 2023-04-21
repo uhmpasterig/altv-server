@@ -49,7 +49,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
     xvehicle.PrimaryColor = (byte)vehicle.color;
     xvehicle.SecondaryColor = (byte)vehicle.color2;
-    await xvehicle.SetNumberplateTextAsync(vehicle.plate);
+    xvehicle.NumberplateText = vehicle.plate;
 
     Models.Vehicle? dbVehicle = await serverContext.Vehicle.FindAsync(vehicle.id);
     if (dbVehicle != null)
@@ -94,7 +94,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     await serverContext.SaveChangesAsync();
   }
 
-  [Obsolete]
   public bool SetModByType(xVehicle veh, VehicleModType modType, byte id)
   {
     veh.ModKit = 1;

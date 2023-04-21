@@ -30,8 +30,6 @@ public class xStorage : Models.Storage
 
     this._items = storage._items;
     this.items = JsonConvert.DeserializeObject<List<InventoryItem>>(this._items)!;
-    _logger.Log($"Storage {this.name} loaded");
-    _logger.Log(JsonConvert.SerializeObject(this.items));
     this.CalculateWeight();
   }
 
