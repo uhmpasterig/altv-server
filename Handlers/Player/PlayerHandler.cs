@@ -10,6 +10,7 @@ using server.Events;
 using server.Handlers.Storage;
 using Newtonsoft.Json;
 using server.Util.Player;
+using System.Diagnostics;
 
 namespace server.Handlers.Player;
 
@@ -41,13 +42,15 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.playerInventorys = dbPlayer.playerInventorys;
 
       await _storageHandler.CreateAllStorages(player);
-      _logger.Info($"Player {player.Name} loaded all storages");
-      _logger.Info(JsonConvert.SerializeObject(player.playerInventorys));
+
+      if (player.playerInventorys.Count != dbPlayer.playerInventorys.Count)
+      {
+        dbPlayer.playerInventorys = player.playerInventorys;
+        await _serverContext.SaveChangesAsync();
+      }
 
       foreach (var playerInventory in player.playerInventorys)
       {
-        _logger.Log("hey");
-        _logger.Info($"Loading storage {playerInventory.Value}");
         await _storageHandler.LoadStorage(playerInventory.Value);
       }
 
@@ -119,6 +122,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async void OnPlayerConnect(IPlayer iplayer, string reason)
   {
+    // new stopwatch to measure the time it takes to load the player
+    Stopwatch stopwatch = new Stopwatch();
     xPlayer? xplayer = await LoadPlayerFromDatabase((xPlayer)iplayer);
 
     if (xplayer == null)
@@ -130,6 +135,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     }
     _logger.Info($"{xplayer.Name} connected to the server!");
     Players.Add(xplayer);
+    stopwatch.Stop();
+    _logger.Info($"Player {xplayer.Name} loaded in {stopwatch.ElapsedMilliseconds}ms!");
   }
 
   public async void OnPlayerDisconnect(IPlayer player, string reason)
