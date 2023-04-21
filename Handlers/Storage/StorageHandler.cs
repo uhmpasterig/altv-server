@@ -33,7 +33,7 @@ public class StorageHandler : IStorageHandler
     var storage = await _serverContext.Storages.FindAsync(storageId);
     if (storage == null)
       return false;
-      
+
     Storages.Add(storage.id, new xStorage(storage));
     _logger.Debug($"Storage {storageId} loaded into memory.");
     return true;
@@ -79,22 +79,6 @@ public class StorageHandler : IStorageHandler
 
   public xStorage GetClosestxStorage(xPlayer player, int range = 2)
   {
-    _logger.Log($"Player {player.Name} [{player.id}] is searching for a storage.");
-    
-    foreach(xStorage storage in Storages.Values)
-    {
-      _logger.Log($"Checking storage {storage.id}.");
-      _logger.Log($"Distance: {player.Position.Distance(storage.Position)}");
-      _logger.Log($"Range: {range}.");
-      _logger.Log($"Owner: {storage.ownerId}.");
-      _logger.Log($"Is player owner: {storage.ownerId == player.id}.");
-      if (player.Position.Distance(storage.Position) < range)
-      {
-        _logger.Log($"Player {player.Name} [{player.id}] found a storage.");
-        return storage;
-      }
-    }
-
     return Storages.Values.FirstOrDefault(v => player.Position.Distance(v.Position) < range && v.ownerId == player.id);
   }
 }
