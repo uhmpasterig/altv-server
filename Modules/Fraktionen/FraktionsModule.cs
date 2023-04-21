@@ -12,7 +12,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   
   public async void OnLoad()
   {
-    _logger.Startup("Fraktionen werden geladen...");
+    _logger.Startup("Fraktionen werden geladen... ACH FICK MICH DOCH");
     await using var serverContext = new ServerContext();
     foreach(BadFrak _frak in serverContext.BadFrak)
     {

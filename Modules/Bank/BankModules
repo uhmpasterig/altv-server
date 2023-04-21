@@ -6,7 +6,7 @@ using server.Handlers.Entities;
 
 namespace server.Modules.Banking;
 
-class BankModule : ILoadEvent
+class BankModuleMain : ILoadEvent
 {
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Bank> bankList = new List<Models.Bank>();
