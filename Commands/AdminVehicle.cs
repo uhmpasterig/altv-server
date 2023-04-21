@@ -23,7 +23,7 @@ internal class AdminVehicle : IScript
     Rotation rot = player.Rotation;
 
     xVehicle? veh = await _vehicleHandler.CreateVehicle(model, pos, rot);
-    if(veh == null)
+    if (veh == null)
     {
       player.SendChatMessage("Invalid Model");
     }
@@ -106,13 +106,31 @@ internal class AdminVehicle : IScript
     }
   }
 
+  [Command("addshop")]
+  public async static void AddShop(xPlayer player, string name, int type = 1)
+  {
+    ServerContext _serverContext = new ServerContext();
+    Position pos = player.Position;
+    Rotation rot = player.Rotation;
+    pos.Z = pos.Z - 1;
+    Models.Shop shop = new Models.Shop()
+    {
+      name = name,
+      type = type,
+      Position = player.Position,
+      heading = RotationMath.YawToHeading(player.Rotation.Yaw)
+    };
+    _serverContext.Shops.Add(shop);
+    await _serverContext.SaveChangesAsync();
+  }
+
   [Command("addgarage")]
   public async static void AddGarage(xPlayer player, string name, int type = 1)
   {
     ServerContext _serverContext = new ServerContext();
     Position pos = player.Position;
     Rotation rot = player.Rotation;
-
+    pos.Z = pos.Z - 1;
     Models.Garage garage = new Models.Garage()
     {
       name = name,

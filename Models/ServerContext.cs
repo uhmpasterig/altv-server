@@ -22,7 +22,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Garage> Garage { get; set; }
   public virtual DbSet<GarageSpawns> GarageSpawns { get; set; }
 
-  public virtual DbSet<Shop> Shop { get; set; }
+  public virtual DbSet<Shop> Shops { get; set; }
   public virtual DbSet<ShopItems> ShopItems { get; set; }
 
   public virtual DbSet<Bank> Banks { get; set; }

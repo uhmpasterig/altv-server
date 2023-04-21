@@ -63,7 +63,7 @@ class GaragenModule : IItemsLoaded, IPressedEEvent
 
   public async void ItemsLoaded()
   {
-    foreach (Models.Shop shop in _serverContext.Shop.ToList())
+    foreach (Models.Shop shop in _serverContext.Shops.ToList())
     {
       foreach (Models.ShopItems shopItem in _serverContext.ShopItems.Where(x => x.type == shop.type).ToList())
       {
