@@ -25,6 +25,8 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Shop> Shop { get; set; }
   public virtual DbSet<ShopItems> ShopItems { get; set; }
 
+  public virtual DbSet<Bank> Banks { get; set; }
+
   public virtual DbSet<Prop> Props { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -99,6 +101,11 @@ public partial class ServerContext : DbContext
     modelBuilder.Entity<ShopItems>(entity =>
     {
       entity.ToTable("shop_items");
+    });
+
+    modelBuilder.Entity<Bank>(entity =>
+    {
+      entity.ToTable("banks");
     });
 
     OnModelCreatingPartial(modelBuilder);

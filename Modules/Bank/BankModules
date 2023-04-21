@@ -1,0 +1,50 @@
+using server.Core;
+using server.Events;
+using server.Models;
+using _logger = server.Logger.Logger;
+using server.Handlers.Entities;
+using server.Util.Shop;
+using AltV.Net.Async;
+using Newtonsoft.Json;
+using server.Modules.Items;
+
+namespace server.Modules.Bank;
+
+class BankModule : ILoadEvent, IPressedEEvent
+{
+  ServerContext _serverContext = new ServerContext();
+  public static List<Models.Bank> bankList = new List<Models.Bank>();
+
+  public async void OnLoad()
+  {
+    foreach (Models.Bank bank in _serverContext.Banks.ToList())
+    {
+
+      xEntity ped = new xEntity();
+      ped.position = bank.Position;
+      ped.dimension = (int)DIMENSIONEN.WORLD;
+      ped.entityType = ENTITY_TYPES.PED;
+      ped.range = 100;
+      ped.data.Add("model", bank.ped);
+      ped.data.Add("heading", bank.heading);
+      ped.CreateEntity();
+
+      Blip.Blip.Create("Bank", 276, 2, 1, bank.Position);
+
+      bankList.Add(bank);
+    }
+  }
+
+  public async Task<bool> OnKeyPressE(xPlayer player)
+  {
+    foreach (Models.Bank bank in bankList.ToList())
+    {
+      if (bank.Position.Distance(player.Position) < 2)
+      {
+        _logger.Log($"Open Bank {bank.name}");
+        return true;
+      }
+    }
+    return false;
+  }
+}
