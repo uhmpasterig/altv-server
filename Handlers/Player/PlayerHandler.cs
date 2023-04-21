@@ -136,7 +136,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     _logger.Info($"{xplayer.Name} connected to the server!");
     Players.Add(xplayer);
     stopwatch.Stop();
-    _logger.Info($"Player {xplayer.Name} loaded in {stopwatch.ElapsedMilliseconds}ms!");
+    _logger.Info($"Player {xplayer.Name} loaded in {stopwatch.ElapsedMilliseconds}ms (~{stopwatch.ElapsedTicks} Ticks)!");
   }
 
   public async void OnPlayerDisconnect(IPlayer player, string reason)
