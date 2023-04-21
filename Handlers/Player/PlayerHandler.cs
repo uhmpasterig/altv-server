@@ -118,15 +118,14 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       iplayer.Kick("Du bist nicht in der Datenbank!");
       return;
-    } else {
-      _logger.Info($"{xplayer.Name} connected to the server!");
-      Players.Add(xplayer);
     }
-
+    _logger.Info($"{xplayer.Name} connected to the server!");
+    Players.Add(xplayer);
   }
 
   public async void OnPlayerDisconnect(IPlayer player, string reason)
   {
+    if (Players.Find(p => p.id == ((xPlayer)player).id) == null) return;
     _logger.Info($"{player.Name} disconnected from the server!");
     await SavePlayerToDatabase((xPlayer)player, true);
     Players.Remove((xPlayer)player);
