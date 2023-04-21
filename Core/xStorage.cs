@@ -93,7 +93,7 @@ public class xStorage : Models.Storage
       _logger.Error($"Storage {this.name} is full");
       return false;
     }
-    if (this.weight + item.weight > this.maxWeight)
+    if (this.weight + (item.weight * count) > this.maxWeight)
     {
       _logger.Error($"Storage {this.name} is full");
       return false;
