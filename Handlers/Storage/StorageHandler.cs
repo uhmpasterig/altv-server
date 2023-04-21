@@ -36,6 +36,7 @@ public class StorageHandler : IStorageHandler
     if (storage == null)
       return false;
 
+    _logger.Log("hey2");
     Storages.Add(storage.id, new xStorage(storage));
     _logger.Debug($"Storage {storageId} loaded into memory.");
     return true;
