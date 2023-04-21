@@ -33,7 +33,7 @@ public class StorageHandler : IStorageHandler
     var storage = await _serverContext.Storages.FindAsync(storageId);
     if (storage == null)
       return false;
-
+      
     Storages.Add(storage.id, new xStorage(storage));
     _logger.Debug($"Storage {storageId} loaded into memory.");
     return true;
