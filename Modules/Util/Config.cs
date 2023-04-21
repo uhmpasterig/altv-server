@@ -25,14 +25,14 @@ public class StorageConfig
   {
     new StorageData()
     {
-      name = "BankSchliessfach",
+      name = "Bank Schliessfach",
       slots = 20,
       maxWeight = 200,
       position = Positions.BankSchliessfach
     },
     new StorageData()
     {
-      name = "ExportSchliessfach",
+      name = "Export Schliessfach",
       slots = 30,
       maxWeight = 300,
       position = Positions.ExportSchliessfach
