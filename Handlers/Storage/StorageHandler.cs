@@ -79,6 +79,7 @@ public class StorageHandler : IStorageHandler
 
   public xStorage GetClosestxStorage(xPlayer player, int range = 2)
   {
+    _logger.Log($"Player {player.Name} [{player.id}] is searching for a storage.");
     return Storages.Values.FirstOrDefault(v => player.Position.Distance(v.Position) < range && v.ownerId == player.id);
   }
 }
