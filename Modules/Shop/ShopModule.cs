@@ -70,7 +70,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
       xEntity ped = new xEntity();
       ped.position = shop.Position;
-      ped.dimesnsion = (int)DIMENSIONEN.WORLD;
+      ped.dimension = (int)DIMENSIONEN.WORLD;
       ped.entityType = ENTITY_TYPES.PED;
       ped.range = 100;
       ped.data.Add("model", shop.ped);
