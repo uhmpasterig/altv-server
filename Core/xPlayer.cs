@@ -8,6 +8,7 @@ using _logger = server.Logger.Logger;
 using AltV.Net.Resources.Chat.Api;
 using AltV.Net.Data;
 using server.Handlers.Storage;
+using server.Models;
 
 namespace server.Core;
 
@@ -30,6 +31,8 @@ public enum NOTIFYS
 
 public partial class xPlayer : AsyncPlayer, IxPlayer
 {
+  ServerContext _serverContext = new ServerContext();
+
   private string[] _notifys = new string[] { "default", "error", "success", "warning" };
 
   public int id { get; set; }
@@ -163,17 +166,28 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public async void GiveMoney(int amount)
   {
     this.cash += amount;
+    this.SaveMoney();
   }
 
   public async void RemoveMoney(int amount)
   {
     this.cash -= amount;
+    this.SaveMoney();
   }
 
   public async Task<bool> HasMoney(int amount)
   {
     return this.cash >= amount;
   }
+
+  public async void SaveMoney()
+  {
+    Models.Player? player = await _serverContext.Player.FindAsync(this.id);
+    player.cash = this.cash;
+    player.bank = this.bank;
+    await _serverContext.SaveChangesAsync();
+  }
+
 
   public new IxPlayer ToAsync(IAsyncContext _) => this;
 }
