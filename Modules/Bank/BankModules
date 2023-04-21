@@ -3,12 +3,8 @@ using server.Events;
 using server.Models;
 using _logger = server.Logger.Logger;
 using server.Handlers.Entities;
-using server.Util.Shop;
-using AltV.Net.Async;
-using Newtonsoft.Json;
-using server.Modules.Items;
 
-namespace server.Modules.Bank;
+namespace server.Modules.Banking;
 
 class BankModule : ILoadEvent
 {
