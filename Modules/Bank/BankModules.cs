@@ -1,17 +1,32 @@
 using server.Core;
-using AltV.Net;
 using server.Events;
-using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
+using server.Handlers.Entities;
 
 namespace server.Modules.Banking;
 
-class BankingModuleMain : ILoadEvent
+class BankModuleMain : ILoadEvent
 {
+  ServerContext _serverContext = new ServerContext();
+  public static List<Models.Bank> bankList = new List<Models.Bank>();
+
   public async void OnLoad()
   {
-    _logger.Startup("BANKEN werden geladen... ACH FICK MICH DOCH");
-  }
+    foreach (Models.Bank bank in _serverContext.Banks)
+    {
+      xEntity ped = new xEntity();
+      ped.position = bank.Position;
+      ped.dimension = (int)DIMENSIONEN.WORLD;
+      ped.entityType = ENTITY_TYPES.PED;
+      ped.range = 100;
+      ped.data.Add("model", bank.ped);
+      ped.data.Add("heading", bank.heading);
+      ped.CreateEntity();
+      _logger.Exception($"Bank {bank.name} created");
+      Blip.Blip.Create("Bank", 276, 2, 1, bank.Position);
 
+      bankList.Add(bank);
+    }
+  }
 }
