@@ -5,6 +5,7 @@ using AltV.Net.Data;
 using Newtonsoft.Json;
 using server.Util.Config;
 using _logger = server.Logger.Logger;
+using server.Modules.Items;
 
 namespace server.Handlers.Storage;
 
@@ -36,7 +37,6 @@ public class StorageHandler : IStorageHandler
     if (storage == null)
       return false;
 
-    _logger.Log("hey2");
     Storages.Add(storage.id, new xStorage(storage));
     _logger.Debug($"Storage {storageId} loaded into memory.");
     return true;
@@ -64,7 +64,8 @@ public class StorageHandler : IStorageHandler
       maxWeight = maxWeight,
       ownerId = ownerId,
       Position = position,
-      usePos = usePos
+      usePos = usePos,
+      _items = JsonConvert.SerializeObject(new List<InventoryItem>())
     };
 
     await _serverContext.Storages.AddAsync(storage);
