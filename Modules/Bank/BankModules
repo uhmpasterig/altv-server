@@ -19,7 +19,6 @@ class BankModule : ILoadEvent, IPressedEEvent
   {
     foreach (Models.Bank bank in _serverContext.Banks.ToList())
     {
-
       xEntity ped = new xEntity();
       ped.position = bank.Position;
       ped.dimension = (int)DIMENSIONEN.WORLD;
@@ -28,7 +27,7 @@ class BankModule : ILoadEvent, IPressedEEvent
       ped.data.Add("model", bank.ped);
       ped.data.Add("heading", bank.heading);
       ped.CreateEntity();
-
+      _logger.Log($"Bank {bank.name} created");
       Blip.Blip.Create("Bank", 276, 2, 1, bank.Position);
 
       bankList.Add(bank);
