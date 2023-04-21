@@ -10,13 +10,14 @@ using server.Modules.Items;
 
 namespace server.Modules.Bank;
 
-class BankModule : ILoadEvent, IPressedEEvent
+class BankModule : ILoadEvent
 {
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Bank> bankList = new List<Models.Bank>();
 
   public async void OnLoad()
   {
+    _logger.Exception("BankModule loaded");
     foreach (Models.Bank bank in _serverContext.Banks.ToList())
     {
       xEntity ped = new xEntity();
@@ -27,7 +28,7 @@ class BankModule : ILoadEvent, IPressedEEvent
       ped.data.Add("model", bank.ped);
       ped.data.Add("heading", bank.heading);
       ped.CreateEntity();
-      _logger.Log($"Bank {bank.name} created");
+      _logger.Exception($"Bank {bank.name} created");
       Blip.Blip.Create("Bank", 276, 2, 1, bank.Position);
 
       bankList.Add(bank);
