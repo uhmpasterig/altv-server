@@ -24,6 +24,7 @@ public class xStorage : Models.Storage
     this.maxWeight = storage.maxWeight;
     this.currentWeight = storage.currentWeight;
     this.slots = storage.slots;
+    this.ownerId = storage.ownerId;
 
     this._pos = storage._pos;
     this.usePos = storage.usePos;
