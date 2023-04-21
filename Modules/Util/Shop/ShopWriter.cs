@@ -1,4 +1,5 @@
 using AltV.Net;
+using _logger = server.Logger.Logger;
 
 namespace server.Util.Shop;
 public class shopWriter : IWritable
@@ -22,6 +23,7 @@ public class shopWriter : IWritable
     foreach (Models.ShopItems item in shop.items.ToList())
     {
       writer.BeginObject();
+      _logger.Log($"Item: {item.item} Price: {item.price}");
       writer.Name("name");
       writer.Value(item.item);
       writer.Name("price");
