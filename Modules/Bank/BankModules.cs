@@ -9,8 +9,6 @@ namespace server.Modules.Banking;
 
 class BankingModuleMain : ILoadEvent
 {
-  public static Dictionary<string, BadFrak> frakList = new Dictionary<string, BadFrak>();
-  
   public async void OnLoad()
   {
     _logger.Startup("BANKEN werden geladen... ACH FICK MICH DOCH");
