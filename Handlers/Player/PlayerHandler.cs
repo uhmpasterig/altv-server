@@ -124,6 +124,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
   {
     // new stopwatch to measure the time it takes to load the player
     Stopwatch stopwatch = new Stopwatch();
+    stopwatch.Start();
     xPlayer? xplayer = await LoadPlayerFromDatabase((xPlayer)iplayer);
 
     if (xplayer == null)
