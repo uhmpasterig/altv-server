@@ -10,7 +10,8 @@ namespace server.Models;
 [PrimaryKey("permaId")]
 public partial class Player
 {
-  public Player() { 
+  public Player()
+  {
   }
 
   public bool isOnline { get; set; }
@@ -37,33 +38,57 @@ public partial class Player
   public DateTime lastLogin { get; set; }
   public DateTime creationDate { get; set; }
 
+  public string _dataCache { get; set; }
 
   [NotMapped]
-  public Position Position {
-    get {
+  public Position Position
+  {
+    get
+    {
       return JsonConvert.DeserializeObject<Position>(_pos);
-      }
-    set {
+    }
+    set
+    {
       _pos = JsonConvert.SerializeObject(value);
     }
   }
+  
   [NotMapped]
-  public Rotation Rotation {
-    get {
+  public Rotation Rotation
+  {
+    get
+    {
       return JsonConvert.DeserializeObject<Rotation>(_rot);
     }
-    set {
+    set
+    {
       _rot = JsonConvert.SerializeObject(value);
     }
   }
 
   [NotMapped]
-  public Dictionary<string, int> playerInventorys {
-    get {
-      return JsonConvert.DeserializeObject<Dictionary<string, int>>(_playerInventorys)!;
+  public Dictionary<string, int> playerInventorys
+  {
+    get
+    {
+      return JsonConvert.DeserializeObject<Dictionary<string, int>>(_playerInventorys);
     }
-    set {
+    set
+    {
       _playerInventorys = JsonConvert.SerializeObject(value);
+    }
+  }
+
+  [NotMapped]
+  public Dictionary<string, object> dataCache
+  {
+    get
+    {
+      return JsonConvert.DeserializeObject<Dictionary<string, object>>(_dataCache);
+    }
+    set
+    {
+      _dataCache = JsonConvert.SerializeObject(value);
     }
   }
 }

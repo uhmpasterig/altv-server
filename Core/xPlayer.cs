@@ -53,6 +53,8 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public DateTime lastLogin { get; set; }
   public DIMENSIONEN dimensionType { get; set; }
 
+  public Dictionary<string, object> dataCache { get; set; }
+
   public int isDead { get; set; }
 
   public xPlayer(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
@@ -64,7 +66,9 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     job = "";
     job_rank = 0;
     job_perm = new Dictionary<string, bool>();
-    creationDate = DateTime.Now;
+    lastLogin = DateTime.Now;
+
+    dataCache = new Dictionary<string, object>();
   }
 
   public void SendMessage(string message, NOTIFYS notifyType)

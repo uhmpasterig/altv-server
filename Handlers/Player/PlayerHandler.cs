@@ -39,6 +39,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.name = dbPlayer.name;
       player.creationDate = dbPlayer.creationDate;
 
+      // CACHE DATA
+      player.dataCache = dbPlayer.dataCache;
+
       // STORAGES
       player.playerInventorys = dbPlayer.playerInventorys;
 
