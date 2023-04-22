@@ -59,11 +59,11 @@ public partial class Vehicle
   }
 
   [NotMapped]
-  public Dictionary<xPlayer, Dictionary<string, object>> UIData
+  public Dictionary<int, Dictionary<string, object>> UIData
   {
     get
     {
-      return JsonConvert.DeserializeObject<Dictionary<xPlayer, Dictionary<string, object>>>(_uidata);
+      return JsonConvert.DeserializeObject<Dictionary<int, Dictionary<string, object>>>(_uidata);
     }
     set
     {

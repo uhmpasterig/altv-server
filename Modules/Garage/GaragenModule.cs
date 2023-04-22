@@ -103,12 +103,16 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehid);
       if (vehicle == null) return;
-      Dictionary<xPlayer, Dictionary<string, object>>? data = vehicle.UIData;
-      if (!data.ContainsKey(player)) {
-        data.Add(player, new Dictionary<string, object>());
+      Dictionary<int, Dictionary<string, object>>? data = vehicle.UIData;
+
+      if (!data.ContainsKey(player.id))
+      {
+        data.Add(player.id, new Dictionary<string, object>());
         _logger.Warning("add player to vehicle");
       };
-      _logger.Warning("overwrite vehicle");
+      data[player.id].Add("name", name);
+      data[player.id].Add("keyword", keyword);
+      data[player.id].Add("important", important);
       vehicle.UIData = data;
       await _serverContext.SaveChangesAsync();
     });
