@@ -30,12 +30,18 @@ public class garagenWriter : IWritable
     writer.BeginArray();
     foreach (Models.Vehicle veh in vehicles.ToList())
     {
-      string? vehname = veh.UIData.Where(x => x.Key == player).Select(x => x.Value["name"]).FirstOrDefault().ToString();
-      if (vehname == null) vehname = "";
-      string? keyword = veh.UIData.Where(x => x.Key == player).Select(x => x.Value["keyword"]).FirstOrDefault().ToString();
-      if (keyword == null) keyword = "";
-      bool? fav = (bool?)veh.UIData.Where(x => x.Key == player).Select(x => x.Value["fav"]).FirstOrDefault();
-      if (fav == null) fav = false;
+      Console.WriteLine(veh._uidata);
+      string vehname = "Unbekannt";
+      string keyword = "";
+      bool fav = false;
+
+      Dictionary<string, object>? playerUidata = veh.UIData.Where(x => x.Key == player).Select(x => x.Value).FirstOrDefault();
+      if (playerUidata != null)
+      {
+        vehname = playerUidata?["name"]?.ToString() ?? "";
+        keyword = playerUidata?["keyword"]?.ToString() ?? "";
+        fav = (bool?)playerUidata?["fav"] ?? false;
+      };
 
       writer.BeginObject();
       writer.Name("id");
