@@ -64,15 +64,6 @@ public class Server : IServer
     _logger.Startup("Lade Timer...");
     _logger.Startup("Timer Geladen!");
 
-    _logger.Startup("Spieler Daten setzen...");
-    foreach (Models.Player player in _serverContext.Player.ToList())
-
-    {
-      if (!player.dataCache.ContainsKey("isOnline")) player.dataCache.Add("isOnline", false);
-      else player.dataCache["isOnline"] = false;
-    }
-
-    _logger.Startup("Spieler Daten gesetzt!");
     _serverContext.SaveChangesAsync();
     _logger.Startup("Server gestartet!");
   }

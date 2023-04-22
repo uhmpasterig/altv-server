@@ -127,7 +127,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     await _serverContext.SaveChangesAsync();
   }
 
-  public async Task<xPlayer> GetPlayer(int id)
+  public async Task<xPlayer?> GetPlayer(int id)
   {
     xPlayer? player = Players.Find(p => p.id == id);
     return player!;
@@ -142,7 +142,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     // new stopwatch to measure the time it takes to load the player
     Stopwatch stopwatch = new Stopwatch();
     stopwatch.Start();
-    
+
     xPlayer? xplayer = await LoadPlayerFromDatabase((xPlayer)iplayer);
 
     if (xplayer == null)
