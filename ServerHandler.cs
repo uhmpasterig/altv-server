@@ -28,6 +28,14 @@ namespace server
 
     public override async void OnStart()
     {
+      Console.WindowHeight = 1000;
+      Console.WindowWidth = 1000;
+      Console.BufferHeight = 1000;
+      Console.BufferWidth = 1000;
+      Console.SetWindowSize(1000, 1000);
+      Console.LargestWindowHeight = 1000;
+      Console.LargestWindowWidth = 1000;
+
       using var startup = new Startup();
       startup.Register();
 
