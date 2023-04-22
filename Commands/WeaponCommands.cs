@@ -36,7 +36,7 @@ internal class WeaponCommands : IScript
     xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     if(frak == null) return;
     inventory.AddItem(frak.weapon, 1);
-    inventory.AddItem("packed_weapon_pistol_mk2", 1);
+    inventory.AddItem("packed_specialcarbine", 1);
   }
 
   [Command("useitem")]

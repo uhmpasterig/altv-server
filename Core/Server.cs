@@ -29,6 +29,9 @@ public class Server : IServer
     "weapon_bat",
     "weapon_combatpistol",
     "weapon_pistol50",
+    "weapon_specialcarbine_mk2",
+    "weapon_specialcarbine",
+    "weapon_advancedrifle",
   };
   
   public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)
