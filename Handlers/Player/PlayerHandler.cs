@@ -39,6 +39,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.creationDate = dbPlayer.creationDate;
 
       // CACHE DATA
+      dbPlayer.dataCache["isOnline"] = true;
       player.dataCache = dbPlayer.dataCache;
 
       // STORAGES
@@ -49,7 +50,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       if (player.playerInventorys.Count != dbPlayer.playerInventorys.Count)
       {
         dbPlayer.playerInventorys = player.playerInventorys;
-        await _serverContext.SaveChangesAsync();
       }
 
       foreach (var playerInventory in player.playerInventorys)
@@ -77,6 +77,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
       player.Emit("player:loaded", new PlayerLoadedWriter(player));
 
+      await _serverContext.SaveChangesAsync();
       return player;
     }
     catch (Exception e)
@@ -155,7 +156,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
     _logger.Info($"{xplayer.Name} connected to the server!");
     Players.Add(xplayer);
-    xplayer.dataCache["isOnline"] = true;
 
     stopwatch.Stop();
     _logger.Info($"Player {xplayer.Name} loaded in {stopwatch.ElapsedMilliseconds}ms (~{stopwatch.ElapsedTicks} Ticks)!");
