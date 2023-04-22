@@ -99,12 +99,18 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       //   vehicle.storeInGarage(garage.id);
     });
 
-    AltAsync.OnClient<xPlayer, int, string, string>("garageOverwriteVehicle", async (player, vehid, name, keyword) =>
+    AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
     {
       Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehid);
       if (vehicle == null) return;
-      vehicle.name = name;
-      vehicle.keyword = keyword;
+      if (!vehicle.UIData.ContainsKey(player)) vehicle.UIData.Add(player, new Dictionary<string, object>());
+
+      vehicle.UIData[player] = new Dictionary<string, object>()
+      {
+        { "name", name },
+        { "keyword", keyword },
+        { "important", important }
+      };
       await _serverContext.SaveChangesAsync();
     });
   }
@@ -132,7 +138,8 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
         player.Emit("frontend:open", "garage", new garagenWriter(
           outVeh,
-          garage.name));
+          garage.name,
+          player));
         return true;
       }
     }
