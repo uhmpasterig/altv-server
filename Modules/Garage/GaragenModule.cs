@@ -101,10 +101,12 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
     AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
     {
+      _logger.Warning("garageOverwriteVehicle");
       Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehid);
       if (vehicle == null) return;
+      _logger.Warning("before overwrite vehicle");
       if (!vehicle.UIData.ContainsKey(player)) vehicle.UIData.Add(player, new Dictionary<string, object>());
-
+      _logger.Warning("Inside overwrite vehicle");
       vehicle.UIData[player] = new Dictionary<string, object>()
       {
         { "name", name },
@@ -112,6 +114,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
         { "important", important }
       };
       await _serverContext.SaveChangesAsync();
+      _logger.Warning("after overwrite vehicle");
     });
   }
 
