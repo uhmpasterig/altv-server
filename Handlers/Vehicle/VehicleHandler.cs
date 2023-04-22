@@ -44,9 +44,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     xvehicle.storageIdTrunk = vehicle.storageIdTrunk;
 
     xvehicle.model = vehicle.model;
-    xvehicle.name = vehicle.name;
-    xvehicle.keyword = vehicle.keyword;
-
     xvehicle.PrimaryColor = (byte)vehicle.color;
     xvehicle.SecondaryColor = (byte)vehicle.color2;
     xvehicle.NumberplateText = vehicle.plate;
