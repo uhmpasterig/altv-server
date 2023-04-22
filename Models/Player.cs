@@ -14,7 +14,6 @@ public partial class Player
   {
   }
 
-  public bool isOnline { get; set; }
   public int permaId { get; set; }
   public string name { get; set; }
 
@@ -52,7 +51,7 @@ public partial class Player
       _pos = JsonConvert.SerializeObject(value);
     }
   }
-  
+
   [NotMapped]
   public Rotation Rotation
   {

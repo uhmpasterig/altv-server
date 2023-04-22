@@ -33,7 +33,7 @@ public class Server : IServer
     "weapon_bat",
     "weapon_battleaxe"
   };
-  
+
   public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)
   {
     _serverContext = serverContext;
@@ -56,18 +56,19 @@ public class Server : IServer
       (threadId) => new LimitedGrid3(50_000, 50_000, 100, 10_000, 10_000, 300),
       new IdProvider());
     _logger.Startup("AltEntitySync initialisiert!");
-    
+
     _logger.Startup("Lade Handler...");
     _eventHandler.LoadHandlers();
     _logger.Startup("Handler Geladen!");
-    
+
     _logger.Startup("Lade Timer...");
     _logger.Startup("Timer Geladen!");
 
     _logger.Startup("Spieler Daten setzen...");
-    foreach(Models.Player player in _serverContext.Player)
+    foreach (Models.Player player in _serverContext.Player)
     {
-      player.isOnline = false;
+      if (player.dataCache.ContainsKey("isOnline")) player.dataCache.Add("isOnline", false);
+      else player.dataCache["isOnline"] = false;
     }
     _logger.Startup("Spieler Daten gesetzt!");
     _serverContext.SaveChangesAsync();
@@ -85,8 +86,8 @@ public class Server : IServer
   {
     _timerHandler.StopAllIntervals();
     await SaveAll();
-    
-    foreach(IPlayer player in Alt.GetAllPlayers())
+
+    foreach (IPlayer player in Alt.GetAllPlayers())
     {
       player.Kick("Server wurde gestoppt");
     }

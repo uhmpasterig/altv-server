@@ -33,7 +33,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       }
 
       // PLAYER INFO
-      dbPlayer.isOnline = true;
       dbPlayer.lastLogin = DateTime.Now;
       player.id = dbPlayer.permaId;
       player.name = dbPlayer.name;
@@ -78,9 +77,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
       player.Emit("player:loaded", new PlayerLoadedWriter(player));
 
-      player.dataCache.Add("isLoaded", true);
-      player.dataCache.Add("isInVehicle", false);
-
       return player;
     }
     catch (Exception e)
@@ -96,7 +92,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
     // PLAYER INFO
     dbPlayer.lastLogin = DateTime.Now;
-    dbPlayer.isOnline = true;
 
     // CACHE DATA
     dbPlayer.dataCache = player.dataCache;
@@ -118,7 +113,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
     if (isDisconnect)
     {
-      dbPlayer.isOnline = false;
       player.Kick("Du wurdest gekickt!");
     }
     await _serverContext.SaveChangesAsync();
@@ -148,6 +142,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     // new stopwatch to measure the time it takes to load the player
     Stopwatch stopwatch = new Stopwatch();
     stopwatch.Start();
+    
     xPlayer? xplayer = await LoadPlayerFromDatabase((xPlayer)iplayer);
 
     if (xplayer == null)
@@ -157,8 +152,11 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         "Falls du noch nicht registriert bist, registriere dich auf unserem Discord!");
       return;
     }
+
     _logger.Info($"{xplayer.Name} connected to the server!");
     Players.Add(xplayer);
+    xplayer.dataCache["isOnline"] = true;
+
     stopwatch.Stop();
     _logger.Info($"Player {xplayer.Name} loaded in {stopwatch.ElapsedMilliseconds}ms (~{stopwatch.ElapsedTicks} Ticks)!");
   }
