@@ -67,8 +67,8 @@ public partial class Vehicle
     }
     set
     {
-      Console.WriteLine(value.ToString());
       _uidata = JsonConvert.SerializeObject(value);
+      Console.WriteLine(_uidata);
     }
   }
 }
