@@ -78,6 +78,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
       player.Emit("player:loaded", new PlayerLoadedWriter(player));
 
+      player.dataCache.Add("isLoaded", true);
+      player.dataCache.Add("isInVehicle", false);
+
       return player;
     }
     catch (Exception e)
@@ -94,6 +97,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     // PLAYER INFO
     dbPlayer.lastLogin = DateTime.Now;
     dbPlayer.isOnline = true;
+
+    // CACHE DATA
+    dbPlayer.dataCache = player.dataCache;
 
     // STORAGES
     foreach (var playerInventory in player.playerInventorys)
