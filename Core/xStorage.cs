@@ -78,7 +78,6 @@ public class xStorage : Models.Storage
     {
       if (!this.items.Any(x => x.slot == i))
       {
-        _logger.Log($"Found free slot {i}");
         return i;
       }
     }

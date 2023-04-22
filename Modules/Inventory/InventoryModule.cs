@@ -106,7 +106,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       var elapsedTicks = watch.ElapsedTicks;
       var elapsedMs = watch.ElapsedMilliseconds;
       var additonalInfo = $"Ticks: {elapsedTicks} | Milliseconds: {elapsedMs}";
-      _logger.Log(additonalInfo);
     });
 
     AltAsync.OnClient<xPlayer, int, int>("inventory:useItem", (player, slot, storageId) =>

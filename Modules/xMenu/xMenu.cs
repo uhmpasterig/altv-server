@@ -40,7 +40,6 @@ public class xMenu : ILoadEvent
 
     AltAsync.OnClient<xPlayer>("ToggleLock", (player) =>
     {
-      _logger.Log("ToggleLock");
       ToggleLock(player);
     });
 

@@ -94,7 +94,6 @@ public class Items : ILoadEvent
       _logger.Error($"Item {itemname} does not exist (GetItemLabel)");
       return null;
     }
-    _logger.Log(JsonConvert.SerializeObject(_items[itemname]));
     return _items[itemname].label;
   }
 

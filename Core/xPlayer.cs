@@ -118,7 +118,6 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public void LoadWeaponsFromDb(string weapons)
   {
-    _logger.Log($"LoadWeaponsFromDb: {weapons}");
     this.weapons = JsonConvert.DeserializeObject<List<xWeapon>>(weapons)!;
     foreach (xWeapon weapon in this.weapons)
     {

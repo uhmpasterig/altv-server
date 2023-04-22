@@ -108,20 +108,16 @@ class GaragenModule : IItemsLoaded, IPressedEEvent
       bool hasMoney = await player.HasMoney(item.price * _item.count);
       if (!hasMoney)
       {
-        _logger.Log($"{player.Name} hat nicht genug Geld für {item.item} ({item.price})");
         continue;
       };
 
       bool hasSpace = await player.GiveItem(item.item, _item.count);
       if (!hasSpace)
       {
-        _logger.Log($"{player.Name} hat nicht genug Platz für {item.item} ({_item.count})");
         continue;
       };
       player.RemoveMoney(item.price * _item.count);
-      _logger.Log($"{player.Name} hat {item.item} ({_item.count}) für {item.price * _item.count} gekauft");
     }
-    _logger.Log($"{player.Name} hat den Warenkorb gekauft");
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)
