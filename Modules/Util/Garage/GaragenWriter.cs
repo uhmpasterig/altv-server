@@ -30,7 +30,6 @@ public class garagenWriter : IWritable
     writer.BeginArray();
     foreach (Models.Vehicle veh in vehicles.ToList())
     {
-      Console.WriteLine(veh._uidata);
       string vehname = "Unbekannt";
       string keyword = "";
       bool fav = false;

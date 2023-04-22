@@ -68,7 +68,6 @@ public partial class Vehicle
     set
     {
       _uidata = JsonConvert.SerializeObject(value);
-      Console.WriteLine(_uidata);
     }
   }
 }

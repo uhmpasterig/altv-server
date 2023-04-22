@@ -46,7 +46,6 @@ public class inventoryWriter : IWritable
         writer.Name("weight");
         writer.Value(item.weight);
         writer.Name("data");
-        Console.WriteLine(item.label);
         writer.Value($"{item.label} {item.count * item.weight}KG");
         writer.Name("count");
         writer.Value(item.count);
