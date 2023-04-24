@@ -88,7 +88,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     AltAsync.OnClient<xPlayer, int>("parkVehicle", async (player, vehicleId) =>
     {
       Models.Garage? garage = garageList.FirstOrDefault(x => x.Position.Distance(player.Position) < 30);
-      Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehicleId);
+      Models.Vehicle? vehicle = _serverContext.Vehicles.FirstOrDefault(x => x.id == vehicleId);
       if (vehicle == null) return;
       Models.GarageSpawn spawn = await GetFreeSpawn(garage!);
       if (spawn == null) return;
@@ -101,7 +101,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
     AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
     {
-      Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehid);
+      Models.Vehicle? vehicle = _serverContext.Vehicles.FirstOrDefault(x => x.id == vehid);
       if (vehicle == null) return;
       Dictionary<int, Dictionary<string, object>>? data = vehicle.UIData;
 

@@ -17,13 +17,13 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 
   public async void OnLoad()
   {
-    foreach (Fraktion _frak in _serverContext.Fraktionen.ToList())
+    foreach (Fraktion _frak in _serverContext.Factions.ToList())
     {
       Dictionary<int, Fraktion_rang> _raenge = new Dictionary<int, Fraktion_rang>();
-      foreach(Fraktion_rang _rang in _serverContext.Fraktionen_range.Where(r => r.fraktions_id == _frak.id).ToList()) _raenge.Add(_rang.rank_id, _rang);
+      foreach(Fraktion_rang _rang in _serverContext.Factions_range.Where(r => r.fraktions_id == _frak.id).ToList()) _raenge.Add(_rang.rank_id, _rang);
       _frak.raenge = _raenge;
 
-      Fraktion_ug _ug = _serverContext.Fraktionen_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
+      Fraktion_ug _ug = _serverContext.Factions_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
       frakUgList.Add(_frak.id, _ug);
 
       _logger.Debug($"Fraktion: {_frak.name} wurde geladen!");

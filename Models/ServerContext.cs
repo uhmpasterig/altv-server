@@ -10,11 +10,11 @@ public partial class ServerContext : DbContext
   public ServerContext(DbContextOptions<ServerContext> options) : base(options) { }
 
   public virtual DbSet<Player> Players { get; set; }
-  public virtual DbSet<Vehicle> Vehicle { get; set; }
+  public virtual DbSet<Vehicle> Vehicles { get; set; }
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Item> Items { get; set; }
 
-  public virtual DbSet<Fraktion> Fraktionen { get; set; }
+  public virtual DbSet<Faction> Factions { get; set; }
   public virtual DbSet<Fraktion_rang> Fraktionen_range { get; set; }
   public virtual DbSet<Fraktion_ug> Fraktionen_ugs { get; set; }
 
@@ -67,7 +67,7 @@ public partial class ServerContext : DbContext
   
     // FRAKTIONEN
     #region FRAKTION
-    modelBuilder.Entity<Fraktion>(entity =>
+    modelBuilder.Entity<Faction>(entity =>
     {
       entity.ToTable("fraktionen");
     });

@@ -48,7 +48,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     xvehicle.SecondaryColor = (byte)vehicle.color2;
     xvehicle.NumberplateText = vehicle.plate;
 
-    Models.Vehicle? dbVehicle = await serverContext.Vehicle.FindAsync(vehicle.id);
+    Models.Vehicle? dbVehicle = await serverContext.Vehicles.FindAsync(vehicle.id);
     if (dbVehicle != null)
     {
       dbVehicle.Position = xvehicle.Position;
@@ -63,7 +63,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task SaveVehicle(xVehicle xvehicle)
   {
     await using ServerContext serverContext = new ServerContext();
-    Models.Vehicle? vehicle = await serverContext.Vehicle.FindAsync(xvehicle.vehicleId);
+    Models.Vehicle? vehicle = await serverContext.Vehicles.FindAsync(xvehicle.vehicleId);
     if (vehicle != null)
     {
       vehicle.Position = xvehicle.Position;
@@ -82,7 +82,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     _logger.Log($"Found {Vehicles.Count} vehicles in memory");
     foreach (var vehicle in Vehicles.Values)
     {
-      Models.Vehicle? dbVehicle = serverContext.Vehicle.Find(vehicle.vehicleId);
+      Models.Vehicle? dbVehicle = serverContext.Vehicles.Find(vehicle.vehicleId);
 
       if (dbVehicle == null) continue;
       dbVehicle.Position = vehicle.Position;
@@ -124,14 +124,14 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<List<Models.Vehicle>> GetVehiclesInGarage(int garageId)
   {
     await using ServerContext serverContext = new ServerContext();
-    List<Models.Vehicle> vehicles = serverContext.Vehicle.Where(v => v.garageId == garageId).ToList();
+    List<Models.Vehicle> vehicles = serverContext.Vehicles.Where(v => v.garageId == garageId).ToList();
     return vehicles;
   }
 
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
-    foreach (Models.Vehicle vehicle in serverContext.Vehicle.Where(v => v.garageId == -1))
+    foreach (Models.Vehicle vehicle in serverContext.Vehicles.Where(v => v.garageId == -1))
     {
       _logger.Debug($"Loading vehicle with id {vehicle.id} from database");
       await CreateVehicleFromDb(vehicle);

@@ -85,7 +85,7 @@ public class xVehicle : AsyncVehicle, IxVehicle
     {
       VehicleHandler.Vehicles.Remove(this.vehicleId);
       ServerContext _serverContext = new ServerContext();
-      var svehicle = _serverContext.Vehicle.Find(this.vehicleId);
+      var svehicle = _serverContext.Vehicles.Find(this.vehicleId);
       if (svehicle == null) return;
       svehicle.garageId = gid;
       _serverContext.SaveChanges();
