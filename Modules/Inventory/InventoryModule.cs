@@ -103,7 +103,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       
       if(fromStorage != toStorage)
       {
-        player.Emit("playAnim", "random@domestic", "pickup_low", -1, 1);
+        player.Emit("playAnim", "mp_common", "givetake2_a", -1, 48);
       }
 
       player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
