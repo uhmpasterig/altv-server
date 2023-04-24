@@ -4,17 +4,18 @@ using server.Events;
 using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
+using server.Util.Fraktionen;
 namespace server.Modules.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {
   public static Dictionary<string, Fraktion> frakList = new Dictionary<string, Fraktion>();
-  
+
   public async void OnLoad()
   {
     _logger.Startup("Fraktionen werden geladen... ACH FICK MICH DOCH");
     await using var serverContext = new ServerContext();
-    foreach(Fraktion _frak in serverContext.Fraktionen)
+    foreach (Fraktion _frak in serverContext.Fraktionen)
     {
       _logger.Debug("Frak: " + _frak.name);
       frakList.Add(_frak.name.ToLower(), _frak);
@@ -24,18 +25,19 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
-    if(frakList.ContainsKey(player.job.ToLower()))
+    if (frakList.ContainsKey(player.job.ToLower()))
     {
-      if(player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
+      if (player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
     }
+    Fraktion frak = frakList[player.job.ToLower()];
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
-    player.Emit("frontend:open", "faction");
+    player.Emit("frontend:open", "faction", new FraktionsWriter(frak));
     return true;
   }
 
   public static Fraktion GetFrak(string name)
   {
-    if(frakList.ContainsKey(name.ToLower()))
+    if (frakList.ContainsKey(name.ToLower()))
     {
       return frakList[name];
     }

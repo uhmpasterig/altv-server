@@ -7,7 +7,7 @@ using server.Models;
 using server.Handlers.Storage;
 using server.Modules.Items;
 
-namespace server.Util.Inventory;
+namespace server.Util.Fraktionen;
 public class FraktionsWriter : IWritable
 {
   public readonly Fraktion fraktion;
