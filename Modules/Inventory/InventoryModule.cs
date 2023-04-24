@@ -17,9 +17,28 @@ namespace server.Modules.Inventory;
 public class InventoryModule : IPressedIEvent, ILoadEvent
 {
   internal static IPlayerHandler playerHandler = new PlayerHandler();
-  internal Dictionary<xPlayer, List<int>> userOpenInventorys = new Dictionary<xPlayer, List<int>>();
-  IStorageHandler storageHandler = new StorageHandler();
+  internal static Dictionary<xPlayer, List<int>> userOpenInventorys = new Dictionary<xPlayer, List<int>>();
+  static IStorageHandler storageHandler = new StorageHandler();
   IVehicleHandler vehicleHandler = new VehicleHandler();
+
+  public static async void OpenStorage(xPlayer player, int storage_id)
+  {
+    List<xStorage> uiStorages = new List<xStorage>();
+    List<int> openInventorys = new List<int>();
+
+    xStorage playerStorage = await storageHandler.GetStorage(player.playerInventorys["Inventar"]);
+    uiStorages.Add(playerStorage);
+    openInventorys.Add(playerStorage.id);
+
+    xStorage storage = await storageHandler.GetStorage(storage_id);
+    if (storage != null)
+    {
+      openInventorys.Add(storage.id);
+      uiStorages.Add(storage);
+    }
+    userOpenInventorys[player] = openInventorys;
+    player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
+  }
 
   public async Task<bool> OnKeyPressI(xPlayer player)
   {

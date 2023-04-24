@@ -12,6 +12,7 @@ public partial class Fraktion
   }
   
   public int id { get; set; }
+  public int storage_id { get; set; }
   public string name { get; set; }
   public string weapon { get; set; }
   public string droge { get; set; }

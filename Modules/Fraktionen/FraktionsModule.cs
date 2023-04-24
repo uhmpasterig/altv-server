@@ -58,7 +58,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 
   public static Fraktion GetFrak(string name)
   {
-    if (frakList.ContainsKey(name.ToLower()))
+    if (frakList.Where(f => f.Key.ToLower() == name.ToLower()) != null)
     {
       return frakList[name];
     }
