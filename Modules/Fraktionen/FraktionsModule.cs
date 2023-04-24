@@ -11,17 +11,16 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {
   public static Dictionary<string, Fraktion> frakList = new Dictionary<string, Fraktion>();
   public static Dictionary<int, Fraktion_ug> frakUgList = new Dictionary<int, Fraktion_ug>();
+  static ServerContext _serverContext = new ServerContext();
 
   public async void OnLoad()
   {
-    await using var serverContext = new ServerContext();
-    foreach (Fraktion _frak in serverContext.Fraktionen)
+    foreach (Fraktion _frak in _serverContext.Fraktionen.ToList())
     {
-      
-      List<Fraktion_rang> _raenge = serverContext.Fraktionen_range.Where(r => r.fraktions_id == _frak.id).ToList();
+      List<Fraktion_rang> _raenge = _serverContext.Fraktionen_range.Where(r => r.fraktions_id == _frak.id).ToList();
       _frak.raenge = _raenge;
-      
-      Fraktion_ug _ug = serverContext.Fraktionen_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
+
+      Fraktion_ug _ug = _serverContext.Fraktionen_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
       frakUgList.Add(_frak.id, _ug);
 
       _logger.Debug($"Fraktion: {_frak.name} wurde geladen!");
@@ -43,6 +42,17 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
     player.Emit("frontend:open", "faction", new FraktionsWriter(frak, player));
     return true;
+  }
+
+  public static string GetRankName(Fraktion frak, int rank)
+  {
+    return frak.raenge.FirstOrDefault(r => r.id == rank)!.label;
+  }
+
+  public static List<Models.Player> GetFrakMembers(string frakname)
+  {
+    List<Models.Player> players = _serverContext.Player.Where(p => p.job == frakname.ToLower()).ToList();
+    return players;
   }
 
   public static Fraktion GetFrak(string name)

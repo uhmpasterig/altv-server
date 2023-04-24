@@ -38,6 +38,7 @@ public partial class Player
   public DateTime creationDate { get; set; }
 
   public string _dataCache { get; set; }
+  public bool isOnline { get; set; }
 
   [NotMapped]
   public Position Position

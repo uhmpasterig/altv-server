@@ -74,7 +74,7 @@ public partial class ServerContext : DbContext
 
     modelBuilder.Entity<Fraktion_rang>(entity =>
     {
-      entity.ToTable("fraktions_range");
+      entity.ToTable("fraktions_raenge");
     });
 
     modelBuilder.Entity<Fraktion_ug>(entity =>

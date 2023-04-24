@@ -6,6 +6,7 @@ using server.Core;
 using server.Models;
 using server.Handlers.Storage;
 using server.Modules.Items;
+using server.Modules.Fraktionen;
 
 namespace server.Util.Fraktionen;
 public class FraktionsWriter : IWritable
@@ -27,11 +28,11 @@ public class FraktionsWriter : IWritable
 
     
     writer.Name("rank");
-    writer.Value("Leader");
+    writer.Value(FraktionsModuleMain.GetRankName(fraktion, player.job_rank));
     writer.Name("rank_id");
-    writer.Value(12);
+    writer.Value(player.job_rank);
     writer.Name("uicolor");
-    writer.Value("#ffffff");
+    writer.Value(fraktion.uicolor);
     
     writer.Name("ugname");
     writer.Value("Hey");
@@ -49,10 +50,10 @@ public class FraktionsWriter : IWritable
       writer.Name("maxlager");
       writer.Value(1000);
     writer.EndObject();
+    
+    #region Shopitems
     writer.Name("shopitems");
     writer.BeginArray();
-
-
       writer.BeginObject();
       writer.Name("name");
       writer.Value("weapon_pistol_mk2");
@@ -66,20 +67,40 @@ public class FraktionsWriter : IWritable
       writer.Name("name");
       writer.Value(fraktion.weapon);
       writer.Name("label");
-      writer.Value(fraktion.weapon);
+      writer.Value(Items.GetItemLabel(fraktion.weapon));
       writer.Name("price");
       writer.Value(1000);
       writer.EndObject();
 
     writer.EndArray();
+    #endregion
 
     writer.Name("perms");
     writer.BeginArray();
-    writer.Value("faction.leader");
+    foreach (string perm in player.job_perm) writer.Value(perm);
     writer.EndArray();
 
     writer.Name("members");
     writer.BeginArray();
+    foreach(Models.Player _player in FraktionsModuleMain.GetFrakMembers(fraktion.name))
+    {
+      writer.Name("id");
+      writer.Value(_player.permaId);
+      writer.Name("name");
+      writer.Value(_player.name);
+      writer.Name("rank");
+      writer.Value(FraktionsModuleMain.GetRankName(fraktion, _player.job_rank));
+      writer.Name("rank_id");
+      writer.Value(_player.job_rank);
+      writer.Name("phone");
+      writer.Value("TODO");
+      writer.Name("lastseen");
+      writer.Value(_player.lastLogin.ToLongTimeString());
+      writer.Name("online");
+      writer.Value(_player.isOnline);
+      writer.Name("frakname");
+      writer.Value(player.job.ToLower());
+    }
     writer.EndArray();
 
     writer.Name("fights");

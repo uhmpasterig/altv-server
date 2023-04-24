@@ -20,6 +20,7 @@ public partial class Fraktion
   public int money { get; set; }
 
   public int ug_id { get; set; }
+  public string uicolor { get; set; }
 
   [NotMapped]
   public List<Fraktion_rang> raenge { get; set; }
