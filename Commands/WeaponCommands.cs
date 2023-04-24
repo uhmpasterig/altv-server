@@ -76,6 +76,6 @@ internal class WeaponCommands : IScript
   [Command("ttest2")]
   public static void Test2(xPlayer player)
   {
-    player.SetDlcClothes(11, 14, 0, 0, Alt.Hash("Blue Check Shirt"));
+    player.SetDlcClothes(11, 14, 0, 0, Alt.Hash("mp_m_freemode_01"));
   }
 }
