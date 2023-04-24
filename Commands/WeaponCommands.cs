@@ -66,4 +66,10 @@ internal class WeaponCommands : IScript
   {
     player.Emit("propCreator", "createprop", prop);
   }
+
+  [Command("ttest")]
+  public static void Test(xPlayer player)
+  {
+    player.SetDlcClothes(11, 4, 0, 0, Alt.Hash("mp_m_executive_01"));
+  }
 }
