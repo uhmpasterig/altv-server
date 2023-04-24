@@ -9,7 +9,7 @@ namespace server.Models;
 public partial class Garage
 {
   public Garage() {
-    garageSpawns = new List<GarageSpawns>();
+    GarageSpawn = new List<GarageSpawn>();
   }
 
   public int id { get; set; }
@@ -30,5 +30,5 @@ public partial class Garage
   }
 
   [NotMapped]
-  public List<GarageSpawns> garageSpawns { get; set; }
+  public List<GarageSpawn> GarageSpawn { get; set; }
 }

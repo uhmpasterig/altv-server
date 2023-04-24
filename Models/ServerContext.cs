@@ -22,7 +22,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<verarbeiter_farming_data> verarbeiter_farming_data { get; set; }
 
   public virtual DbSet<Garage> Garage { get; set; }
-  public virtual DbSet<GarageSpawns> GarageSpawns { get; set; }
+  public virtual DbSet<GarageSpawn> GarageSpawns { get; set; }
 
   public virtual DbSet<Shop> Shops { get; set; }
   public virtual DbSet<ShopItems> ShopItems { get; set; }
@@ -103,7 +103,7 @@ public partial class ServerContext : DbContext
       entity.ToTable("garage");
     });
 
-    modelBuilder.Entity<GarageSpawns>(entity =>
+    modelBuilder.Entity<GarageSpawn>(entity =>
     {
       entity.ToTable("garage_spawns");
     });

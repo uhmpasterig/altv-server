@@ -153,7 +153,7 @@ internal class AdminVehicle : IScript
 
     if (veh.Exists)
     {
-      Models.GarageSpawns spawn = new Models.GarageSpawns()
+      Models.GarageSpawn spawn = new Models.GarageSpawn()
       {
         Position = player.Vehicle.Position,
         Rotation = player.Vehicle.Rotation,

@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace server.Models;
 
 [PrimaryKey("id")]
-public partial class GarageSpawns
+public partial class GarageSpawn
 {
-  public GarageSpawns() {
+  public GarageSpawn() {
   }
 
   public int id { get; set; }

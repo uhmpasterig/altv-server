@@ -64,9 +64,9 @@ class GaragenModule : ILoadEvent, IPressedEEvent
   {
     foreach (Models.Garage garage in _serverContext.Garage.ToList())
     {
-      foreach (Models.GarageSpawns spawn in _serverContext.GarageSpawns.Where(x => x.garage_id == garage.id).ToList())
+      foreach (Models.GarageSpawn spawn in _serverContext.GarageSpawns.Where(x => x.garage_id == garage.id).ToList())
       {
-        garage.garageSpawns.Add(spawn);
+        garage.GarageSpawn.Add(spawn);
       }
 
       xEntity ped = new xEntity();
@@ -90,7 +90,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       Models.Garage? garage = garageList.FirstOrDefault(x => x.Position.Distance(player.Position) < 30);
       Models.Vehicle? vehicle = _serverContext.Vehicle.FirstOrDefault(x => x.id == vehicleId);
       if (vehicle == null) return;
-      Models.GarageSpawns spawn = await GetFreeSpawn(garage!);
+      Models.GarageSpawn spawn = await GetFreeSpawn(garage!);
       if (spawn == null) return;
       await _vehicleHandler.CreateVehicleFromDb(vehicle, spawn.Position, spawn.Rotation);
       // if (type == "einparken")
@@ -118,10 +118,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     });
   }
 
-  public async Task<Models.GarageSpawns> GetFreeSpawn(Models.Garage garage)
+  public async Task<Models.GarageSpawn> GetFreeSpawn(Models.Garage garage)
   {
-    if (garage.garageSpawns.Count == 0) return null;
-    foreach (Models.GarageSpawns spawn in garage.garageSpawns.ToList())
+    if (garage.GarageSpawn.Count == 0) return null;
+    foreach (Models.GarageSpawn spawn in garage.GarageSpawn.ToList())
     {
       if (_vehicleHandler.GetClosestVehicle(spawn.Position, 1) == null)
         return spawn;
