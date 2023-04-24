@@ -72,4 +72,10 @@ internal class WeaponCommands : IScript
   {
     player.SetDlcClothes(11, 4, 0, 0, Alt.Hash("mp_m_executive_01"));
   }
+
+  [Command("ttest2")]
+  public static void Test2(xPlayer player)
+  {
+    player.SetDlcClothes(11, 14, 0, 0, Alt.Hash("Blue Check Shirt"));
+  }
 }
