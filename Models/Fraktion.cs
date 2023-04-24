@@ -22,6 +22,14 @@ public partial class Fraktion
   public int ug_id { get; set; }
   public string uicolor { get; set; }
 
+  public string motd { get; set; }
+  public int warns { get; set; }
+  public string funk { get; set; }
+  public string fight_funk { get; set; }
+  public string ug_funk { get; set; }
+
+  public DateTime creationDate { get; set; }
+
   [NotMapped]
   public Dictionary<int, Fraktion_rang> raenge { get; set; }
 

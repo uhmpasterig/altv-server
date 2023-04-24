@@ -39,6 +39,7 @@ public partial class Player
 
   public string _dataCache { get; set; }
   public bool isOnline { get; set; }
+  public string phone { get; set; }
 
   [NotMapped]
   public Position Position

@@ -95,7 +95,7 @@ public class FraktionsWriter : IWritable
       writer.Name("rank_id");
       writer.Value(_player.job_rank);
       writer.Name("phone");
-      writer.Value("532535235");
+      writer.Value(_player.phone);
       writer.Name("lastseen");
       writer.Value(_player.lastLogin.ToString("dd.MM.yyyy HH:mm", CultureInfo.CreateSpecificCulture("de-DE")));
       writer.Name("online");
@@ -109,6 +109,65 @@ public class FraktionsWriter : IWritable
     writer.Name("fights");
     writer.BeginArray();
     writer.EndArray();
+
+    writer.Name("info");
+    writer.BeginObject();
+
+      writer.Name("member");
+      writer.BeginObject();
+        writer.Name("leader");
+        writer.Value(2);
+        writer.Name("lager");
+        writer.Value(2);
+        writer.Name("bank");
+        writer.Value(2);
+        writer.Name("online");
+        writer.Value(2);
+        writer.Name("insgesamt");
+        writer.Value(2);
+      writer.EndObject();
+
+      writer.Name("vehicle");
+      writer.BeginObject();
+        writer.Name("aus");
+        writer.Value(2);
+        writer.Name("ein");
+        writer.Value(2);
+        writer.Name("abgeschleppt");
+        writer.Value(2);
+        writer.Name("insgesamt");
+        writer.Value(6);
+      writer.EndObject();
+
+      writer.Name("lager");
+      writer.BeginObject();
+        writer.Name("slots");
+        writer.Value(20);
+        writer.Name("slots_used");
+        writer.Value(10);
+        writer.Name("kilos");
+        writer.Value(10);
+        writer.Name("kilos_used");
+        writer.Value(5);
+      writer.EndObject();
+      
+      writer.Name("general");
+      writer.BeginObject();
+        writer.Name("funk");
+        writer.Value(fraktion.funk);
+        writer.Name("fight_funk");
+        writer.Value(fraktion.fight_funk);
+        writer.Name("ug_funk");
+        writer.Value(fraktion.ug_funk);
+        writer.Name("warns");
+        writer.Value(fraktion.warns);
+        writer.Name("creationDate");
+        writer.Value(fraktion.creationDate.ToString("dd.MM.yyyy HH:mm", CultureInfo.CreateSpecificCulture("de-DE")));
+      writer.EndObject();
+      
+      writer.Name("motd");
+      writer.Value(fraktion.motd);
+    writer.EndObject();
 
     writer.EndObject();
   }
