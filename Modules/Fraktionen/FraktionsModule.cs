@@ -17,7 +17,8 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   {
     foreach (Fraktion _frak in _serverContext.Fraktionen.ToList())
     {
-      List<Fraktion_rang> _raenge = _serverContext.Fraktionen_range.Where(r => r.fraktions_id == _frak.id).ToList();
+      Dictionary<int, Fraktion_rang> _raenge = new Dictionary<int, Fraktion_rang>();
+      foreach(Fraktion_rang _rang in _serverContext.Fraktionen_range.Where(r => r.fraktions_id == _frak.id).ToList()) _raenge.Add(_rang.rank_id, _rang);
       _frak.raenge = _raenge;
 
       Fraktion_ug _ug = _serverContext.Fraktionen_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
@@ -46,7 +47,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 
   public static string GetRankName(Fraktion frak, int rank)
   {
-    return frak.raenge.FirstOrDefault(r => r.id == rank)!.label;
+    return frak.raenge.FirstOrDefault(r => r.Key == rank)!.Value.label;
   }
 
   public static List<Models.Player> GetFrakMembers(string frakname)

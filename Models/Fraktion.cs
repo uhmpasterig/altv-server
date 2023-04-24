@@ -23,7 +23,7 @@ public partial class Fraktion
   public string uicolor { get; set; }
 
   [NotMapped]
-  public List<Fraktion_rang> raenge { get; set; }
+  public Dictionary<int, Fraktion_rang> raenge { get; set; }
 
   [NotMapped]
   public Fraktion_ug untergruppe { get; set; }

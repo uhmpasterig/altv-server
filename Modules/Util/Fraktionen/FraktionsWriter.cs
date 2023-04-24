@@ -84,6 +84,7 @@ public class FraktionsWriter : IWritable
     writer.BeginArray();
     foreach(Models.Player _player in FraktionsModuleMain.GetFrakMembers(fraktion.name))
     {
+      writer.BeginObject();
       writer.Name("id");
       writer.Value(_player.permaId);
       writer.Name("name");
@@ -95,11 +96,12 @@ public class FraktionsWriter : IWritable
       writer.Name("phone");
       writer.Value("TODO");
       writer.Name("lastseen");
-      writer.Value(_player.lastLogin.ToLongTimeString());
+      writer.Value(_player.lastLogin.ToLongDateString() + " " + _player.lastLogin.ToLongTimeString());
       writer.Name("online");
       writer.Value(_player.isOnline);
       writer.Name("frakname");
       writer.Value(player.job.ToLower());
+      writer.EndObject();
     }
     writer.EndArray();
 
