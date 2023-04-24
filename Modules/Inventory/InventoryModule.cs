@@ -103,6 +103,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       
       if(fromStorage != toStorage)
       {
+        _logger.Log("playAnim");
         player.Emit("playAnim", "mp_common", "givetake2_a", -1, 48);
       }
 
