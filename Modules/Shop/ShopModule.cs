@@ -118,6 +118,7 @@ class GaragenModule : IItemsLoaded, IPressedEEvent
       };
       player.RemoveMoney(item.price * _item.count);
     }
+    player.SaveMoney();
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)

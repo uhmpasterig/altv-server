@@ -14,11 +14,13 @@ public class FraktionsWriter : IWritable
 {
   public readonly Fraktion fraktion;
   public readonly xPlayer player;
+  public readonly xStorage storage;
 
-  public FraktionsWriter(Fraktion _fraktion, xPlayer _player)
+  public FraktionsWriter(Fraktion _fraktion, xPlayer _player, xStorage _storage)
   {
     this.fraktion = _fraktion;
     this.player = _player;
+    this.storage = _storage;
   }
 
   public void OnWrite(IMValueWriter writer)
@@ -81,6 +83,7 @@ public class FraktionsWriter : IWritable
     foreach (string perm in player.job_perm) writer.Value(perm);
     writer.EndArray();
 
+    #region Members 
     writer.Name("members");
     writer.BeginArray();
     foreach(Models.Player _player in FraktionsModuleMain.GetFrakMembers(fraktion.name))
@@ -105,6 +108,7 @@ public class FraktionsWriter : IWritable
       writer.EndObject();
     }
     writer.EndArray();
+    #endregion
 
     writer.Name("fights");
     writer.BeginArray();
@@ -142,13 +146,13 @@ public class FraktionsWriter : IWritable
       writer.Name("lager");
       writer.BeginObject();
         writer.Name("slots");
-        writer.Value(20);
+        writer.Value(storage.slots);
         writer.Name("slots_used");
-        writer.Value(10);
+        writer.Value(storage.items.Count);
         writer.Name("kilos");
-        writer.Value(10);
+        writer.Value(storage.maxWeight);
         writer.Name("kilos_used");
-        writer.Value(5);
+        writer.Value(storage.weight);
       writer.EndObject();
       
       writer.Name("general");

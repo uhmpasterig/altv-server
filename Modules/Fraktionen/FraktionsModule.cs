@@ -5,6 +5,7 @@ using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Fraktionen;
+using server.Handlers.Storage;
 namespace server.Modules.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
@@ -12,6 +13,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   public static Dictionary<string, Fraktion> frakList = new Dictionary<string, Fraktion>();
   public static Dictionary<int, Fraktion_ug> frakUgList = new Dictionary<int, Fraktion_ug>();
   static ServerContext _serverContext = new ServerContext();
+  static IStorageHandler storageHandler = new StorageHandler();
 
   public async void OnLoad()
   {
@@ -40,8 +42,10 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
       if (player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
     }
     Fraktion frak = frakList[player.job.ToLower()];
+    xStorage storage =  await storageHandler.GetStorage(frak.storage_id);
+
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
-    player.Emit("frontend:open", "faction", new FraktionsWriter(frak, player));
+    player.Emit("frontend:open", "faction", new FraktionsWriter(frak, player, storage));
     return true;
   }
 

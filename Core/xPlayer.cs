@@ -169,13 +169,11 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public async void GiveMoney(int amount)
   {
     this.cash += amount;
-    this.SaveMoney();
   }
 
   public async void RemoveMoney(int amount)
   {
     this.cash -= amount;
-    this.SaveMoney();
   }
 
   public async Task<bool> HasMoney(int amount)
