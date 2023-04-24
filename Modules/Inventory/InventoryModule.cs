@@ -100,6 +100,11 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         xStorage storage = await storageHandler.GetStorage(storageId);
         uiStorages.Add(storage);
       }
+      
+      if(fromStorage != toStorage)
+      {
+        player.Emit("playAnim", "mp_common", "givetake2_a", -1, 48);
+      }
 
       player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
       watch.Stop();
