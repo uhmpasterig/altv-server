@@ -7,6 +7,7 @@ using server.Models;
 using server.Handlers.Storage;
 using server.Modules.Items;
 using server.Modules.Fraktionen;
+using System.Globalization;
 
 namespace server.Util.Fraktionen;
 public class FraktionsWriter : IWritable
@@ -96,7 +97,7 @@ public class FraktionsWriter : IWritable
       writer.Name("phone");
       writer.Value("532535235");
       writer.Name("lastseen");
-      writer.Value(_player.lastLogin.ToLongDateString());
+      writer.Value(_player.lastLogin.ToString("dd.MM.yyyy HH:mm", CultureInfo.CreateSpecificCulture("de-DE")));
       writer.Name("online");
       writer.Value(_player.isOnline);
       writer.Name("frakname");
