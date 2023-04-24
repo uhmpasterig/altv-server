@@ -94,7 +94,7 @@ public class FraktionsWriter : IWritable
       writer.Name("rank_id");
       writer.Value(_player.job_rank);
       writer.Name("phone");
-      writer.Value("TODO");
+      writer.Value("532535235");
       writer.Name("lastseen");
       writer.Value(_player.lastLogin.ToLongDateString());
       writer.Name("online");
