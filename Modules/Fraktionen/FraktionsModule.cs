@@ -8,13 +8,13 @@ namespace server.Modules.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {
-  public static Dictionary<string, BadFrak> frakList = new Dictionary<string, BadFrak>();
+  public static Dictionary<string, Fraktion> frakList = new Dictionary<string, Fraktion>();
   
   public async void OnLoad()
   {
     _logger.Startup("Fraktionen werden geladen... ACH FICK MICH DOCH");
     await using var serverContext = new ServerContext();
-    foreach(BadFrak _frak in serverContext.BadFrak)
+    foreach(Fraktion _frak in serverContext.Fraktion)
     {
       _logger.Debug("Frak: " + _frak.name);
       frakList.Add(_frak.name.ToLower(), _frak);
@@ -33,7 +33,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     return true;
   }
 
-  public static BadFrak GetFrak(string name)
+  public static Fraktion GetFrak(string name)
   {
     if(frakList.ContainsKey(name.ToLower()))
     {
@@ -42,8 +42,8 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     return null!;
   }
 
-  public static void FrakToString(BadFrak frak)
+  public static void FrakToString(Fraktion frak)
   {
-    Alt.Log($"Frak: {frak.name} - {frak.money} - {frak.logo} - {frak._pos} - {frak._posLager}");
+    Alt.Log($"Frak: {frak.name} - {frak.money} - {frak._pos} - {frak._posLager}");
   }
 }

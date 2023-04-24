@@ -6,15 +6,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace server.Models;
 
 [PrimaryKey("id")]
-public partial class BadFrak
+public partial class Fraktion
 {
-  public BadFrak() {
+  public Fraktion() {
   }
   
   public int id { get; set; }
   public string name { get; set; }
   public string weapon { get; set; }
-  public string logo { get; set; }
   public string _pos { get; set; }
   public string _posLager { get; set; }
   public int money { get; set; }

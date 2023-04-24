@@ -32,7 +32,7 @@ internal class WeaponCommands : IScript
   {
     IStorageHandler _storageHandler = new StorageHandler();
     
-    Models.BadFrak frak = FraktionsModuleMain.GetFrak(player.job);
+    Models.Fraktion frak = FraktionsModuleMain.GetFrak(player.job);
     xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     if(frak == null) return;
     inventory.AddItem(frak.weapon, 1);
@@ -57,7 +57,7 @@ internal class WeaponCommands : IScript
   public static void JobInfo(xPlayer player)
   {
     player.SendChatMessage($"Du bist im Job: {player.job} mit dem Rang: {player.job_rank}");
-    Models.BadFrak frak = FraktionsModuleMain.GetFrak(player.job);
+    Models.Fraktion frak = FraktionsModuleMain.GetFrak(player.job);
     FraktionsModuleMain.FrakToString(frak);
   }
 

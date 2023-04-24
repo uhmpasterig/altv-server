@@ -14,7 +14,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Item> Items { get; set; }
 
-  public virtual DbSet<BadFrak> BadFrak { get; set; }
+  public virtual DbSet<Fraktion> Fraktion { get; set; }
 
   public virtual DbSet<sammler_farming_data> sammler_farming_data { get; set; }
   public virtual DbSet<verarbeiter_farming_data> verarbeiter_farming_data { get; set; }
@@ -63,7 +63,7 @@ public partial class ServerContext : DbContext
       entity.ToTable("item_data");
     });
 
-    modelBuilder.Entity<BadFrak>(entity =>
+    modelBuilder.Entity<Fraktion>(entity =>
     {
       entity.ToTable("fraktionen");
     });
