@@ -96,7 +96,7 @@ public class FraktionsWriter : IWritable
       writer.Name("phone");
       writer.Value("TODO");
       writer.Name("lastseen");
-      writer.Value(_player.lastLogin.ToLongDateString() + " " + _player.lastLogin.ToLongTimeString());
+      writer.Value(_player.lastLogin.ToLongDateString());
       writer.Name("online");
       writer.Value(_player.isOnline);
       writer.Name("frakname");
