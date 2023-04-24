@@ -32,10 +32,10 @@ public partial class Faction
   public DateTime creationDate { get; set; }
 
   [NotMapped]
-  public Dictionary<int, Fraktion_rang> raenge { get; set; }
+  public Dictionary<int, Faction_rank> raenge { get; set; }
 
   [NotMapped]
-  public Fraktion_ug untergruppe { get; set; }
+  public Faction_ug untergruppe { get; set; }
 
   [NotMapped]
   public Position Position

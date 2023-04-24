@@ -12,11 +12,11 @@ using System.Globalization;
 namespace server.Util.Fraktionen;
 public class FraktionsWriter : IWritable
 {
-  public readonly Fraktion fraktion;
+  public readonly Faction fraktion;
   public readonly xPlayer player;
   public readonly xStorage storage;
 
-  public FraktionsWriter(Fraktion _fraktion, xPlayer _player, xStorage _storage)
+  public FraktionsWriter(Faction _fraktion, xPlayer _player, xStorage _storage)
   {
     this.fraktion = _fraktion;
     this.player = _player;

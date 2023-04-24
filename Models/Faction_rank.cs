@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace server.Models;
 
 [PrimaryKey("id")]
-public partial class Fraktion_rang
+public partial class Faction_rank
 {
-  public Fraktion_rang()
+  public Faction_rank()
   {
   }
 

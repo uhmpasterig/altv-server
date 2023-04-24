@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace server.Models;
 
 [PrimaryKey("id")]
-public partial class Fraktion_ug
+public partial class Faction_ug
 {
-  public Fraktion_ug() {
+  public Faction_ug() {
   }
   
   public int id { get; set; }

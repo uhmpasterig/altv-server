@@ -10,20 +10,20 @@ namespace server.Modules.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {
-  public static Dictionary<string, Fraktion> frakList = new Dictionary<string, Fraktion>();
-  public static Dictionary<int, Fraktion_ug> frakUgList = new Dictionary<int, Fraktion_ug>();
+  public static Dictionary<string, Faction> frakList = new Dictionary<string, Faction>();
+  public static Dictionary<int, Faction_ug> frakUgList = new Dictionary<int, Faction_ug>();
   static ServerContext _serverContext = new ServerContext();
   static IStorageHandler storageHandler = new StorageHandler();
 
   public async void OnLoad()
   {
-    foreach (Fraktion _frak in _serverContext.Factions.ToList())
+    foreach (Faction _frak in _serverContext.Factions.ToList())
     {
-      Dictionary<int, Fraktion_rang> _raenge = new Dictionary<int, Fraktion_rang>();
-      foreach(Fraktion_rang _rang in _serverContext.Factions_range.Where(r => r.fraktions_id == _frak.id).ToList()) _raenge.Add(_rang.rank_id, _rang);
+      Dictionary<int, Faction_rank> _raenge = new Dictionary<int, Faction_rank>();
+      foreach(Faction_rank _rang in _serverContext.Faction_ranks.Where(r => r.fraktions_id == _frak.id).ToList()) _raenge.Add(_rang.rank_id, _rang);
       _frak.raenge = _raenge;
 
-      Fraktion_ug _ug = _serverContext.Factions_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
+      Faction_ug _ug = _serverContext.Faction_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
       frakUgList.Add(_frak.id, _ug);
 
       _logger.Debug($"Fraktion: {_frak.name} wurde geladen!");
@@ -41,7 +41,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     {
       if (player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
     }
-    Fraktion frak = frakList[player.job.ToLower()];
+    Faction frak = frakList[player.job.ToLower()];
     xStorage storage =  await storageHandler.GetStorage(frak.storage_id);
 
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
@@ -49,7 +49,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     return true;
   }
 
-  public static string GetRankName(Fraktion frak, int rank)
+  public static string GetRankName(Faction frak, int rank)
   {
     return frak.raenge.FirstOrDefault(r => r.Key == rank)!.Value.label;
   }
@@ -60,17 +60,12 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     return players;
   }
 
-  public static Fraktion GetFrak(string name)
+  public static Faction GetFrak(string name)
   {
     if (frakList.Where(f => f.Key.ToLower() == name.ToLower()) != null)
     {
       return frakList[name];
     }
     return null!;
-  }
-
-  public static void FrakToString(Fraktion frak)
-  {
-    Alt.Log($"Frak: {frak.name} - {frak.money} - {frak._pos} - {frak._posLager}");
   }
 }

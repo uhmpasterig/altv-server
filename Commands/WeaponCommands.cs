@@ -27,7 +27,7 @@ internal class WeaponCommands : IScript
     player.Revive();
   }
 
-  [Command("frakweap")]
+/*   [Command("frakweap")]
   public async static void FrakWeap(xPlayer player)
   {
     IStorageHandler _storageHandler = new StorageHandler();
@@ -38,7 +38,7 @@ internal class WeaponCommands : IScript
     inventory.AddItem(frak.weapon, 1);
     inventory.AddItem("packed_specialcarbine", 1);
   }
-
+ */
   [Command("useitem")]
   public static void UseItem(xPlayer player, string name)
   {
@@ -51,14 +51,6 @@ internal class WeaponCommands : IScript
     IStorageHandler _storageHandler = new StorageHandler();
     xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     inventory.AddItem(name, amount);
-  }
-
-  [Command("jobinfo")]
-  public static void JobInfo(xPlayer player)
-  {
-    player.SendChatMessage($"Du bist im Job: {player.job} mit dem Rang: {player.job_rank}");
-    Models.Faction frak = FraktionsModuleMain.GetFrak(player.job);
-    FraktionsModuleMain.FrakToString(frak);
   }
 
   [Command("createprop")]

@@ -15,8 +15,8 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Item> Items { get; set; }
 
   public virtual DbSet<Faction> Factions { get; set; }
-  public virtual DbSet<Fraktion_rang> Fraktionen_range { get; set; }
-  public virtual DbSet<Fraktion_ug> Fraktionen_ugs { get; set; }
+  public virtual DbSet<Faction_rank> Faction_ranks { get; set; }
+  public virtual DbSet<Faction_ug> Faction_ugs { get; set; }
 
   public virtual DbSet<sammler_farming_data> sammler_farming_data { get; set; }
   public virtual DbSet<verarbeiter_farming_data> verarbeiter_farming_data { get; set; }
@@ -72,12 +72,12 @@ public partial class ServerContext : DbContext
       entity.ToTable("fraktionen");
     });
 
-    modelBuilder.Entity<Fraktion_rang>(entity =>
+    modelBuilder.Entity<Faction_rank>(entity =>
     {
       entity.ToTable("fraktions_raenge");
     });
 
-    modelBuilder.Entity<Fraktion_ug>(entity =>
+    modelBuilder.Entity<Faction_ug>(entity =>
     {
       entity.ToTable("fraktions_ugs");
     });
