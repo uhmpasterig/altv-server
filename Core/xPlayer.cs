@@ -183,7 +183,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public async void SaveMoney()
   {
-    Models.Player? player = await _serverContext.Player.FindAsync(this.id);
+    Models.Player? player = await _serverContext.Players.FindAsync(this.id);
     player.cash = this.cash;
     player.bank = this.bank;
     await _serverContext.SaveChangesAsync();

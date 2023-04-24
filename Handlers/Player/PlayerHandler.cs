@@ -25,7 +25,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
   {
     try
     {
-      Models.Player? dbPlayer = await _serverContext.Player
+      Models.Player? dbPlayer = await _serverContext.Players
         .FirstOrDefaultAsync(p => p.name == player.Name);
       if (dbPlayer == null)
       {
@@ -89,7 +89,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async Task SavePlayerToDatabase(xPlayer player, bool isDisconnect = false)
   {
-    Models.Player? dbPlayer = await _serverContext.Player.FindAsync(player.id);
+    Models.Player? dbPlayer = await _serverContext.Players.FindAsync(player.id);
 
     // PLAYER INFO
     dbPlayer.isOnline = false;

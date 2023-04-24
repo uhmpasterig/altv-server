@@ -56,7 +56,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 
   public static List<Models.Player> GetFrakMembers(string frakname)
   {
-    List<Models.Player> players = _serverContext.Player.Where(p => p.job == frakname.ToLower()).ToList();
+    List<Models.Player> players = _serverContext.Players.Where(p => p.job == frakname.ToLower()).ToList();
     return players;
   }
 

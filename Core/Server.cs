@@ -63,7 +63,7 @@ public class Server : IServer
 
     _logger.Startup("Lade Timer...");
     _logger.Startup("Timer Geladen!");
-    foreach(Models.Player _player in _serverContext.Player.ToList())
+    foreach(Models.Player _player in _serverContext.Players.ToList())
     {
       _player.isOnline = false;
     }

@@ -9,7 +9,7 @@ public partial class ServerContext : DbContext
   public ServerContext() { }
   public ServerContext(DbContextOptions<ServerContext> options) : base(options) { }
 
-  public virtual DbSet<Player> Player { get; set; }
+  public virtual DbSet<Player> Players { get; set; }
   public virtual DbSet<Vehicle> Vehicle { get; set; }
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Item> Items { get; set; }
