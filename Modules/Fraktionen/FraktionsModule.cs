@@ -10,14 +10,24 @@ namespace server.Modules.Fraktionen;
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {
   public static Dictionary<string, Fraktion> frakList = new Dictionary<string, Fraktion>();
+  public static Dictionary<int, Fraktion_ug> frakUgList = new Dictionary<int, Fraktion_ug>();
 
   public async void OnLoad()
   {
-    _logger.Startup("Fraktionen werden geladen... ACH FICK MICH DOCH");
     await using var serverContext = new ServerContext();
     foreach (Fraktion _frak in serverContext.Fraktionen)
     {
-      _logger.Debug("Frak: " + _frak.name);
+      
+      List<Fraktion_rang> _raenge = serverContext.Fraktionen_range.Where(r => r.fraktions_id == _frak.id).ToList();
+      _frak.raenge = _raenge;
+      
+      Fraktion_ug _ug = serverContext.Fraktionen_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
+      frakUgList.Add(_frak.id, _ug);
+
+      _logger.Debug($"Fraktion: {_frak.name} wurde geladen!");
+      _logger.Debug($"Fraktion: {_frak.name} hat x{_raenge.Count} Ränge!");
+      _logger.Debug($"Fraktion: {_frak.name} hat {_ug.name} als Untergruppierung!");
+
       frakList.Add(_frak.name.ToLower(), _frak);
     }
     _logger.Startup($"x{frakList.Count} Fraktionen wurden geladen!");
@@ -31,7 +41,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     }
     Fraktion frak = frakList[player.job.ToLower()];
     player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
-    player.Emit("frontend:open", "faction", new FraktionsWriter(frak));
+    player.Emit("frontend:open", "faction", new FraktionsWriter(frak, player));
     return true;
   }
 

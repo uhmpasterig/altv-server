@@ -15,6 +15,8 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Item> Items { get; set; }
 
   public virtual DbSet<Fraktion> Fraktionen { get; set; }
+  public virtual DbSet<Fraktion_rang> Fraktionen_range { get; set; }
+  public virtual DbSet<Fraktion_ug> Fraktionen_ugs { get; set; }
 
   public virtual DbSet<sammler_farming_data> sammler_farming_data { get; set; }
   public virtual DbSet<verarbeiter_farming_data> verarbeiter_farming_data { get; set; }
@@ -62,12 +64,27 @@ public partial class ServerContext : DbContext
     {
       entity.ToTable("item_data");
     });
-
+  
+    // FRAKTIONEN
+    #region FRAKTION
     modelBuilder.Entity<Fraktion>(entity =>
     {
       entity.ToTable("fraktionen");
     });
 
+    modelBuilder.Entity<Fraktion_rang>(entity =>
+    {
+      entity.ToTable("fraktions_range");
+    });
+
+    modelBuilder.Entity<Fraktion_ug>(entity =>
+    {
+      entity.ToTable("fraktions_ugs");
+    });
+    #endregion
+
+    // FARMING
+    #region FARMING
     modelBuilder.Entity<sammler_farming_data>(entity =>
     {
       entity.ToTable("sammler_farming_data");
@@ -77,7 +94,10 @@ public partial class ServerContext : DbContext
     {
       entity.ToTable("verarbeiter_farming_data");
     });
+    #endregion
 
+    // GARAGE
+    #region GARAGE
     modelBuilder.Entity<Garage>(entity =>
     {
       entity.ToTable("garage");
@@ -87,12 +107,10 @@ public partial class ServerContext : DbContext
     {
       entity.ToTable("garage_spawns");
     });
+    #endregion
 
-    modelBuilder.Entity<Prop>(entity =>
-    {
-      entity.ToTable("custom_props");
-    });
-
+    // SHOP
+    #region SHOP
     modelBuilder.Entity<Shop>(entity =>
     {
       entity.ToTable("shops");
@@ -101,6 +119,12 @@ public partial class ServerContext : DbContext
     modelBuilder.Entity<ShopItems>(entity =>
     {
       entity.ToTable("shop_items");
+    });
+    #endregion
+
+     modelBuilder.Entity<Prop>(entity =>
+    {
+      entity.ToTable("custom_props");
     });
 
     modelBuilder.Entity<Bank>(entity =>

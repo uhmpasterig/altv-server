@@ -6,26 +6,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace server.Models;
 
 [PrimaryKey("id")]
-public partial class Fraktion
+public partial class Fraktion_ug
 {
-  public Fraktion() {
+  public Fraktion_ug() {
   }
   
   public int id { get; set; }
   public string name { get; set; }
-  public string weapon { get; set; }
-  public string droge { get; set; }
   public string _pos { get; set; }
   public string _posLager { get; set; }
-  public int money { get; set; }
-
-  public int ug_id { get; set; }
-
-  [NotMapped]
-  public List<Fraktion_rang> raenge { get; set; }
-
-  [NotMapped]
-  public Fraktion_ug untergruppe { get; set; }
 
   [NotMapped]
   public Position Position

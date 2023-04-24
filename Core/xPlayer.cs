@@ -47,7 +47,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public string job { get; set; }
   public int job_rank { get; set; }
-  public Dictionary<string, bool> job_perm { get; set; }
+  public List<string> job_perm { get; set; }
 
   public DateTime creationDate { get; set; }
   public DateTime lastLogin { get; set; }
@@ -65,7 +65,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     weapons = new List<xWeapon>();
     job = "";
     job_rank = 0;
-    job_perm = new Dictionary<string, bool>();
+    job_perm = new List<string>();
     lastLogin = DateTime.Now;
 
     dataCache = new Dictionary<string, object>();

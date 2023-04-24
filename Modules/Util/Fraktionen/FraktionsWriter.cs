@@ -11,10 +11,12 @@ namespace server.Util.Fraktionen;
 public class FraktionsWriter : IWritable
 {
   public readonly Fraktion fraktion;
+  public readonly xPlayer player;
 
-  public FraktionsWriter(Fraktion _fraktion)
+  public FraktionsWriter(Fraktion _fraktion, xPlayer _player)
   {
     this.fraktion = _fraktion;
+    this.player = _player;
   }
 
   public void OnWrite(IMValueWriter writer)
@@ -22,8 +24,8 @@ public class FraktionsWriter : IWritable
     writer.BeginObject();
     writer.Name("name");
     writer.Value(fraktion.name);
-    writer.Name("ugname");
-    writer.Value("Hey");
+
+    
     writer.Name("rank");
     writer.Value("Leader");
     writer.Name("rank_id");
@@ -31,6 +33,9 @@ public class FraktionsWriter : IWritable
     writer.Name("uicolor");
     writer.Value("#ffffff");
     
+    writer.Name("ugname");
+    writer.Value("Hey");
+
     writer.Name("drogenInfo");
     writer.BeginObject();
       writer.Name("droge");
