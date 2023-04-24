@@ -76,7 +76,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.LoadWeaponsFromDb(dbPlayer._weapons);
 
       player.Emit("player:loaded", new PlayerLoadedWriter(player));
-
+      dbPlayer.isOnline = true;
       await _serverContext.SaveChangesAsync();
       return player;
     }
@@ -92,6 +92,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     Models.Player? dbPlayer = await _serverContext.Player.FindAsync(player.id);
 
     // PLAYER INFO
+    dbPlayer.isOnline = false;
     dbPlayer.lastLogin = DateTime.Now;
 
     // CACHE DATA

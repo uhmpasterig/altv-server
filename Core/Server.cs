@@ -63,9 +63,14 @@ public class Server : IServer
 
     _logger.Startup("Lade Timer...");
     _logger.Startup("Timer Geladen!");
+    foreach(Models.Player _player in _serverContext.Player.ToList())
+    {
+      _player.isOnline = false;
+    }
 
     _serverContext.SaveChangesAsync();
     _logger.Startup("Server gestartet!");
+
   }
 
   public async Task SaveAll()
