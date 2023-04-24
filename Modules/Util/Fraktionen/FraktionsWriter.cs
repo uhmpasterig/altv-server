@@ -169,6 +169,38 @@ public class FraktionsWriter : IWritable
       writer.Value(fraktion.motd);
     writer.EndObject();
 
+    writer.Name("fights");
+    writer.BeginArray();
+      
+      writer.BeginObject();
+        writer.Name("image");
+        writer.Value("https://amoure.club/factions/lcn.png");
+        writer.Name("name");
+        writer.Value("Gangwar");
+        writer.Name("useable");
+        writer.Value(false);
+      writer.EndObject();
+
+      writer.BeginObject();
+        writer.Name("image");
+        writer.Value("https://amoure.club/factions/lcn.png");
+        writer.Name("name");
+        writer.Value("Bootcamp");
+        writer.Name("useable");
+        writer.Value(true);
+      writer.EndObject();
+
+      writer.BeginObject();
+        writer.Name("image");
+        writer.Value("https://amoure.club/factions/lcn.png");
+        writer.Name("name");
+        writer.Value("Raid'n Defend");
+        writer.Name("useable");
+        writer.Value(false);
+      writer.EndObject();
+    
+    writer.EndArray();
+
     writer.EndObject();
   }
 }
