@@ -22,49 +22,49 @@ public class FraktionsWriter : IWritable
     writer.BeginObject();
     writer.Name("name");
     writer.Value(fraktion.name);
-    writer.Value("ugname");
+    writer.Name("ugname");
     writer.Value("Hey");
-    writer.Value("rank");
+    writer.Name("rank");
     writer.Value("Leader");
-    writer.Value("rank_id");
+    writer.Name("rank_id");
     writer.Value(12);
-    writer.Value("uicolor");
+    writer.Name("uicolor");
     writer.Value("#ffffff");
-
+    
     writer.Name("drogenInfo");
     writer.BeginObject();
-    writer.Name("droge");
-    writer.Value(fraktion.droge);
-    writer.Name("einpreis");
-    writer.Value(100);
-    writer.Name("auspreis");
-    writer.Value(200);
-    writer.Name("lager");
-    writer.Value(100);
-    writer.Name("maxlager");
-    writer.Value(1000);
+      writer.Name("droge");
+      writer.Value(fraktion.droge);
+      writer.Name("einpreis");
+      writer.Value(100);
+      writer.Name("auspreis");
+      writer.Value(200);
+      writer.Name("lager");
+      writer.Value(100);
+      writer.Name("maxlager");
+      writer.Value(1000);
     writer.EndObject();
-
     writer.Name("shopitems");
     writer.BeginArray();
 
-    writer.BeginObject();
-    writer.Name("name");
-    writer.Value("weapon_pistol_mk2");
-    writer.Name("label");
-    writer.Value("Pistol MK2");
-    writer.Name("price");
-    writer.Value(3000);
-    writer.EndObject();
 
-    writer.BeginObject();
-    writer.Name("name");
-    writer.Value(fraktion.weapon);
-    writer.Name("label");
-    writer.Value(fraktion.weapon);
-    writer.Name("price");
-    writer.Value(1000);
-    writer.EndObject();
+      writer.BeginObject();
+      writer.Name("name");
+      writer.Value("weapon_pistol_mk2");
+      writer.Name("label");
+      writer.Value("Pistol MK2");
+      writer.Name("price");
+      writer.Value(3000);
+      writer.EndObject();
+
+      writer.BeginObject();
+      writer.Name("name");
+      writer.Value(fraktion.weapon);
+      writer.Name("label");
+      writer.Value(fraktion.weapon);
+      writer.Name("price");
+      writer.Value(1000);
+      writer.EndObject();
 
     writer.EndArray();
 
