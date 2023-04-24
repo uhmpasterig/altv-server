@@ -14,7 +14,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   {
     _logger.Startup("Fraktionen werden geladen... ACH FICK MICH DOCH");
     await using var serverContext = new ServerContext();
-    foreach(Fraktion _frak in serverContext.Fraktion)
+    foreach(Fraktion _frak in serverContext.Fraktionen)
     {
       _logger.Debug("Frak: " + _frak.name);
       frakList.Add(_frak.name.ToLower(), _frak);
