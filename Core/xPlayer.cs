@@ -94,7 +94,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public async Task<bool> GiveItem(string name, int count)
   {
-    IStorageHandler storageHandler = new StorageHandler();
+    StorageHandler storageHandler = new StorageHandler();
     xStorage inv = await storageHandler.GetStorage(this.playerInventorys["Inventar"]);
     if (inv == null)
     {
@@ -161,7 +161,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public async Task<bool> HasItem(string name, int count = 1)
   {
-    IStorageHandler _storageHandler = new StorageHandler();
+    StorageHandler _storageHandler = new StorageHandler();
     xStorage inv = await _storageHandler.GetStorage(this.playerInventorys["Inventar"]);
     return inv.HasItem(name, count);
   }

@@ -21,7 +21,7 @@ public class Server : IServer
   private readonly ITimerHandler _timerHandler;
   private readonly IVehicleHandler _vehicleHandler;
   private readonly IPlayerHandler _playerHandler;
-  private readonly IStorageHandler _storageHandler;
+  private readonly StorageHandler _storageHandler;
 
   public static List<string> _serverWeapons = new List<string>() {
     "weapon_specialcarbine_mk2",
@@ -34,7 +34,7 @@ public class Server : IServer
     "weapon_battleaxe"
   };
 
-  public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)
+  public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, StorageHandler storageHandler)
   {
     _serverContext = serverContext;
     _vehicleHandler = vehicleHandler;

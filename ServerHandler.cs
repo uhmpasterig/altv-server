@@ -37,7 +37,7 @@ namespace server
       var vehicleHandler = startup.GetContainer().Resolve<IVehicleHandler>();
       var eventHandler = startup.GetContainer().Resolve<IEventHandler>();
       var timerHandler = startup.GetContainer().Resolve<ITimerHandler>();
-      var storageHandler = startup.GetContainer().Resolve<IStorageHandler>();
+      var storageHandler = startup.GetContainer().Resolve<StorageHandler>();
 
 
       _server = new Server(serverContext, vehicleHandler, playerHandler, eventHandler, timerHandler, storageHandler);

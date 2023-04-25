@@ -7,7 +7,7 @@ namespace server.Modules.Items;
 
 class PackedWeapons : IItemsLoaded
 {
-  private IStorageHandler _storageHandler = new StorageHandler();
+  private StorageHandler _storageHandler = new StorageHandler();
   public void ItemsLoaded()
   {
     async void UnpackFunc(xPlayer player, string item)

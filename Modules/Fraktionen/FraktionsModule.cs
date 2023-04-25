@@ -13,7 +13,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   public static Dictionary<string, Faction> frakList = new Dictionary<string, Faction>();
   public static Dictionary<int, Faction_ug> frakUgList = new Dictionary<int, Faction_ug>();
   static ServerContext _serverContext = new ServerContext();
-  static IStorageHandler storageHandler = new StorageHandler();
+  static StorageHandler storageHandler = new StorageHandler();
 
   public async void OnLoad()
   {

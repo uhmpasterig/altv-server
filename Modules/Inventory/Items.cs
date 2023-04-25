@@ -119,7 +119,7 @@ public class Items : ILoadEvent
 
   public async static void UseItemFromSlot(xPlayer player, int slot, int storageId)
   {
-    IStorageHandler handler = new StorageHandler();
+    StorageHandler handler = new StorageHandler();
     xStorage storage = await handler.GetStorage(storageId);
     if (storage == null)
     {
@@ -156,7 +156,7 @@ public class Items : ILoadEvent
 
   public async static void RemoveItemFromSlot(int slot, int storageId, int count)
   {
-    IStorageHandler handler = new StorageHandler();
+    StorageHandler handler = new StorageHandler();
     xStorage storage = await handler.GetStorage(storageId);
     if (storage == null)
     {

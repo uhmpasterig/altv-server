@@ -106,7 +106,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
   {
     if (player == null) return false;
     if (feld == null) return false;
-    IStorageHandler _storageHandler = new StorageHandler();
+    StorageHandler _storageHandler = new StorageHandler();
     xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]!);
     int random = new Random().Next(feld.amountmin, feld.amountmax);
     inv.AddItem(feld.item, random);

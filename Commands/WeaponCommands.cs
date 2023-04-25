@@ -30,7 +30,7 @@ internal class WeaponCommands : IScript
 /*   [Command("frakweap")]
   public async static void FrakWeap(xPlayer player)
   {
-    IStorageHandler _storageHandler = new StorageHandler();
+    StorageHandler _storageHandler = new StorageHandler();
     
     Modles.Faction frak = FraktionsModuleMain.GetFrak(player.job);
     xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
@@ -48,7 +48,7 @@ internal class WeaponCommands : IScript
   [Command("giveitem")]
   public async static void GiveItem(xPlayer player, string name, int amount = 1)
   {
-    IStorageHandler _storageHandler = new StorageHandler();
+    StorageHandler _storageHandler = new StorageHandler();
     xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     inventory.AddItem(name, amount);
   }

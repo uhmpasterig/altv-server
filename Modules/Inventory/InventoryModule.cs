@@ -18,7 +18,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 {
   internal static IPlayerHandler playerHandler = new PlayerHandler();
   internal static Dictionary<xPlayer, List<int>> userOpenInventorys = new Dictionary<xPlayer, List<int>>();
-  static IStorageHandler storageHandler = new StorageHandler();
+  static StorageHandler storageHandler = new StorageHandler();
   IVehicleHandler vehicleHandler = new VehicleHandler();
 
   public static async void OpenStorage(xPlayer player, int storage_id)
@@ -90,7 +90,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     {
       var watch = System.Diagnostics.Stopwatch.StartNew();
       xPlayer playerr = (xPlayer)player;
-      IStorageHandler storageHandler = new StorageHandler();
+      StorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
       xStorage to = await storageHandler.GetStorage(toStorage);
       InventoryItem? item = from.items.Find(x => x.slot == fslot);
