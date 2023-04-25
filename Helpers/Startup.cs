@@ -41,22 +41,10 @@ internal class Startup : IDisposable
 
     builder.RegisterType<ServerContext>()
       .WithParameter("options", optionsBuilder.Options)
-      .InstancePerMatchingLifetimeScope();
+      .AsSelf()
+      .InstancePerLifetimeScope();
 
     _container = builder.Build();
-  }
-
-  internal void ResolveTypes()
-  {
-    _scope = _container.BeginLifetimeScope();
-    var dataAccess = Assembly.GetExecutingAssembly();
-    foreach (var type in dataAccess.GetTypes())
-    {
-      if(type.Namespace != null && type.Namespace.StartsWith("server.Modules"))
-      {
-        _scope.Resolve(type);
-      }
-    }
   }
 
   public T Resolve<T>()

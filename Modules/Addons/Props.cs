@@ -16,7 +16,7 @@ namespace server.Modules.Props;
 
 public class Props : ILoadEvent
 {
-  public Props(ServerContext serverContext, IPlayerHandler playerHandler, IStorageHandler storageHandler, IEventHandler eventhandler)
+  public Props()
   {
   }
   
