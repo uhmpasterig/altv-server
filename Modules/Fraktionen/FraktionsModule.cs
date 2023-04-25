@@ -42,11 +42,13 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     if (!frakList.ContainsKey(player.job.ToLower())) return false;
 
     if (player.Position.Distance(frakList[player.job.ToLower()].Position) < 2) {
+      _logger.Log($"Fraktions Menu von {player.Name} wurde geöffnet!");
       OpenFrakMenu(player); 
       return true;
     }
 
     if (player.Position.Distance(frakList[player.job.ToLower()].StoragePosition) < 2){
+      _logger.Log($"Fraktions Tresor von {player.Name} wurde geöffnet!");
       OpenFrakStorage(player);
       return true;
     }
@@ -58,6 +60,7 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   {
     Faction frak = frakList[player.job.ToLower()];
     xStorage storage = await storageHandler.GetStorage(frak.storage_id);
+    player.Emit("frontend:open", "faction", new FraktionsWriter(frak, player, storage));
   }
 
   static async void OpenFrakStorage(xPlayer player)
