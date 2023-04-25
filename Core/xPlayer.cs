@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
 using AltV.Net.Resources.Chat.Api;
 using AltV.Net.Data;
+using server.Modules.Clothing;
 using server.Handlers.Storage;
 using server.Models;
 
@@ -55,6 +56,9 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public Dictionary<string, object> dataCache { get; set; } = new Dictionary<string, object>();
 
+  public Player_Skin player_skin { get; set; }
+  public Player_Cloth player_cloth { get; set; }
+
   public int isDead { get; set; }
 
   public xPlayer(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
@@ -82,7 +86,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.dataCache = _player.dataCache;
   }
 
-#region Methods
+  #region Methods
   public void SendMessage(string message, NOTIFYS notifyType)
   {
     this.SendChatMessage(message);
@@ -200,7 +204,49 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     player.bank = this.bank;
     await _serverContext.SaveChangesAsync();
   }
-#endregion
+
+  // SKIN
+  public async void LoadSkin(Player_Skin? skin = null)
+  {
+    if (skin == null) skin = this.player_skin;
+    this.SetHeadBlendData(
+            skin.shape1,
+            skin.shape2,
+            0,
+            skin.skin1,
+            skin.skin2,
+            0,
+            skin.shapeMix,
+            skin.skinMix,
+            0);
+
+    this.SetEyeColor(skin.eyeColor);
+    this.HairColor = skin.hairColor;
+    this.HairHighlightColor = skin.hairColor2;
+    this.SetClothes(2, skin.hair, skin.hair2, 0);
+  }
+
+  public void SetClothPiece(int id)
+  {
+    Models.Cloth? cloth = ClothModule.GetCloth(id);
+    if (cloth == null)
+    {
+      _logger.Error($"Cloth with id {id} not found!");
+      return;
+    }
+    this.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
+  }
+
+  public async void LoadClothes(Player_Cloth? cloth = null)
+  {
+    if (cloth == null) cloth = this.player_cloth;
+    foreach(int id in cloth.ToList())
+    {
+      this.SetClothPiece(id);
+    }
+  }
+
+  #endregion
   public new IxPlayer ToAsync(IAsyncContext _) => this;
 }
 

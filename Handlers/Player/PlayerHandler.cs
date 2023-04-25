@@ -40,6 +40,10 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     player.SetClothes(2, skin.hair, skin.hair2, 0);
   }
 
+  public async Task LoadPlayerCloth(xPlayer player, Player_Cloth cloth)
+  {
+  }
+
   #region Player Functions
   public async Task<xPlayer?> LoadPlayerFromDatabase(xPlayer player)
   {

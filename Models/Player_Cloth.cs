@@ -10,14 +10,15 @@ namespace server.Models;
 [Table("player_cloth")]
 public partial class Player_Cloth
 {
-  public Player_Cloth() { 
+  public Player_Cloth()
+  {
   }
   public int id { get; set; }
-  
+
   [ForeignKey("player_id")]
   public int player_id { get; set; }
   public Models.Player Player { get; set; }
-  
+
   public int mask { get; set; }
   public int torso { get; set; }
   public int leg { get; set; }
@@ -28,4 +29,9 @@ public partial class Player_Cloth
   public int armor { get; set; }
   public int decal { get; set; }
   public int top { get; set; }
+
+  public List<int> ToList()
+  {
+    return new List<int>() { mask, torso, leg, bag, shoe, accessories, undershirt, armor, decal, top };
+  }
 }
