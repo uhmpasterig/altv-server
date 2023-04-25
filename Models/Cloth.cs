@@ -19,8 +19,10 @@ public partial class Cloth
   public byte component { get; set; }
   public ushort drawable { get; set; }
   public byte texture { get; set; }
-  public byte palette { get; set; } = 0;
   public string dlcName { get; set; }
+
+  [NotMapped]
+  public byte palette { get; set; } = 0;
 
   [NotMapped]
   public uint dlc
