@@ -28,6 +28,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       Models.Player? dbPlayer = await _serverContext.Players
         .Include(p => p.player_skin)
+        .Include(p => p.player_cloth)
         .FirstOrDefaultAsync(p => p.name == player.Name);
 
       if (dbPlayer == null) return null;
@@ -54,8 +55,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.Model = (uint)Alt.Hash(player.ped);
       player.Spawn(dbPlayer.Position, 0);
 
-      await player.LoadClothes();
       await player.LoadSkin();
+      await player.LoadClothes();
 
       player.Rotation = dbPlayer.Rotation;
       player.Health = dbPlayer.health;
