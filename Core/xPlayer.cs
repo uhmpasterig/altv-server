@@ -251,6 +251,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     if (cloth == null) cloth = this.player_cloth;
     foreach(int id in cloth.ToList())
     {
+      if(id == -1) continue;
       await this.SetClothPiece(id);
     }
     _logger.Info($"Loaded clothes for {this.name}");
