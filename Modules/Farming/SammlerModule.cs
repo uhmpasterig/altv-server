@@ -75,7 +75,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     };
 
     _logger.Debug("Entity found");
-    player.Emit("playAnim", "melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
+    player.Emit("playAnim", "farming_spitzhacke");
 
     _farmingPlayers.Add(player, _currentSammler.id);
     return true;
