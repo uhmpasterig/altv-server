@@ -15,7 +15,7 @@ internal class ProcessData
 {
   public xVehicle vehicle { get; set; }
   public xPlayer player { get; set; }
-  public verarbeiter_farming_data verarbeiter { get; set; }
+  public Farming_Processor verarbeiter { get; set; }
   public xStorage trunk { get; set; }
   public bool isRunning { get; set; } = true;
   public int stepsDone { get; set; } = 0;
@@ -32,7 +32,7 @@ internal class ProcessData
     player.SendMessage($"Du hast {amount}x {verarbeiter.outputitem} erhalten", NOTIFYS.INFO);
   }
 
-  public ProcessData(xVehicle vehicle, xPlayer player, verarbeiter_farming_data verarbeiter, xStorage trunk, int stepsToDo = 1)
+  public ProcessData(xVehicle vehicle, xPlayer player, Farming_Processor verarbeiter, xStorage trunk, int stepsToDo = 1)
   {
     this.vehicle = vehicle;
     this.player = player;
@@ -48,7 +48,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
   internal static IVehicleHandler _vehicleHandler = new VehicleHandler();
   internal static IStorageHandler _storageHandler = new StorageHandler();
 
-  private List<verarbeiter_farming_data> _verarbeiter = new List<verarbeiter_farming_data>();
+  private List<Farming_Processor> _verarbeiter = new List<Farming_Processor>();
   private List<ProcessData> _processes = new List<ProcessData>();
 
   public async void ProcessTrunk(xVehicle vehicle, xPlayer player, int stepsToDo = 1)
@@ -56,7 +56,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
     xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
     vehicle.isAccesable = false;
     if(_processes.Any(x => x.vehicle == vehicle)) return;
-    verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
+    Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
     if (verarbeiter == null) return;
     ProcessData processData = new ProcessData(vehicle, player, verarbeiter, trunk, stepsToDo);
     _processes.Add(processData);
@@ -70,7 +70,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
   {
     xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
     int steps = 0;
-    verarbeiter_farming_data verarbeiter = _verarbeiter.Find(x => x.Position.Distance(vehicle.Position) < 40)!;
+    Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(vehicle.Position) < 40)!;
     if (verarbeiter == null) return 0;
     int amount = trunk.GetItemAmount(verarbeiter.inputitem);
     if (amount == 0) return 0;
@@ -101,7 +101,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
   {
     await using ServerContext serverContext = new ServerContext();
     _logger.Startup("Verarbeiter loaded");
-    foreach (verarbeiter_farming_data verarbeiter in serverContext.verarbeiter_farming_data)
+    foreach (Farming_Processor verarbeiter in serverContext.Farming_Processors.ToList())
     {
       xEntity ped = new xEntity();
       ped.position = verarbeiter.Position;
@@ -127,7 +127,7 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
     if (player.IsDead) return false;
-    foreach (verarbeiter_farming_data verarbeiter in _verarbeiter.ToList())
+    foreach (Farming_Processor verarbeiter in _verarbeiter.ToList())
     {
       if (verarbeiter.Position.Distance(player.Position) < 2)
       {

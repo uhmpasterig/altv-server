@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace server.Models;
 
+[Table("faction_ranks")]
 [PrimaryKey("id")]
 public partial class Faction_rank
 {

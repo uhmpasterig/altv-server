@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace server.Models;
 
+[Table("static_props")]
 [PrimaryKey("id")]
 public partial class Prop
 {

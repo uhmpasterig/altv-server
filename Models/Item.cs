@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace server.Models;
 
+[Table("items")]
 [PrimaryKey("id")]
 public partial class Item
 {

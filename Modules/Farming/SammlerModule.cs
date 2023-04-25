@@ -13,10 +13,10 @@ using Newtonsoft.Json;
 namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
-  private List<sammler_farming_data> _sammler = new List<sammler_farming_data>();
+  private List<Farming_Collector> _sammler = new List<Farming_Collector>();
   private Dictionary<xPlayer, int> _farmingPlayers;
 
-  public async void LoadSammler(sammler_farming_data sammlerData)
+  public async void LoadSammler(Farming_Collector sammlerData)
   {
     sammlerData.PropPositions = JsonConvert.DeserializeObject<List<propData>>(sammlerData._propPositions)!;
     
@@ -43,7 +43,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       player.Emit("stopAnim");
       return true;
     };
-    sammler_farming_data _currentSammler = null!;
+    Farming_Collector _currentSammler = null!;
     // Get the Closest Sammler
     _sammler.ForEach((sammler) =>
     {
@@ -84,7 +84,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
     await using ServerContext serverContext = new ServerContext();
     _logger.Startup("Lade Sammler!");
-    foreach (sammler_farming_data sammler in serverContext.sammler_farming_data)
+    foreach (Farming_Collector sammler in serverContext.Farming_Collectors.ToList())
     {
       _sammler.Add(sammler);
       LoadSammler(sammler);
@@ -93,16 +93,16 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
   }
 
-  public sammler_farming_data GetSammler(int id)
+  public Farming_Collector GetSammler(int id)
   {
-    foreach (sammler_farming_data sammler in _sammler)
+    foreach (Farming_Collector sammler in _sammler)
     {
       if (sammler.id == id) return sammler;
     }
     return null!;
   }
 
-  public async Task<bool> FarmingStep(xPlayer player, sammler_farming_data feld)
+  public async Task<bool> FarmingStep(xPlayer player, Farming_Collector feld)
   {
     if (player == null) return false;
     if (feld == null) return false;

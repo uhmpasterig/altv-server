@@ -6,6 +6,7 @@ using server.Core;
 
 namespace server.Models;
 
+[Table("vehicles")]
 [PrimaryKey("id")]
 public partial class Vehicle
 {

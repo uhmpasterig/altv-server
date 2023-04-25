@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace server.Models;
 
+[Table("garages")]
 [PrimaryKey("id")]
 public partial class Garage
 {
