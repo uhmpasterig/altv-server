@@ -41,6 +41,8 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
+
+    #region Checks if he can farm
     if (_farmingPlayers.ContainsKey(player))
     {
       _farmingPlayers.Remove(player);
@@ -73,8 +75,10 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       player.SendMessage("Du benötigst ein " + _currentSammler.tool, NOTIFYS.ERROR);
       return false;
     }; */
-
+    #endregion
     _logger.Debug("Entity found");
+    player.Emit("pointAtCoords", _currentEntity.position.X, _currentEntity.position.Y, _currentEntity.position.Z);
+    await Task.Delay(1000);
     player.Emit("playAnim", "farming_spitzhacke");
 
     _farmingPlayers.Add(player, _currentSammler.id);
