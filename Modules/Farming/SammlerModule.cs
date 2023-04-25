@@ -68,11 +68,11 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     });
     if (_currentEntity == null) return false;
 
-    if (await player.HasItem(_currentSammler.tool) == false)
+   /*  if (await player.HasItem(_currentSammler.tool) == false)
     {
       player.SendMessage("Du benötigst ein " + _currentSammler.tool, NOTIFYS.ERROR);
       return false;
-    };
+    }; */
 
     _logger.Debug("Entity found");
     player.Emit("playAnim", "farming_spitzhacke");
