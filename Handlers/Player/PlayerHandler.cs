@@ -65,6 +65,11 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         dbPlayer.player_skin.skinMix,
         0);
       
+      player.SetEyeColor(dbPlayer.player_skin.eyeColor);
+      player.HairColor = dbPlayer.player_skin.hairColor;
+      player.HairHighlightColor = dbPlayer.player_skin.hairColor2;
+      player.SetClothes(2, dbPlayer.player_skin.hair, dbPlayer.player_skin.hair2, 0);
+      
       player.Rotation = dbPlayer.Rotation;
       player.Health = dbPlayer.health;
       player.Armor = dbPlayer.armor;

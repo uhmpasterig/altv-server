@@ -27,4 +27,14 @@ public partial class Player_Skin
   public uint skin2 { get; set; }
   public Single shapeMix { get; set; }
   public Single skinMix { get; set; }
+
+  public byte eyeColor { get; set; }
+  public byte hairColor { get; set; }
+  public byte hairColor2 { get; set; }
+
+
+  public byte hair { get; set; }
+  public byte hair2 { get; set; }
+
+  
 }
