@@ -169,4 +169,11 @@ internal class AdminVehicle : IScript
   {
     player.SetHeadOverlay((byte)overlayId, (byte)overlayValue, opacity);
   }
+
+  [Command("haircolor")]
+  public static void HairColor(xPlayer player, int colorId, int highlightColorId)
+  {
+    player.HairColor = (byte)colorId;
+    player.HairHighlightColor = (byte)highlightColorId;
+  }
 }
