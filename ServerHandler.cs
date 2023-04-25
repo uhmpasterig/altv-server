@@ -31,7 +31,7 @@ namespace server
       using var startup = new Startup();
       
       startup.Register();
-      /* var playerHandler = startup.GetContainer().Resolve<IPlayerHandler>();
+      var playerHandler = startup.GetContainer().Resolve<IPlayerHandler>();
       var vehicleHandler = startup.GetContainer().Resolve<IVehicleHandler>();
       var eventHandler = startup.GetContainer().Resolve<IEventHandler>();
       var timerHandler = startup.GetContainer().Resolve<ITimerHandler>();
@@ -40,9 +40,8 @@ namespace server
       // context cannot be null
       await using var serverContext = new ServerContext();
           
-      startup.ResolveTypes();
       _server = new Server(serverContext, vehicleHandler, playerHandler, eventHandler, timerHandler, storageHandler);
-      _server.Start(); */
+      _server.Start();
 
     }
     public override async void OnStop()

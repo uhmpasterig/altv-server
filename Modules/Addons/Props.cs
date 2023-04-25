@@ -9,13 +9,14 @@ using _logger = server.Logger.Logger;
 using server.Handlers.Player;
 using server.Handlers.Event;
 using server.Handlers.Storage;
+using server.Handlers.Entities;
 
 
 namespace server.Modules.Props;
 
 public class Props : ILoadEvent
 {
-  public Props(ServerContext serverContext, IPlayerHandler playerHandler, IStorageHandler storageHandler, IEventHandler eventhandler, )
+  public Props(ServerContext serverContext, IPlayerHandler playerHandler, IStorageHandler storageHandler, IEventHandler eventhandler)
   {
   }
   
@@ -37,7 +38,7 @@ public class Props : ILoadEvent
   public async static void CreateProp(Models.Prop _prop)
   {
     xEntity _entity = new xEntity();
-    _entity.entityType = server.Handlers.Entities.ENTITY_TYPES.PROP; 
+    _entity.entityType = ENTITY_TYPES.PROP; 
     _entity.dimension = (int)DIMENSIONEN.WORLD;
     _entity.position = _prop.Position;
     _entity.range = 250;

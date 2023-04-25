@@ -9,7 +9,7 @@ using server.Handlers.Vehicle;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
-namespace server.ModulesGoofy.Farming.Verarbeiter;
+namespace server.Modules.Farming.Verarbeiter;
 
 internal class ProcessData
 {

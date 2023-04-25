@@ -4,7 +4,7 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Handlers.Entities;
 
-namespace server.ModulesGoofy.Banking;
+namespace server.Modules.Banking;
 
 class BankModuleMain : ILoadEvent
 {

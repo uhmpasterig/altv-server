@@ -10,7 +10,7 @@ using AltV.Net.Data;
 using server.Handlers.Storage;
 using Newtonsoft.Json;
 
-namespace server.ModulesGoofy.Farming.Sammler;
+namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
   public SammlerMain()

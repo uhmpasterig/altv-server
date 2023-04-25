@@ -6,7 +6,7 @@ using server.Events;
 using server.Core;
 using server.Util.Blip;
 
-namespace server.ModulesGoofy.Blip;
+namespace server.Modules.Blip;
 
 /* public enum BlipColor {
   WHITE = 0,

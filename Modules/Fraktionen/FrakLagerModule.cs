@@ -6,9 +6,9 @@ using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Fraktionen;
-using server.ModulesGoofy.Inventory;
+using server.Modules.Inventory;
 
-namespace server.ModulesGoofy.Fraktionen;
+namespace server.Modules.Fraktionen;
 
 class FrakLagerModule : ILoadEvent
 {

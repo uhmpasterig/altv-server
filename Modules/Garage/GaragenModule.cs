@@ -8,9 +8,9 @@ using AltV.Net.Async;
 using server.Handlers.Entities;
 using server.Handlers.Vehicle;
 using server.Util.Garage;
-using server.ModulesGoofy.Blip;
+using server.Modules.Blip;
 
-namespace server.ModulesGoofy.Garage;
+namespace server.Modules.Garage;
 
 enum GARAGE_TYPES
 {

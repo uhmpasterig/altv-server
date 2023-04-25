@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
 using server.Handlers.Vehicle;
 
-namespace server.ModulesGoofy.xMenu;
+namespace server.Modules.xMenu;
 
 public class xMenu : ILoadEvent
 {

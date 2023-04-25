@@ -1,6 +1,6 @@
 using AltV.Net;
 
-namespace server.ModulesGoofy.Weapons;
+namespace server.Modules.Weapons;
 
 public class xWeapon {
   public int id { get; set; }

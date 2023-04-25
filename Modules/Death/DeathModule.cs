@@ -5,7 +5,7 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
-namespace server.ModulesGoofy.Death;
+namespace server.Modules.Death;
 
 class DeathModule : IPlayerDeadEvent
 {

@@ -4,15 +4,15 @@ using server.Core;
 using server.Events;
 using Newtonsoft.Json;
 using server.Handlers.Vehicle;
-using _items = server.ModulesGoofy.Items.Items;
+using _items = server.Modules.Items.Items;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using server.ModulesGoofy.Items;
+using server.Modules.Items;
 using server.Handlers.Player;
 using server.Util.Inventory;
 using _logger = server.Logger.Logger;
 
-namespace server.ModulesGoofy.Inventory;
+namespace server.Modules.Inventory;
 
 public class InventoryModule : IPressedIEvent, ILoadEvent
 {

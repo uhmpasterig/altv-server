@@ -6,7 +6,7 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Fraktionen;
 using server.Handlers.Storage;
-namespace server.ModulesGoofy.Fraktionen;
+namespace server.Modules.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {

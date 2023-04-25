@@ -5,7 +5,7 @@ using AltV.Net;
 using server.Core;
 using server.Models;
 using server.Handlers.Storage;
-using server.ModulesGoofy.Items;
+using server.Modules.Items;
 
 namespace server.Util.Farming;
 public class verarbeiterWriter : IWritable

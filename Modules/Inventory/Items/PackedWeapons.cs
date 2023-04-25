@@ -2,9 +2,8 @@ using server.Core;
 using server.Events;
 using _logger = server.Logger.Logger;
 using server.Handlers.Storage;
-using _items = server.ModulesGoofy.Items.Items;
 
-namespace server.Items;
+namespace server.Modules.Items;
 
 class PackedWeapons : IItemsLoaded
 {
@@ -22,41 +21,42 @@ class PackedWeapons : IItemsLoaded
       }
     }
 
-    _items.RegisterUsableItem("weapon_specialcarbine_mk2", async (xPlayer player) =>
+    Items.RegisterUsableItem("weapon_specialcarbine_mk2", async (xPlayer player) =>
     {
       UnpackFunc(player, "weapon_specialcarbine_mk2");
     });
 
-    _items.RegisterUsableItem("weapon_specialcarbine", async (xPlayer player) =>
+    Items.RegisterUsableItem("weapon_specialcarbine", async (xPlayer player) =>
     {
       UnpackFunc(player, "weapon_specialcarbine");
     });
-    _items.RegisterUsableItem("weapon_pistol", async (xPlayer player) =>
+
+    Items.RegisterUsableItem("weapon_pistol", async (xPlayer player) =>
     {
       UnpackFunc(player, "weapon_pistol");
     });
 
-    _items.RegisterUsableItem("weapon_advancedrifle", async (xPlayer player) =>
+    Items.RegisterUsableItem("weapon_advancedrifle", async (xPlayer player) =>
     {
       UnpackFunc(player, "weapon_advancedrifle");
     });
 
-    _items.RegisterUsableItem("weapon_bullpuprifle", async (xPlayer player) =>
+    Items.RegisterUsableItem("weapon_bullpuprifle", async (xPlayer player) =>
    {
      UnpackFunc(player, "weapon_bullpuprifle");
    });
 
-    _items.RegisterUsableItem("weapon_bullpuprifle_mk2", async (xPlayer player) =>
+    Items.RegisterUsableItem("weapon_bullpuprifle_mk2", async (xPlayer player) =>
     {
       UnpackFunc(player, "weapon_bullpuprifle_mk2");
     });
 
-    _items.RegisterUsableItem("weapon_bat", async (xPlayer player) =>
+    Items.RegisterUsableItem("weapon_bat", async (xPlayer player) =>
    {
      UnpackFunc(player, "weapon_bat");
    });
 
-    _items.RegisterUsableItem("weapon_battleaxe", async (xPlayer player) =>
+    Items.RegisterUsableItem("weapon_battleaxe", async (xPlayer player) =>
     {
       UnpackFunc(player, "weapon_battleaxe");
     });
