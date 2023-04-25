@@ -139,7 +139,7 @@ internal class AdminVehicle : IScript
       heading = RotationMath.YawToHeading(player.Rotation.Yaw)
 
     };
-    _serverContext.Garage.Add(garage);
+    _serverContext.Garages.Add(garage);
     await _serverContext.SaveChangesAsync();
   }
 

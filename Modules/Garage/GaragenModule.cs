@@ -62,7 +62,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
   public async void OnLoad()
   {
-    foreach (Models.Garage garage in _serverContext.Garage.ToList())
+    foreach (Models.Garage garage in _serverContext.Garages.ToList())
     {
       foreach (Models.GarageSpawn spawn in _serverContext.GarageSpawns.Where(x => x.garage_id == garage.id).ToList())
       {
