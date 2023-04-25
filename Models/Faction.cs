@@ -52,7 +52,7 @@ public partial class Faction
   }
 
   [NotMapped]
-  public Position PositionLager
+  public Position StoragePosition
   {
     get
     {

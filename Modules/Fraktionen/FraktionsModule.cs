@@ -6,6 +6,8 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Fraktionen;
 using server.Handlers.Storage;
+using server.Modules.Inventory;
+
 namespace server.Modules.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
@@ -24,15 +26,11 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     foreach (Faction _frak in _serverContext.Factions.ToList())
     {
       Dictionary<int, Faction_rank> _raenge = new Dictionary<int, Faction_rank>();
-      foreach(Faction_rank _rang in _serverContext.Faction_ranks.Where(r => r.fraktions_id == _frak.id).ToList()) _raenge.Add(_rang.rank_id, _rang);
+      foreach (Faction_rank _rang in _serverContext.Faction_ranks.Where(r => r.fraktions_id == _frak.id).ToList()) _raenge.Add(_rang.rank_id, _rang);
       _frak.raenge = _raenge;
 
       Faction_ug _ug = _serverContext.Faction_ugs.FirstOrDefault(u => u.id == _frak.ug_id)!;
       frakUgList.Add(_frak.id, _ug);
-
-      _logger.Debug($"Fraktion: {_frak.name} wurde geladen!");
-      _logger.Debug($"Fraktion: {_frak.name} hat x{_raenge.Count} Ränge!");
-      _logger.Debug($"Fraktion: {_frak.name} hat {_ug.name} als Untergruppierung!");
 
       frakList.Add(_frak.name.ToLower(), _frak);
     }
@@ -41,16 +39,29 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
-    if (frakList.ContainsKey(player.job.ToLower()))
-    {
-      if (player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) return false;
-    }
-    Faction frak = frakList[player.job.ToLower()];
-    xStorage storage =  await storageHandler.GetStorage(frak.storage_id);
+    if (!frakList.ContainsKey(player.job.ToLower())) return false;
 
-    player.SendMessage("Du bist in der Fraktion: " + player.job, NOTIFYS.INFO);
-    player.Emit("frontend:open", "faction", new FraktionsWriter(frak, player, storage));
-    return true;
+    if (player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) {
+      OpenFrakMenu(player); 
+      return true;
+    }
+    if (player.Position.Distance(frakList[player.job.ToLower()].StoragePosition) > 2){
+      OpenFrakStorage(player);
+      return true;
+    }
+    return false;
+  }
+
+  static async void OpenFrakMenu(xPlayer player)
+  {
+    Faction frak = frakList[player.job.ToLower()];
+    xStorage storage = await storageHandler.GetStorage(frak.storage_id);
+  }
+
+  static async void OpenFrakStorage(xPlayer player)
+  {
+    Faction frak = frakList[player.job.ToLower()];
+    InventoryModule.OpenStorage(player, player.boundStorages["Fraktions Tresor"]);
   }
 
   public static string GetRankName(Faction frak, int rank)

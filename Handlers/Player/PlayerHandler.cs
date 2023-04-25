@@ -11,6 +11,7 @@ using server.Handlers.Storage;
 using Newtonsoft.Json;
 using server.Util.Player;
 using System.Diagnostics;
+using server.Util.Config;
 
 namespace server.Handlers.Player;
 
@@ -39,7 +40,15 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       {
         dbPlayer.boundStorages = player.boundStorages;
       }
-      await _storageHandler.LoadStorage(player.boundStorages["Inventar"]);
+
+      foreach(KeyValuePair<string, int> storage in player.boundStorages)
+      {
+        if(StorageConfig.StoragesDieJederHabenSollte.Where(s => s.name == storage.Key).FirstOrDefault().loadOnConnect)
+        {
+          _logger.Info($"Lade Storage {storage.Key} für {player.Name}!");
+          await _storageHandler.LoadStorage(storage.Value);
+        }
+      }
 
       // SPAWN AND SET PED VALUES
       player.Model = (uint)Alt.Hash(player.ped);

@@ -15,6 +15,7 @@ public class StorageConfig
     public int slots { get; set; }
     public float maxWeight { get; set; }
     public Position? position { get; set; }
+    public bool loadOnConnect { get; set; } = true;
 
     public StorageData()
     {
@@ -26,6 +27,7 @@ public class StorageConfig
     new StorageData()
     {
       name = "Inventar",
+      loadOnConnect = true,
       slots = 20,
       maxWeight = 200,
       position = null
@@ -33,6 +35,7 @@ public class StorageConfig
     new StorageData()
     {
       name = "Bank Schliessfach",
+      loadOnConnect = true,
       slots = 20,
       maxWeight = 200,
       position = Positions.BankSchliessfach
@@ -40,6 +43,7 @@ public class StorageConfig
     new StorageData()
     {
       name = "Export Schliessfach",
+      loadOnConnect = true,
       slots = 30,
       maxWeight = 300,
       position = Positions.ExportSchliessfach
@@ -47,6 +51,7 @@ public class StorageConfig
     new StorageData()
     {
       name = "Import Schliessfach",
+      loadOnConnect = true,
       slots = 50,
       maxWeight = 1000,
       position = Positions.ImportSchliessfach
@@ -54,6 +59,7 @@ public class StorageConfig
     new StorageData()
     {
       name = "Fraktions Tresor",
+      loadOnConnect = false,
       slots = 10,
       maxWeight = 100,
       position = null
@@ -61,6 +67,7 @@ public class StorageConfig
     new StorageData()
     {
       name = "Haus Garage",
+      loadOnConnect = false,
       slots = 15,
       maxWeight = 150,
       position = null
