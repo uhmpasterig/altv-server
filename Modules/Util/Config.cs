@@ -25,6 +25,13 @@ public class StorageConfig
   {
     new StorageData()
     {
+      name = "Inventar",
+      slots = 20,
+      maxWeight = 200,
+      position = null
+    },
+    new StorageData()
+    {
       name = "Bank Schliessfach",
       slots = 20,
       maxWeight = 200,
@@ -39,17 +46,24 @@ public class StorageConfig
     },
     new StorageData()
     {
-      name = "Inventar",
-      slots = 20,
-      maxWeight = 200,
-      position = null
-    },
-    new StorageData()
-    {
       name = "Import Schliessfach",
       slots = 50,
       maxWeight = 1000,
       position = Positions.ImportSchliessfach
+    },
+    new StorageData()
+    {
+      name = "Fraktions Tresor",
+      slots = 10,
+      maxWeight = 100,
+      position = null
+    },
+    new StorageData()
+    {
+      name = "Haus Garage",
+      slots = 15,
+      maxWeight = 150,
+      position = null
     }
   };
 
