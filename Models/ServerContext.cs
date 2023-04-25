@@ -10,6 +10,8 @@ public partial class ServerContext : DbContext
   public ServerContext(DbContextOptions<ServerContext> options) : base(options) { }
 
   public virtual DbSet<Player> Players { get; set; }
+  public virtual DbSet<Player_Skin> Player_Skins { get; set; }
+
   public virtual DbSet<Vehicle> Vehicles { get; set; }
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Item> Items { get; set; }
@@ -42,6 +44,14 @@ public partial class ServerContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
+    modelBuilder.Entity<Player>(entity => {
+      entity.HasOne(d => d.player_skin)
+        .WithOne(p => p.Player)
+        .HasForeignKey<Player_Skin>(d => d.player_id)
+        .HasPrincipalKey<Player>(p => p.id);        
+    });
+
+  
     OnModelCreatingPartial(modelBuilder);
   }
 

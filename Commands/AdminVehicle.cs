@@ -163,4 +163,10 @@ internal class AdminVehicle : IScript
       await _serverContext.SaveChangesAsync();
     }
   }
+
+  [Command("headoverlay")]
+  public static void HeadOverlay(xPlayer player, int overlayId, int overlayValue, float opacity = 1.0f)
+  {
+    player.SetHeadOverlay((byte)overlayId, (byte)overlayValue, opacity);
+  }
 }

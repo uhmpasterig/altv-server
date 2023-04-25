@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using server.Modules.Weapons;
 
 namespace server.Models;
 
@@ -17,67 +18,71 @@ public partial class Player
 
   public int id { get; set; }
   public string name { get; set; }
-
+  public string ped { get; set; }
 
   public int cash { get; set; }
   public int bank { get; set; }
   public ushort health { get; set; }
   public ushort armor { get; set; }
+  public ushort max_armor { get; set; }
 
-  public string _playerInventorys { get; set; }
+  public string phone { get; set; }
 
+
+  public string _boundStorages { get; set; }
   public string _weapons { get; set; }
 
   public string job { get; set; }
   public int job_rank { get; set; }
-  public string job_perm { get; set; }
+  public string _job_perm { get; set; }
 
   public string _pos { get; set; }
   public string _rot { get; set; }
 
   public DateTime lastLogin { get; set; }
   public DateTime creationDate { get; set; }
+  public bool isOnline { get; set; }
 
   public string _dataCache { get; set; }
-  public bool isOnline { get; set; }
-  public string phone { get; set; }
+
+  public Player_Skin player_skin { get; set; }
 
   [NotMapped]
-  public Position Position
+  public Dictionary<string, int> boundStorages
   {
     get
     {
-      return JsonConvert.DeserializeObject<Position>(_pos);
+      return JsonConvert.DeserializeObject<Dictionary<string, int>>(_boundStorages);
     }
     set
     {
-      _pos = JsonConvert.SerializeObject(value);
+      _boundStorages = JsonConvert.SerializeObject(value);
     }
   }
 
   [NotMapped]
-  public Rotation Rotation
+  public List<xWeapon> weapons
   {
     get
     {
-      return JsonConvert.DeserializeObject<Rotation>(_rot);
+      return JsonConvert.DeserializeObject<List<xWeapon>>(_weapons);
     }
     set
     {
-      _rot = JsonConvert.SerializeObject(value);
+      _weapons = JsonConvert.SerializeObject(value);
     }
   }
 
   [NotMapped]
-  public Dictionary<string, int> playerInventorys
+  public List<string> job_perm
   {
     get
     {
-      return JsonConvert.DeserializeObject<Dictionary<string, int>>(_playerInventorys);
+      return JsonConvert.DeserializeObject<List<string>>(_job_perm);
     }
     set
     {
-      _playerInventorys = JsonConvert.SerializeObject(value);
+      _job_perm = JsonConvert.SerializeObject(value);
     }
   }
 
@@ -92,5 +97,19 @@ public partial class Player
     {
       _dataCache = JsonConvert.SerializeObject(value);
     }
+  }
+
+  [NotMapped]
+  public Position Position
+  {
+    get { return JsonConvert.DeserializeObject<Position>(_pos); } 
+    set { _pos = JsonConvert.SerializeObject(value); }
+  }
+
+  [NotMapped]
+  public Rotation Rotation
+  {
+    get { return JsonConvert.DeserializeObject<Rotation>(_rot); }
+    set { _rot = JsonConvert.SerializeObject(value); }
   }
 }

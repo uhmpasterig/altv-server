@@ -75,7 +75,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     };
 
     _logger.Debug("Entity found");
-    player.Emit("pointAtCoords", _currentEntity.entity.Position.X, _currentEntity.entity.Position.Y, _currentEntity.entity.Position.Z);
     player.Emit("playAnim", "melee@large_wpn@streamed_core_fps", "ground_attack_on_spot", -1, 1);
 
     _farmingPlayers.Add(player, _currentSammler.id);
@@ -111,7 +110,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     if (player == null) return false;
     if (feld == null) return false;
     IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]!);
+    xStorage inv = await _storageHandler.GetStorage(player.boundStorages["Inventar"]!);
     int random = new Random().Next(feld.amountmin, feld.amountmax);
     inv.AddItem(feld.item, random);
     player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);

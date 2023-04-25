@@ -26,57 +26,48 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     try
     {
       Models.Player? dbPlayer = await _serverContext.Players
+        .Include(p => p.player_skin)
         .FirstOrDefaultAsync(p => p.name == player.Name);
-      if (dbPlayer == null)
-      {
-        return null;
-      }
 
-      // PLAYER INFO
-      dbPlayer.lastLogin = DateTime.Now;
-      player.id = dbPlayer.id;
-      player.name = dbPlayer.name;
-      player.creationDate = dbPlayer.creationDate;
-
-      // CACHE DATA
-      dbPlayer.dataCache["isOnline"] = true;
-      player.dataCache = dbPlayer.dataCache;
-
+      if (dbPlayer == null) return null;
+      player.SetDataFromDatabase(dbPlayer);
+      
       // STORAGES
-      player.playerInventorys = dbPlayer.playerInventorys;
-
       await _storageHandler.CreateAllStorages(player);
 
-      if (player.playerInventorys.Count != dbPlayer.playerInventorys.Count)
+      if (player.boundStorages.Count != dbPlayer.boundStorages.Count)
       {
-        dbPlayer.playerInventorys = player.playerInventorys;
+        dbPlayer.boundStorages = player.boundStorages;
       }
-
-      foreach (var playerInventory in player.playerInventorys)
-      {
-        await _storageHandler.LoadStorage(playerInventory.Value);
-      }
-
-      player.cash = dbPlayer.cash;
-      player.bank = dbPlayer.bank;
-
-      // JOB
-      player.job = dbPlayer.job;
-      player.job_rank = dbPlayer.job_rank;
-      player.job_perm = JsonConvert.DeserializeObject<List<string>>(dbPlayer.job_perm)!;
+      await _storageHandler.LoadStorage(player.boundStorages["Inventar"]);
 
       // SPAWN AND SET PED VALUES
-      player.Model = (uint)Alt.Hash("mp_m_freemode_01");
+      player.Model = (uint)Alt.Hash(player.ped);
       player.Spawn(dbPlayer.Position, 0);
+
+      player.SetHeadBlendData(
+        dbPlayer.player_skin.shape1,
+        dbPlayer.player_skin.shape2,
+        0,
+        dbPlayer.player_skin.skin1,
+        dbPlayer.player_skin.skin2,
+        0,
+        dbPlayer.player_skin.shapeMix,
+        dbPlayer.player_skin.skinMix,
+        0);
+      
       player.Rotation = dbPlayer.Rotation;
       player.Health = dbPlayer.health;
       player.Armor = dbPlayer.armor;
+      player.MaxArmor = dbPlayer.max_armor;
 
       // WEAPONS
       player.LoadWeaponsFromDb(dbPlayer._weapons);
 
       player.Emit("player:loaded", new PlayerLoadedWriter(player));
+      dbPlayer.lastLogin = DateTime.Now;
       dbPlayer.isOnline = true;
+
       await _serverContext.SaveChangesAsync();
       return player;
     }
@@ -99,7 +90,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     dbPlayer.dataCache = player.dataCache;
 
     // STORAGES
-    foreach (var playerInventory in player.playerInventorys)
+    foreach (var playerInventory in player.boundStorages)
     {
       await _storageHandler.UnloadStorage(playerInventory.Value);
     }

@@ -12,7 +12,7 @@ class PackedWeapons : IItemsLoaded
   {
     async void UnpackFunc(xPlayer player, string item)
     {
-      xStorage inv = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
+      xStorage inv = await _storageHandler.GetStorage(player.boundStorages["Inventar"]);
       bool succ = await player.GiveSavedWeapon(item, 100, true);
       if (!succ)
       {

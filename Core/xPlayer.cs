@@ -12,6 +12,7 @@ using server.Models;
 
 namespace server.Core;
 
+#region enums
 public enum DIMENSIONEN
 {
   WORLD,
@@ -28,6 +29,7 @@ public enum NOTIFYS
   SUCCESS,
   WARNING
 }
+#endregion
 
 public partial class xPlayer : AsyncPlayer, IxPlayer
 {
@@ -37,40 +39,50 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public int id { get; set; }
   public string name { get; set; }
-
+  public string ped { get; set; }
   public int cash { get; set; }
   public int bank { get; set; }
 
-  public Dictionary<string, int> playerInventorys { get; set; }
-
-  public List<xWeapon> weapons { get; set; }
+  public Dictionary<string, int> boundStorages { get; set; } = new Dictionary<string, int>();
+  public List<xWeapon> weapons { get; set; } = new List<xWeapon>();
 
   public string job { get; set; }
   public int job_rank { get; set; }
-  public List<string> job_perm { get; set; }
+  public List<string> job_perm { get; set; } = new List<string>();
 
   public DateTime creationDate { get; set; }
   public DateTime lastLogin { get; set; }
-  public DIMENSIONEN dimensionType { get; set; }
 
-  public Dictionary<string, object> dataCache { get; set; }
+  public Dictionary<string, object> dataCache { get; set; } = new Dictionary<string, object>();
 
   public int isDead { get; set; }
 
   public xPlayer(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
-    id = 0;
-    name = "";
-    playerInventorys = new Dictionary<string, int>();
-    weapons = new List<xWeapon>();
-    job = "";
-    job_rank = 0;
-    job_perm = new List<string>();
-    lastLogin = DateTime.Now;
-
     dataCache = new Dictionary<string, object>();
   }
 
+  public void SetDataFromDatabase(Models.Player _player)
+  {
+    this.id = _player.id;
+    this.name = _player.name;
+    this.ped = _player.ped;
+
+    this.cash = _player.cash;
+    this.bank = _player.bank;
+    this.boundStorages = _player.boundStorages;
+    this.weapons = _player.weapons;
+    this.job = _player.job;
+    this.job_rank = _player.job_rank;
+    this.job_perm = _player.job_perm;
+    this.dataCache = _player.dataCache;
+
+    this.creationDate = _player.creationDate;
+    this.lastLogin = _player.lastLogin;
+    this.dataCache = _player.dataCache;
+  }
+
+#region Methods
   public void SendMessage(string message, NOTIFYS notifyType)
   {
     this.SendChatMessage(message);
@@ -95,7 +107,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public async Task<bool> GiveItem(string name, int count)
   {
     IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(this.playerInventorys["Inventar"]);
+    xStorage inv = await _storageHandler.GetStorage(this.boundStorages["Inventar"]);
     if (inv == null)
     {
       this.SendMessage("Du hast kein Inventar!", NOTIFYS.ERROR);
@@ -106,13 +118,13 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public void SetPlayerInventoryId(string key, int value)
   {
-    if (playerInventorys.ContainsKey(key))
+    if (boundStorages.ContainsKey(key))
     {
-      playerInventorys[key] = value;
+      boundStorages[key] = value;
     }
     else
     {
-      playerInventorys.Add(key, value);
+      boundStorages.Add(key, value);
     }
   }
 
@@ -162,7 +174,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public async Task<bool> HasItem(string name, int count = 1)
   {
     IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(this.playerInventorys["Inventar"]);
+    xStorage inv = await _storageHandler.GetStorage(this.boundStorages["Inventar"]);
     return inv.HasItem(name, count);
   }
 
@@ -188,8 +200,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     player.bank = this.bank;
     await _serverContext.SaveChangesAsync();
   }
-
-
+#endregion
   public new IxPlayer ToAsync(IAsyncContext _) => this;
 }
 
