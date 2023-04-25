@@ -21,7 +21,7 @@ internal class WeaponCommands : IScript
     player.GiveSavedWeapon(name, ammo);
   }
 
-  [Command("revive")]
+  [Command("r")]
   public static void Revive(xPlayer player)
   {
     player.Revive();
