@@ -21,10 +21,11 @@ public class propData
   }
 }
 
+[Table("farming_collectors")]
 [PrimaryKey("id")]
-public partial class sammler_farming_data
+public partial class Farming_Collector
 {
-  public sammler_farming_data()
+  public Farming_Collector()
   {
   }
   public int id { get; set; }

@@ -7,10 +7,11 @@ using server.Core;
 
 namespace server.Models;
 
+[Table("farming_processors")]
 [PrimaryKey("id")]
-public partial class verarbeiter_farming_data
+public partial class Farming_Processor
 {
-  public verarbeiter_farming_data()
+  public Farming_Processor()
   {
   }
   public int id { get; set; }

@@ -34,7 +34,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
       // PLAYER INFO
       dbPlayer.lastLogin = DateTime.Now;
-      player.id = dbPlayer.permaId;
+      player.id = dbPlayer.id;
       player.name = dbPlayer.name;
       player.creationDate = dbPlayer.creationDate;
 

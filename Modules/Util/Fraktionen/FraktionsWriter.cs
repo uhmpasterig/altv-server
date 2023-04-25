@@ -90,7 +90,7 @@ public class FraktionsWriter : IWritable
     {
       writer.BeginObject();
       writer.Name("id");
-      writer.Value(_player.permaId);
+      writer.Value(_player.id);
       writer.Name("name");
       writer.Value(_player.name);
       writer.Name("rank");

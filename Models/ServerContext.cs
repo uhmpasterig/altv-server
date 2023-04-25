@@ -18,8 +18,8 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Faction_rank> Faction_ranks { get; set; }
   public virtual DbSet<Faction_ug> Faction_ugs { get; set; }
 
-  public virtual DbSet<sammler_farming_data> sammler_farming_data { get; set; }
-  public virtual DbSet<verarbeiter_farming_data> verarbeiter_farming_data { get; set; }
+  public virtual DbSet<Farming_Collector> Farming_Collectors { get; set; }
+  public virtual DbSet<Farming_Processor> Farming_Processors { get; set; }
 
   public virtual DbSet<Garage> Garage { get; set; }
   public virtual DbSet<GarageSpawn> GarageSpawns { get; set; }
@@ -42,14 +42,6 @@ public partial class ServerContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Player>(entity =>
-    {
-      entity.ToTable("player");
-
-      entity.Property(e => e.permaId)
-          .HasColumnName("id");
-    });
-
     modelBuilder.Entity<Vehicle>(entity =>
     {
       entity.ToTable("vehicle");
@@ -80,19 +72,6 @@ public partial class ServerContext : DbContext
     modelBuilder.Entity<Faction_ug>(entity =>
     {
       entity.ToTable("fraktions_ugs");
-    });
-    #endregion
-
-    // FARMING
-    #region FARMING
-    modelBuilder.Entity<sammler_farming_data>(entity =>
-    {
-      entity.ToTable("sammler_farming_data");
-    });
-
-    modelBuilder.Entity<verarbeiter_farming_data>(entity =>
-    {
-      entity.ToTable("verarbeiter_farming_data");
     });
     #endregion
 

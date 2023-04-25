@@ -7,14 +7,15 @@ using Newtonsoft.Json;
 
 namespace server.Models;
 
-[PrimaryKey("permaId")]
+[Table("players")]
+[PrimaryKey("id")]
 public partial class Player
 {
   public Player()
   {
   }
 
-  public int permaId { get; set; }
+  public int id { get; set; }
   public string name { get; set; }
 
 
