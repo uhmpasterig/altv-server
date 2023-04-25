@@ -47,11 +47,12 @@ class GARAGE_NAMES
 class GaragenModule : ILoadEvent, IPressedEEvent
 {
   ServerContext _serverContext = new ServerContext();
-  IVehicleHandler _vehicleHandler = new VehicleHandler();
+  VehicleHandler _vehicleHandler = new VehicleHandler();
   public static List<Models.Garage> garageList = new List<Models.Garage>();
 
   public static Dictionary<string, int> GetGarageBlipByType(int type)
   {
+    
     string typeName = Enum.GetName(typeof(GARAGE_TYPES), type)!;
 
     Dictionary<string, int> dict = new Dictionary<string, int>();
