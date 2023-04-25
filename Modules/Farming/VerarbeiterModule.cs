@@ -46,7 +46,7 @@ internal class ProcessData
 public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
 {
   internal static IVehicleHandler _vehicleHandler = new VehicleHandler();
-  internal static StorageHandler _storageHandler = new StorageHandler();
+  internal static IStorageHandler _storageHandler = new StorageHandler();
 
   private List<Farming_Processor> _verarbeiter = new List<Farming_Processor>();
   private List<ProcessData> _processes = new List<ProcessData>();

@@ -21,7 +21,7 @@ public class Server : IServer
   private readonly ITimerHandler _timerHandler;
   private readonly IVehicleHandler _vehicleHandler;
   private readonly IPlayerHandler _playerHandler;
-  private readonly StorageHandler _storageHandler;
+  private readonly IStorageHandler _storageHandler;
 
   public static List<string> _serverWeapons = new List<string>() {
     "weapon_specialcarbine_mk2",

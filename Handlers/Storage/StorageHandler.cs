@@ -9,7 +9,7 @@ using server.Modules.Items;
 
 namespace server.Handlers.Storage;
 
-public class StorageHandler
+public class StorageHandler : IStorageHandler
 {
   ServerContext _serverContext = new ServerContext();
   public static readonly Dictionary<int, xStorage> Storages = new Dictionary<int, xStorage>();

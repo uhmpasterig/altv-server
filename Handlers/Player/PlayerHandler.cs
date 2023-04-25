@@ -17,7 +17,7 @@ namespace server.Handlers.Player;
 public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconnectEvent
 {
   public static List<xPlayer> Players = new List<xPlayer>();
-  StorageHandler _storageHandler = new StorageHandler();
+  IStorageHandler _storageHandler = new StorageHandler();
   ServerContext _serverContext = new ServerContext();
 
   #region Player Functions

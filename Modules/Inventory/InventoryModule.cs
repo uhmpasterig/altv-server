@@ -18,7 +18,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 {
   internal static IPlayerHandler playerHandler = new PlayerHandler();
   internal static Dictionary<xPlayer, List<int>> userOpenInventorys = new Dictionary<xPlayer, List<int>>();
-  static StorageHandler storageHandler = new StorageHandler();
+  static IStorageHandler _storageHandler = new StorageHandler();
   IVehicleHandler vehicleHandler = new VehicleHandler();
 
   public static async void OpenStorage(xPlayer player, int storage_id)
@@ -26,11 +26,11 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     List<xStorage> uiStorages = new List<xStorage>();
     List<int> openInventorys = new List<int>();
 
-    xStorage playerStorage = await storageHandler.GetStorage(player.playerInventorys["Inventar"]);
+    xStorage playerStorage = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     uiStorages.Add(playerStorage);
     openInventorys.Add(playerStorage.id);
 
-    xStorage storage = await storageHandler.GetStorage(storage_id);
+    xStorage storage = await _storageHandler.GetStorage(storage_id);
     if (storage != null)
     {
       openInventorys.Add(storage.id);
@@ -45,7 +45,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     List<xStorage> uiStorages = new List<xStorage>();
     List<int> openInventorys = new List<int>();
 
-    xStorage playerStorage = await storageHandler.GetStorage(player.playerInventorys["Inventar"]);
+    xStorage playerStorage = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
     uiStorages.Add(playerStorage);
     openInventorys.Add(playerStorage.id);
 
@@ -53,7 +53,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     {
       xVehicle vehicle = (xVehicle)player.Vehicle;
       if (vehicle.storageIdTrunk == 0) goto load;
-      xStorage gloveStorage = await storageHandler.GetStorage(vehicle.storageIdGloveBox);
+      xStorage gloveStorage = await _storageHandler.GetStorage(vehicle.storageIdGloveBox);
       openInventorys.Add(gloveStorage.id);
       uiStorages.Add(gloveStorage);
       goto load;
@@ -64,13 +64,13 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if (closestVehicle.storageIdTrunk == 0) goto load;
       if (closestVehicle.canTrunkBeOpened() == false) goto load;
 
-      xStorage trunkStorage = await storageHandler.GetStorage(closestVehicle.storageIdTrunk);
+      xStorage trunkStorage = await _storageHandler.GetStorage(closestVehicle.storageIdTrunk);
       openInventorys.Add(trunkStorage.id);
       uiStorages.Add(trunkStorage);
       goto load;
     }
 
-    xStorage closestStorage = storageHandler.GetClosestxStorage(player, 5);
+    xStorage closestStorage = _storageHandler.GetClosestxStorage(player, 5);
     if (closestStorage != null)
     {
       openInventorys.Add(closestStorage.id);
