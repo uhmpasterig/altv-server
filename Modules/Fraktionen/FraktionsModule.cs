@@ -41,14 +41,16 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
   {
     if (!frakList.ContainsKey(player.job.ToLower())) return false;
 
-    if (player.Position.Distance(frakList[player.job.ToLower()].Position) > 2) {
+    if (player.Position.Distance(frakList[player.job.ToLower()].Position) < 2) {
       OpenFrakMenu(player); 
       return true;
     }
-    if (player.Position.Distance(frakList[player.job.ToLower()].StoragePosition) > 2){
+
+    if (player.Position.Distance(frakList[player.job.ToLower()].StoragePosition) < 2){
       OpenFrakStorage(player);
       return true;
     }
+    
     return false;
   }
 
