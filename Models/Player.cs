@@ -46,6 +46,7 @@ public partial class Player
   public string _dataCache { get; set; }
 
   public Player_Skin player_skin { get; set; }
+  public Player_Cloth player_cloth { get; set; }
 
   [NotMapped]
   public Dictionary<string, int> boundStorages

@@ -18,5 +18,14 @@ public partial class Player_Cloth
   public int player_id { get; set; }
   public Models.Player Player { get; set; }
   
-  public string name { get; set; }
+  public int mask { get; set; }
+  public int torso { get; set; }
+  public int leg { get; set; }
+  public int bag { get; set; }
+  public int shoe { get; set; }
+  public int accessories { get; set; }
+  public int undershirt { get; set; }
+  public int armor { get; set; }
+  public int decal { get; set; }
+  public int top { get; set; }
 }
