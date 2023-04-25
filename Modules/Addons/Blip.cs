@@ -6,7 +6,7 @@ using server.Events;
 using server.Core;
 using server.Util.Blip;
 
-namespace server.Modules.Blip;
+namespace server.ModulesGoofy.Blip;
 
 /* public enum BlipColor {
   WHITE = 0,
@@ -19,6 +19,11 @@ namespace server.Modules.Blip;
 
 public class Blip : IPlayerConnectEvent
 {
+
+  public Blip()
+  {
+  }
+  
   public static List<xBlip> All = new List<xBlip>();
 
   public static void Create(string name, int sprite, int color, float scale, Position position)

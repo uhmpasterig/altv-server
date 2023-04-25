@@ -4,10 +4,14 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Handlers.Entities;
 
-namespace server.Modules.Banking;
+namespace server.ModulesGoofy.Banking;
 
 class BankModuleMain : ILoadEvent
 {
+  public BankModuleMain()
+  {
+  }
+
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Bank> bankList = new List<Models.Bank>();
 

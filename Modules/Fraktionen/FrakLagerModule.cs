@@ -6,12 +6,15 @@ using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Fraktionen;
-using server.Modules.Inventory;
+using server.ModulesGoofy.Inventory;
 
-namespace server.Modules.Fraktionen;
+namespace server.ModulesGoofy.Fraktionen;
 
 class FrakLagerModule : ILoadEvent
 {
+  public FrakLagerModule()
+  {
+  }
   public async void OnLoad()
   {
     AltAsync.OnClient<xPlayer>("fraktion:lager:open", async (player) => {

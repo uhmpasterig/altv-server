@@ -2,7 +2,7 @@ using AltV.Net;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Async;
-using server.Modules.Weapons;
+using server.ModulesGoofy.Weapons;
 using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
 using AltV.Net.Resources.Chat.Api;

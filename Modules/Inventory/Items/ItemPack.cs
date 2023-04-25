@@ -2,10 +2,13 @@ using server.Core;
 using server.Events;
 using _logger = server.Logger.Logger;
 
-namespace server.Modules.Items;
+namespace server.Items;
 
-class UsabelMedikit : IItemsLoaded
+class UsabelMedikit
 {
+  public UsabelMedikit()
+  {
+  }
   public static string usedItems { get; set; }
   public static Dictionary<xPlayer, Dictionary<int, string>> playerUsedItems  = new Dictionary<xPlayer, Dictionary<int, string>>();
 
@@ -25,7 +28,7 @@ class UsabelMedikit : IItemsLoaded
     return true;
   } */
 
-  static int DefaultFunc(xPlayer player, string item)
+  /* static int DefaultFunc(xPlayer player, string item)
   {
     int randomNumber = new Random().Next(0, 99999);
     if (playerUsedItems.ContainsKey(player) == false)
@@ -69,5 +72,5 @@ class UsabelMedikit : IItemsLoaded
       player.Emit("stopAnim");
       player.Armor = 100;
     });
-  }
+  } */
 }

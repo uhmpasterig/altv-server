@@ -5,7 +5,7 @@ using AltV.Net.Data;
 using Newtonsoft.Json;
 using server.Util.Config;
 using _logger = server.Logger.Logger;
-using server.Modules.Items;
+using server.ModulesGoofy.Items;
 
 namespace server.Handlers.Storage;
 

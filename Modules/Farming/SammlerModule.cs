@@ -10,9 +10,13 @@ using AltV.Net.Data;
 using server.Handlers.Storage;
 using Newtonsoft.Json;
 
-namespace server.Modules.Farming.Sammler;
+namespace server.ModulesGoofy.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
+  public SammlerMain()
+  {
+  }
+
   private List<Farming_Collector> _sammler = new List<Farming_Collector>();
   private Dictionary<xPlayer, int> _farmingPlayers;
 

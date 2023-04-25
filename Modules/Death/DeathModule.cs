@@ -5,10 +5,14 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
-namespace server.Modules.Death;
+namespace server.ModulesGoofy.Death;
 
 class DeathModule : IPlayerDeadEvent
 {
+  public DeathModule()
+  {
+  }
+  
   public void OnPlayerDeath(IPlayer iplayer, IEntity ikiller, uint weapon)
   {
     Alt.Log("Player " + iplayer.Name + " is dead");

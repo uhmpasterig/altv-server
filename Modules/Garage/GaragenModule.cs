@@ -8,9 +8,9 @@ using AltV.Net.Async;
 using server.Handlers.Entities;
 using server.Handlers.Vehicle;
 using server.Util.Garage;
-using server.Modules.Blip;
+using server.ModulesGoofy.Blip;
 
-namespace server.Modules.Garage;
+namespace server.ModulesGoofy.Garage;
 
 enum GARAGE_TYPES
 {
@@ -46,6 +46,10 @@ class GARAGE_NAMES
 
 class GaragenModule : ILoadEvent, IPressedEEvent
 {
+  public GaragenModule()
+  {
+  }
+
   ServerContext _serverContext = new ServerContext();
   VehicleHandler _vehicleHandler = new VehicleHandler();
   public static List<Models.Garage> garageList = new List<Models.Garage>();

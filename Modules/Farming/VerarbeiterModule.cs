@@ -9,7 +9,7 @@ using server.Handlers.Vehicle;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 
-namespace server.Modules.Farming.Verarbeiter;
+namespace server.ModulesGoofy.Farming.Verarbeiter;
 
 internal class ProcessData
 {
@@ -45,6 +45,10 @@ internal class ProcessData
 
 public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
 {
+  public VerarbeiterMain()
+  {
+  }
+
   internal static IVehicleHandler _vehicleHandler = new VehicleHandler();
   internal static IStorageHandler _storageHandler = new StorageHandler();
 

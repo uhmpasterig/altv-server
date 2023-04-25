@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using AltV.Net;
-using server.Modules.Blip;
+using server.ModulesGoofy.Blip;
 using server.Models;
 
 namespace server.Util.Blip;

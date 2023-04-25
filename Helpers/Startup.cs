@@ -62,7 +62,7 @@ internal class Startup : IDisposable
       {
         _handlerTypes.Add(_type);
       }
-      else if(_type.Namespace != null && _type.Namespace.StartsWith("server.Modules"))
+      else if(_type.Namespace != null && _type.Namespace.StartsWith("server.ModulesGoofy"))
       {
         _moduleTypes.Add(_type);
       }

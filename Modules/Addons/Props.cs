@@ -1,16 +1,24 @@
 using server.Events;
 using server.Core;
 using server.Models;
-using server.Handlers.Entities;
 using AltV.Net.Data;
 using AltV.Net.Async;
 using Newtonsoft.Json;
 using _logger = server.Logger.Logger;
 
+using server.Handlers.Player;
+using server.Handlers.Event;
+using server.Handlers.Storage;
+
+
 namespace server.Modules.Props;
 
 public class Props : ILoadEvent
 {
+  public Props(ServerContext serverContext, IPlayerHandler playerHandler, IStorageHandler storageHandler, IEventHandler eventhandler, )
+  {
+  }
+  
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();

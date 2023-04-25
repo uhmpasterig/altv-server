@@ -7,9 +7,9 @@ using server.Handlers.Vehicle;
 using AltV.Net.Data;
 using AltV.Net;
 using _logger = server.Logger.Logger;
-using server.Modules.Fraktionen;
+using server.ModulesGoofy.Fraktionen;
 using server.Handlers.Storage;
-using server.Modules.Items;
+using server.ModulesGoofy.Items;
 
 namespace server.Commands;
 

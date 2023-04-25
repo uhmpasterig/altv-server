@@ -9,7 +9,7 @@ using server.Handlers.Storage;
 using server.Handlers.Event;
 using Newtonsoft.Json;
 
-namespace server.Modules.Items;
+namespace server.ModulesGoofy.Items;
 
 public class xItem : Models.Item
 {

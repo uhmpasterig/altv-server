@@ -6,10 +6,14 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Fraktionen;
 using server.Handlers.Storage;
-namespace server.Modules.Fraktionen;
+namespace server.ModulesGoofy.Fraktionen;
 
 class FraktionsModuleMain : ILoadEvent, IPressedEEvent
 {
+  public FraktionsModuleMain()
+  {
+  }
+
   public static Dictionary<string, Faction> frakList = new Dictionary<string, Faction>();
   public static Dictionary<int, Faction_ug> frakUgList = new Dictionary<int, Faction_ug>();
   static ServerContext _serverContext = new ServerContext();

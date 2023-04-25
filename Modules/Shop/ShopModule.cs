@@ -6,9 +6,9 @@ using server.Handlers.Entities;
 using server.Util.Shop;
 using AltV.Net.Async;
 using Newtonsoft.Json;
-using server.Modules.Items;
+using server.ModulesGoofy.Items;
 
-namespace server.Modules.Shop;
+namespace server.ModulesGoofy.Shop;
 
 enum SHOP_TYPES
 {
