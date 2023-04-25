@@ -21,8 +21,7 @@ public partial class Cloth
   public byte texture { get; set; }
   public string dlcName { get; set; }
 
-  [NotMapped]
-  public byte palette { get; set; } = 0;
+  public byte palette { get; set; };
 
   [NotMapped]
   public uint dlc
