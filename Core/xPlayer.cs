@@ -84,6 +84,9 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.creationDate = _player.creationDate;
     this.lastLogin = _player.lastLogin;
     this.dataCache = _player.dataCache;
+
+    this.player_skin = _player.player_skin;
+    this.player_cloth = _player.player_cloth;
   }
 
   #region Methods
@@ -206,7 +209,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   }
 
   // SKIN
-  public async void LoadSkin(Player_Skin? skin = null)
+  public async Task LoadSkin(Player_Skin? skin = null)
   {
     if (skin == null) skin = this.player_skin;
     this.SetHeadBlendData(
@@ -226,7 +229,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.SetClothes(2, skin.hair, skin.hair2, 0);
   }
 
-  public void SetClothPiece(int id)
+  public async Task SetClothPiece(int id)
   {
     Models.Cloth? cloth = ClothModule.GetCloth(id);
     if (cloth == null)
@@ -237,12 +240,12 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
   }
 
-  public async void LoadClothes(Player_Cloth? cloth = null)
+  public async Task LoadClothes(Player_Cloth? cloth = null)
   {
     if (cloth == null) cloth = this.player_cloth;
     foreach(int id in cloth.ToList())
     {
-      this.SetClothPiece(id);
+      await this.SetClothPiece(id);
     }
   }
 

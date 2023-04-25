@@ -21,29 +21,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
   IStorageHandler _storageHandler = new StorageHandler();
   ServerContext _serverContext = new ServerContext();
 
-  public async Task LoadPlayerSkin(xPlayer player, Player_Skin skin)
-  {
-    player.SetHeadBlendData(
-            skin.shape1,
-            skin.shape2,
-            0,
-            skin.skin1,
-            skin.skin2,
-            0,
-            skin.shapeMix,
-            skin.skinMix,
-            0);
-
-    player.SetEyeColor(skin.eyeColor);
-    player.HairColor = skin.hairColor;
-    player.HairHighlightColor = skin.hairColor2;
-    player.SetClothes(2, skin.hair, skin.hair2, 0);
-  }
-
-  public async Task LoadPlayerCloth(xPlayer player, Player_Cloth cloth)
-  {
-  }
-
   #region Player Functions
   public async Task<xPlayer?> LoadPlayerFromDatabase(xPlayer player)
   {
@@ -77,7 +54,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.Model = (uint)Alt.Hash(player.ped);
       player.Spawn(dbPlayer.Position, 0);
 
-      await LoadPlayerSkin(player, dbPlayer.player_skin);
+      await player.LoadClothes();
+      await player.LoadSkin();
 
       player.Rotation = dbPlayer.Rotation;
       player.Health = dbPlayer.health;
