@@ -31,6 +31,8 @@ public partial class ServerContext : DbContext
 
   public virtual DbSet<Bank> Banks { get; set; }
 
+  public virtual DbSet<Cloth> Clothes { get; set; }
+
   public virtual DbSet<Prop> Props { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -12,7 +12,7 @@ namespace server.Core;
 
 public class xVehicle : AsyncVehicle, IxVehicle
 {
-  public xVehicle(ICore core, IntPtr nativePointer, uint id) : base(core, nativePointer, id)
+  public xVehicle(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
   }
 

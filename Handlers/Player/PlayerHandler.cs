@@ -21,6 +21,25 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
   IStorageHandler _storageHandler = new StorageHandler();
   ServerContext _serverContext = new ServerContext();
 
+  public async Task LoadPlayerSkin(xPlayer player, Player_Skin skin)
+  {
+    player.SetHeadBlendData(
+            skin.shape1,
+            skin.shape2,
+            0,
+            skin.skin1,
+            skin.skin2,
+            0,
+            skin.shapeMix,
+            skin.skinMix,
+            0);
+
+    player.SetEyeColor(skin.eyeColor);
+    player.HairColor = skin.hairColor;
+    player.HairHighlightColor = skin.hairColor2;
+    player.SetClothes(2, skin.hair, skin.hair2, 0);
+  }
+
   #region Player Functions
   public async Task<xPlayer?> LoadPlayerFromDatabase(xPlayer player)
   {
@@ -32,7 +51,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
       if (dbPlayer == null) return null;
       player.SetDataFromDatabase(dbPlayer);
-      
+
       // STORAGES
       await _storageHandler.CreateAllStorages(player);
 
@@ -41,9 +60,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         dbPlayer.boundStorages = player.boundStorages;
       }
 
-      foreach(KeyValuePair<string, int> storage in player.boundStorages)
+      foreach (KeyValuePair<string, int> storage in player.boundStorages)
       {
-        if(StorageConfig.StoragesDieJederHabenSollte.Where(s => s.name == storage.Key).FirstOrDefault().loadOnConnect)
+        if (StorageConfig.StoragesDieJederHabenSollte.Where(s => s.name == storage.Key).FirstOrDefault().loadOnConnect)
         {
           _logger.Info($"Lade Storage {storage.Key} für {player.Name}!");
           await _storageHandler.LoadStorage(storage.Value);
@@ -54,22 +73,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       player.Model = (uint)Alt.Hash(player.ped);
       player.Spawn(dbPlayer.Position, 0);
 
-      player.SetHeadBlendData(
-        dbPlayer.player_skin.shape1,
-        dbPlayer.player_skin.shape2,
-        0,
-        dbPlayer.player_skin.skin1,
-        dbPlayer.player_skin.skin2,
-        0,
-        dbPlayer.player_skin.shapeMix,
-        dbPlayer.player_skin.skinMix,
-        0);
-      
-      player.SetEyeColor(dbPlayer.player_skin.eyeColor);
-      player.HairColor = dbPlayer.player_skin.hairColor;
-      player.HairHighlightColor = dbPlayer.player_skin.hairColor2;
-      player.SetClothes(2, dbPlayer.player_skin.hair, dbPlayer.player_skin.hair2, 0);
-      
+      await LoadPlayerSkin(player, dbPlayer.player_skin);
+
       player.Rotation = dbPlayer.Rotation;
       player.Health = dbPlayer.health;
       player.Armor = dbPlayer.armor;

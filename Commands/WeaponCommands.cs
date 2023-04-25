@@ -10,11 +10,13 @@ using _logger = server.Logger.Logger;
 using server.Modules.Fraktionen;
 using server.Handlers.Storage;
 using server.Modules.Items;
+using server.Models;
 
 namespace server.Commands;
 
 internal class WeaponCommands : IScript
 {
+  static ServerContext _serverContext = new ServerContext();
   [Command("giveweapon")]
   public static void GiveWeapon(xPlayer player, string name, int ammo = 100)
   {
@@ -59,21 +61,10 @@ internal class WeaponCommands : IScript
     player.Emit("propCreator", "createprop", prop);
   }
 
-  [Command("ttest")]
-  public static void Test(xPlayer player)
+  [Command("anziehen")]
+  public static void Test(xPlayer player, int id)
   {
-    player.SetDlcClothes(11, 4, 0, 0, Alt.Hash("mp_m_executive_01"));
-  }
-
-  [Command("ttest2")]
-  public static void Test2(xPlayer player)
-  {
-    player.SetDlcClothes(11, 14, 0, 0, 0);
-  }
-
-  [Command("ttest3")]
-  public static void Test3(xPlayer player)
-  {
-    player.SetDlcClothes(11, 23, 2, 0, 0);
+    Models.Cloth cloth = _serverContext.Clothes.Where(c => c.id == id).FirstOrDefault()!;
+    player.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
   }
 }
