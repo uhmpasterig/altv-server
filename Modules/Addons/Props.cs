@@ -37,7 +37,7 @@ public class Props : ILoadEvent
   public async static void CreateProp(Models.Prop _prop)
   {
     xEntity _entity = new xEntity();
-    _entity.entityType = ENTITY_TYPES.PROP;
+    // _entity.entityType = ENTITY_TYPES.PROP; 
     _entity.dimension = (int)DIMENSIONEN.WORLD;
     _entity.position = _prop.Position;
     _entity.range = 250;
