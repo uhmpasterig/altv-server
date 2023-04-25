@@ -1,6 +1,9 @@
 using AltV.Net;
 using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Data;
+using AltV.Net.EntitySync.Events;
+using AltV.Net.EntitySync.ServerEvent;
+using AltV.Net.EntitySync;
 using server.Handlers.Entities;
 using System.Numerics;
 
@@ -12,7 +15,9 @@ public class xEntity
   public xEntity()
   {
     this.data = new Dictionary<string, object>();
+    this.entity = null!;
   }
+  public IEntity entity { get; set; }
   
   public uint range { get; set; }
   public ENTITY_TYPES entityType { get; set; }
@@ -23,28 +28,35 @@ public class xEntity
   
   public void CreateEntity()
   {
+    this.entity = AltEntitySync.CreateEntity((uint)this.entityType, this.position, this.dimension, this.range, this.data);
   }
 
   public void Destroy()
   {
+    AltEntitySync.RemoveEntity(entity);
+    this.entity = null!;
   }
 
   public void Hide()
   {
+    AltEntitySync.RemoveEntity(entity);
   }
 
   public void Show()
   {
+    AltEntitySync.AddEntity(entity);
   }
 
   public void SetSyncedData(string key, object value)
   {
     this.data[key] = value;
+    this.entity.SetData(key, value);
   }
 
   public void RemoveData(string key)
   {
     this.data[key] = null!;
+    this.entity.SetData(key, null!);
   }
 }
 

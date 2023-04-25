@@ -6,6 +6,9 @@ using server.Handlers.Vehicle;
 using server.Handlers.Player;
 using server.Handlers.Storage;
 using AltV.Net.Elements.Entities;
+using AltV.Net.EntitySync;
+using AltV.Net.EntitySync.SpatialPartitions;
+using AltV.Net.EntitySync.ServerEvent;
 using _logger = server.Logger.Logger;
 
 
@@ -44,6 +47,15 @@ public class Server : IServer
   public void Start()
   {
     _logger.Startup("Server startet...");
+
+    _logger.Startup("AltEntitySync initialisieren...");
+    AltEntitySync.Init(1, (threadId) => 100, (threadId) => false,
+      (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
+      (entity, threadCount) => (entity.Id % threadCount),
+      (entityId, entityType, threadCount) => (entityId % threadCount),
+      (threadId) => new LimitedGrid3(50_000, 50_000, 100, 10_000, 10_000, 300),
+      new IdProvider());
+    _logger.Startup("AltEntitySync initialisiert!");
 
     _logger.Startup("Lade Handler...");
     _eventHandler.LoadHandlers();
