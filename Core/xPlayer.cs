@@ -66,7 +66,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     dataCache = new Dictionary<string, object>();
   }
 
-  public void SetDataFromDatabase(Models.Player _player)
+  public async Task SetDataFromDatabase(Models.Player _player)
   {
     this.id = _player.id;
     this.name = _player.name;
@@ -211,6 +211,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   // SKIN
   public async Task LoadSkin(Player_Skin? skin = null)
   {
+    _logger.Info($"Loading skin for {this.name}");
     if (skin == null) skin = this.player_skin;
     this.SetHeadBlendData(
             skin.shape1,
@@ -227,10 +228,13 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.HairColor = skin.hairColor;
     this.HairHighlightColor = skin.hairColor2;
     this.SetClothes(2, skin.hair, skin.hair2, 0);
+
+    _logger.Info($"Loaded skin for {this.name}");
   }
 
   public async Task SetClothPiece(int id)
   {
+    _logger.Info($"Setting cloth with id {id} for {this.name}");
     Models.Cloth? cloth = ClothModule.GetCloth(id);
     if (cloth == null)
     {
@@ -238,15 +242,18 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
       return;
     }
     this.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
+    _logger.Info($"Set cloth with id {id} for {this.name}");
   }
 
   public async Task LoadClothes(Player_Cloth? cloth = null)
   {
+    _logger.Info($"Loading clothes for {this.name}");
     if (cloth == null) cloth = this.player_cloth;
     foreach(int id in cloth.ToList())
     {
       await this.SetClothPiece(id);
     }
+    _logger.Info($"Loaded clothes for {this.name}");
   }
 
   #endregion

@@ -31,7 +31,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         .FirstOrDefaultAsync(p => p.name == player.Name);
 
       if (dbPlayer == null) return null;
-      player.SetDataFromDatabase(dbPlayer);
+      await player.SetDataFromDatabase(dbPlayer);
 
       // STORAGES
       await _storageHandler.CreateAllStorages(player);
