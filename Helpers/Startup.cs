@@ -9,13 +9,20 @@ using System.Reflection;
 namespace server.Helpers;
 internal class Startup : IDisposable
 {
+  private readonly Type[] _loadedTypes = Assembly.GetExecutingAssembly().GetTypes();
+
   private IContainer _container;
   private ILifetimeScope _scope;
+
+  private List<Type> _handlerTypes = new List<Type>();
+  private List<Type> _moduleTypes = new List<Type>();
 
   public void Register()
   {
     var builder = new ContainerBuilder();
     var dataAccess = Assembly.GetExecutingAssembly();
+
+    LoadTypes();
 
     _logger.Startup("Registering Server...");
     builder.RegisterType<Server>()
@@ -27,12 +34,13 @@ internal class Startup : IDisposable
       .Where(t => t.Namespace.StartsWith("server.Handlers"))
       .AsImplementedInterfaces();
 
-    builder.RegisterAssemblyTypes(dataAccess)
-     .Where(t => t.Namespace != null)
-     .Where(t => t.Namespace.StartsWith("server.Modules"))
-     .AsSelf()
-     .SingleInstance()
-     .AsImplementedInterfaces();
+    foreach (var module in _moduleTypes)
+    {
+      builder.RegisterType(module)
+        .AsSelf()
+        .AsImplementedInterfaces()
+        .SingleInstance();
+    }
 
     _logger.Startup("Registering Database Context...");
     var optionsBuilder = new DbContextOptionsBuilder<ServerContext>()
@@ -44,6 +52,21 @@ internal class Startup : IDisposable
       .InstancePerMatchingLifetimeScope();
 
     _container = builder.Build();
+  }
+
+  internal void LoadTypes()
+  {
+    foreach(Type _type in _loadedTypes)
+    {
+      if(_type.Namespace != null && _type.Namespace.StartsWith("server.Handlers"))
+      {
+        _handlerTypes.Add(_type);
+      }
+      else if(_type.Namespace != null && _type.Namespace.StartsWith("server.Modules"))
+      {
+        _moduleTypes.Add(_type);
+      }
+    }
   }
 
   internal void ResolveTypes()
@@ -73,5 +96,6 @@ internal class Startup : IDisposable
   {
     _scope?.Dispose();
     _container?.Dispose();
+    GC.SuppressFinalize(this);
   }
 }

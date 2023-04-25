@@ -34,7 +34,7 @@ public class Server : IServer
     "weapon_battleaxe"
   };
 
-  public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, StorageHandler storageHandler)
+  public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)
   {
     _serverContext = serverContext;
     _vehicleHandler = vehicleHandler;
