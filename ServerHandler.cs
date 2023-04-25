@@ -57,12 +57,12 @@ namespace server
 
 public class xPlayerFactory : IEntityFactory<IPlayer>
 {
-  public IPlayer Create(ICore core, IntPtr playerPointer, ushort id)
+  public IPlayer Create(ICore core, IntPtr playerPointer, uint id)
   {
     return new xPlayer(core, playerPointer, id);
   }
 
-  public AsyncPlayer CreateAsync(ICore core, IntPtr playerPointer, ushort id)
+  public AsyncPlayer CreateAsync(ICore core, IntPtr playerPointer, uint id)
   {
     return new xPlayer(core, playerPointer, id);
   }
@@ -70,12 +70,12 @@ public class xPlayerFactory : IEntityFactory<IPlayer>
 
 public class xVehicleFactory : IEntityFactory<IVehicle>
 {
-  public IVehicle Create(ICore core, IntPtr vehiclePointer, ushort id)
+  public IVehicle Create(ICore core, IntPtr vehiclePointer, uint id)
   {
     return new xVehicle(core, vehiclePointer, id);
   }
 
-  public AsyncVehicle CreateAsync(ICore core, IntPtr vehiclePointer, ushort id)
+  public AsyncVehicle CreateAsync(ICore core, IntPtr vehiclePointer, uint id)
   {
     return new xVehicle(core, vehiclePointer, id);
   }

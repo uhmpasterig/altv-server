@@ -57,7 +57,7 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
 
   public int isDead { get; set; }
 
-  public xPlayer(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
+  public xPlayer(ICore core, IntPtr nativePointer, uint id) : base(core, nativePointer, id)
   {
     dataCache = new Dictionary<string, object>();
   }

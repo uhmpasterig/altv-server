@@ -9,6 +9,8 @@ using server.Handlers.Entities;
 using server.Handlers.Vehicle;
 using server.Util.Garage;
 using server.Modules.Blip;
+using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 
 namespace server.Modules.Garage;
 
@@ -73,7 +75,6 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       {
         garage.GarageSpawn.Add(spawn);
       }
-
       xEntity ped = new xEntity();
       ped.position = garage.Position;
       ped.dimension = (int)DIMENSIONEN.WORLD;

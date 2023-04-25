@@ -1,4 +1,4 @@
-/* using System;
+using System;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using server.Core;
@@ -27,17 +27,17 @@ internal class WeaponCommands : IScript
     player.Revive();
   }
 
-  [Command("frakweap")]
+  /* [Command("frakweap")]
   public async static void FrakWeap(xPlayer player)
   {
     StorageHandler _storageHandler = new StorageHandler();
     
     Modles.Faction frak = FraktionsModuleMain.GetFrak(player.job);
-    xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
+    xStorage inventory = await _storageHandler.GetStorage(player.boundStorages["Inventar"]);
     if(frak == null) return;
     inventory.AddItem(frak.weapon, 1);
     inventory.AddItem("packed_specialcarbine", 1);
-  }
+  } */
 
   [Command("useitem")]
   public static void UseItem(xPlayer player, string name)
@@ -49,7 +49,7 @@ internal class WeaponCommands : IScript
   public async static void GiveItem(xPlayer player, string name, int amount = 1)
   {
     StorageHandler _storageHandler = new StorageHandler();
-    xStorage inventory = await _storageHandler.GetStorage(player.playerInventorys["Inventar"]);
+    xStorage inventory = await _storageHandler.GetStorage(player.boundStorages["Inventar"]);
     inventory.AddItem(name, amount);
   }
 
@@ -76,4 +76,4 @@ internal class WeaponCommands : IScript
   {
     player.SetDlcClothes(11, 23, 2, 0, 0);
   }
-} */
+}
