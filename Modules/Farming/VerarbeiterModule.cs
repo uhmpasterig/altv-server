@@ -73,7 +73,7 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     int timeInMilliseconds = 5000 * stepsToDo;
     int mins = timeInMilliseconds / 60000;
     int seconds = (timeInMilliseconds - (mins * 60000)) / 1000;
-    player.SendMessage($"ETA: {mins} Minuten und ${seconds} Sekunden", NOTIFYS.INFO);
+    player.SendMessage($"ETA: {mins} Minuten und {seconds} Sekunden", NOTIFYS.INFO);
     player.StartProgressBar(timeInMilliseconds);
   }
 
@@ -124,6 +124,7 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
 
       _verarbeiter.Add(verarbeiter);
     }
+    
     AltAsync.OnClient<IPlayer, int>("verarbeiter:verarbeitenVehId", async (iplayer, vehicleId) =>
     {
       xPlayer player = (xPlayer)iplayer;
