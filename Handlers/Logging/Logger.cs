@@ -50,7 +50,7 @@ public class Logger
   {
     Console.ForegroundColor = color;
     Console.WriteLine($"[{prefix}] {message}");
-    if(_clientLogsEnabled) Alt.EmitAllClients("client:log", $"[{prefix}] {message}");
+    if(_clientLogsEnabled) Alt.EmitAllClients("client:log", prefix, message);
   }
 
   public static void EnableClientLogging()
