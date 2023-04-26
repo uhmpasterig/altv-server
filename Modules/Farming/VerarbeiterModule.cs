@@ -28,8 +28,7 @@ internal class ProcessData
     if (!hasEnough) return;
     trunk.AddItem(verarbeiter.outputitem, stepsDone);
     vehicle.isAccesable = true;
-    player.SendMessage("Verarbeitung abgeschlossen", NOTIFYS.INFO);
-    player.SendMessage($"Du hast {amount}x {verarbeiter.outputitem} erhalten", NOTIFYS.INFO);
+    player.SendMessage($"Du hast {stepsDone}x {verarbeiter.outputitem} erhalten", NOTIFYS.INFO);
   }
 
   public ProcessData(xVehicle vehicle, xPlayer player, Farming_Processor verarbeiter, xStorage trunk, int stepsToDo = 1)
@@ -58,15 +57,20 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
   public async void ProcessTrunk(xVehicle vehicle, xPlayer player, int stepsToDo = 1)
   {
     xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
-    vehicle.isAccesable = false;
     if(_processes.Any(x => x.vehicle == vehicle)) return;
     Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
+    if(!trunk.HasItem(verarbeiter.inputitem, verarbeiter.ratio)) {
+      player.SendMessage($"Du hast nicht genug {verarbeiter.inputitem} dabei", NOTIFYS.ERROR);
+      return;
+    };
     if (verarbeiter == null) return;
+    vehicle.isAccesable = false;
+
     ProcessData processData = new ProcessData(vehicle, player, verarbeiter, trunk, stepsToDo);
     _processes.Add(processData);
-    player.SendMessage("Verarbeitung gestartet", NOTIFYS.INFO);
     int time = 5000 * stepsToDo;
     int timeInMin = time / 1000 / 60;
+    
     player.SendMessage($"ETA: {timeInMin} Minuten", NOTIFYS.INFO);
     player.StartProgressBar(time);
   }
@@ -89,7 +93,6 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     {
       if (!processData.isRunning) continue;
       processData.stepsDone++;
-      _logger.Log($"Verarbeiter: {processData.stepsDone}/{processData.stepsToDo}");
       if (processData.stepsDone >= processData.stepsToDo)
       {
         processData.isRunning = false;
@@ -105,7 +108,6 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
-    _logger.Startup("Verarbeiter loaded");
     foreach (Farming_Processor verarbeiter in serverContext.Farming_Processors.ToList())
     {
       xEntity ped = new xEntity();
