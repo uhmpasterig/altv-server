@@ -30,6 +30,7 @@ internal class AdminVehicle : IScript
 
     if (veh.Exists)
     {
+      player.SetIntoVehicle(veh, 1);
       player.SendChatMessage("Spawned Vehicle: " + model);
     }
   }
