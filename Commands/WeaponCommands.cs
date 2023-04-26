@@ -67,4 +67,10 @@ internal class WeaponCommands : IScript
     Models.Cloth cloth = _serverContext.Clothes.Where(c => c.id == id).FirstOrDefault()!;
     player.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
   }
+
+  [Command("test")]
+  public static void Test2(xPlayer player, int component, int drawable, int texture, int palette, string dlc = "mpbeach_overlays")
+  {
+    player.SetDlcClothes((byte)component, (byte)drawable, (byte)texture, (byte)palette, Alt.Hash(dlc));
+  }
 }
