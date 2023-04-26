@@ -187,6 +187,9 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   public void SetDead(int isDead)
   {
     this.isDead = isDead;
+    this.Spawn(this.Position, 0);
+    this.Health = this.MaxHealth;
+    
     this.Emit("player:dead", isDead);
   }
 
