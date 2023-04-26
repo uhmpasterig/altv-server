@@ -192,7 +192,6 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
       this.Spawn(this.Position, 0);
       this.Health = this.MaxHealth;
       this.Invincible = true;
-      this.Collision = false;
     }
     this.Emit("player:dead", isDead);
   }

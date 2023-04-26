@@ -86,7 +86,9 @@ public class xStorage : Models.Storage
 
   public bool AddItem(string itemname, int count = 1)
   {
-    xItem item = Items.GetItem(itemname);
+    xItem? item = Items.GetItem(itemname);
+    if(item == null) return false;
+
     if (this.items.Count > this.slots)
     {
       _logger.Error($"Storage {this.name} is full");
