@@ -149,22 +149,29 @@ public class xStorage : Models.Storage
 
   public bool RemoveItem(int slot, int count = 1)
   {
-    InventoryItem item = this.items.FirstOrDefault(x => x.slot == slot)!;
-    if (item == null) return false;
-    if (item.count == count)
+    List<InventoryItem> items = this.items.Where(x => x.slot == slot).ToList();
+    if (items.Count == 0) return false;
+    foreach (var item in items)
     {
-      this.items.Remove(item);
-      return true;
-    }
-    else if (item.count > count)
-    {
+      
+      if(item.count == count)
+      {
+        this.items.Remove(item);
+        return true;
+      }
+      else if(item.count > count)
+      {
+        item.count -= count;
+        return true;
+      }
+      else
+      {
+        count -= item.count;
+        this.items.Remove(item);
+      }
       item.count -= count;
-      return true;
     }
-    else
-    {
-      return false;
-    }
+    return true;
   }
 
   public bool RemoveItem(string itemname, int count = 1)
