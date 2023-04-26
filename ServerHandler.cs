@@ -8,6 +8,7 @@ using Autofac;
 using Microsoft.Extensions.Logging;
 using server.Models;
 using AltV.Net.Async.Elements.Entities;
+using _logger = server.Logger.Logger;
 
 using server.Handlers.Storage;
 using server.Handlers.Player;
@@ -28,6 +29,8 @@ namespace server
 
     public override async void OnStart()
     {
+      _logger.EnableClientLogging();
+
       using var startup = new Startup();
       
       startup.Register();

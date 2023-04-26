@@ -100,22 +100,22 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
     this.Emit("clientNotify", title, text, time, _notifys[(int)notifyType]);
   }
 
-  public async Task StartProgressBar(int time)
+  public async Task StartProgressBarAsync(int time)
   {
     this.Emit("clientProgressbarStart", time);
-    Task.Delay(time).ContinueWith(_ =>
+    await Task.Delay(time).ContinueWith(_ =>
     {
       this.Emit("clientProgressbarStop");
       return Task.CompletedTask;
     });
   }
 
-  public void StartProgressBar(int time) 
+  public void StartProgressBar(int time)
   {
     this.Emit("clientProgressbarStart", time);
   }
 
-  public void StopProgressBar() 
+  public void StopProgressBar()
   {
     this.Emit("clientProgressbarStop");
   }
@@ -269,9 +269,9 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   {
     _logger.Info($"Loading clothes for {this.name}");
     if (cloth == null) cloth = this.player_cloth;
-    foreach(int id in cloth.ToList())
+    foreach (int id in cloth.ToList())
     {
-      if(id == -1) continue;
+      if (id == -1) continue;
       await this.SetClothPiece(id);
     }
     _logger.Info($"Loaded clothes for {this.name}");

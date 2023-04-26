@@ -68,7 +68,7 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     int time = 5000 * stepsToDo;
     int timeInMin = time / 1000 / 60;
     player.SendMessage($"ETA: {timeInMin} Minuten", NOTIFYS.INFO);
-    player.StartProgressBar(time)
+    player.StartProgressBar(time);
   }
 
   public async Task<int> StepsVehicleCanDo(xVehicle vehicle)
