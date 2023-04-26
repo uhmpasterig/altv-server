@@ -59,20 +59,22 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
     if(_processes.Any(x => x.vehicle == vehicle)) return;
     Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
+    
     if(!trunk.HasItem(verarbeiter.inputitem, verarbeiter.ratio)) {
       player.SendMessage($"Du hast nicht genug {verarbeiter.inputitem} dabei", NOTIFYS.ERROR);
       return;
     };
+
     if (verarbeiter == null) return;
     vehicle.isAccesable = false;
 
     ProcessData processData = new ProcessData(vehicle, player, verarbeiter, trunk, stepsToDo);
     _processes.Add(processData);
-    int time = 5000 * stepsToDo;
-    int timeInMin = time / 1000 / 60;
-    
-    player.SendMessage($"ETA: {timeInMin} Minuten", NOTIFYS.INFO);
-    player.StartProgressBar(time);
+    int timeInMilliseconds = 5000 * stepsToDo;
+    int mins = timeInMilliseconds / 60000;
+    int seconds = (timeInMilliseconds - (mins * 60000)) / 1000;
+    player.SendMessage($"ETA: {mins} Minuten und ${seconds} Sekunden", NOTIFYS.INFO);
+    player.StartProgressBar(timeInMilliseconds);
   }
 
   public async Task<int> StepsVehicleCanDo(xVehicle vehicle)
