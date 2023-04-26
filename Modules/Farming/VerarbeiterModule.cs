@@ -43,9 +43,9 @@ internal class ProcessData
   }
 }
 
-public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
+public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
 {
-  public VerarbeiterMain()
+  public VerarbeiterModule()
   {
   }
 
@@ -65,9 +65,10 @@ public class VerarbeiterMain : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEve
     ProcessData processData = new ProcessData(vehicle, player, verarbeiter, trunk, stepsToDo);
     _processes.Add(processData);
     player.SendMessage("Verarbeitung gestartet", NOTIFYS.INFO);
-    int timeInMin = 5000 * stepsToDo;
-    timeInMin = timeInMin / 1000 / 60;
+    int time = 5000 * stepsToDo;
+    int timeInMin = time / 1000 / 60;
     player.SendMessage($"ETA: {timeInMin} Minuten", NOTIFYS.INFO);
+    player.StartProgressBar(time)
   }
 
   public async Task<int> StepsVehicleCanDo(xVehicle vehicle)

@@ -92,12 +92,32 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   #region Methods
   public void SendMessage(string message, NOTIFYS notifyType)
   {
-    this.SendChatMessage(message);
+    this.SendMessage("SERVER", message, 5000, notifyType);
   }
 
   public void SendMessage(string title, string text, int time, NOTIFYS notifyType)
   {
     this.Emit("clientNotify", title, text, time, _notifys[(int)notifyType]);
+  }
+
+  public async Task StartProgressBar(int time)
+  {
+    this.Emit("clientProgressbarStart", time);
+    Task.Delay(time).ContinueWith(_ =>
+    {
+      this.Emit("clientProgressbarStop");
+      return Task.CompletedTask;
+    });
+  }
+
+  public void StartProgressBar(int time) 
+  {
+    this.Emit("clientProgressbarStart", time);
+  }
+
+  public void StopProgressBar() 
+  {
+    this.Emit("clientProgressbarStop");
   }
 
   public bool CanInteract()
