@@ -211,9 +211,14 @@ public class xStorage : Models.Storage
 
   public bool HasItem(string name, int count = 1)
   {
-    InventoryItem item = this.items.FirstOrDefault(x => x.name == name)!;
-    if (item == null) return false;
-    if (item.count < count) return false;
+    List<InventoryItem> items = this.items.Where(x => x.name == name).ToList();
+    if (items.Count == 0) return false;
+    int itemCount = 0;
+    foreach (var item in items)
+    {
+      itemCount += item.count;
+    }
+    if (itemCount < count) return false;
     return true;
   }
 
