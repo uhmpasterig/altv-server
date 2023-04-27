@@ -31,8 +31,6 @@ public class garagenWriter : IWritable
     writer.BeginArray();
     foreach (Models.Vehicle veh in vehicles.ToList())
     {
-      _logger.Exception($"Vehicle UIDATA: {veh.vehicle_data._uidata} | {veh.vehicle_data.r} {veh.vehicle_data.g} {veh.vehicle_data.b}");
-
       string vehname = "Unbekannt";
       string keyword = "";
       bool fav = false;

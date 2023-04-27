@@ -246,7 +246,6 @@ public partial class xPlayer : AsyncPlayer
   #region Skin
   public async Task LoadSkin(Player_Skin? skin = null)
   {
-    _logger.Info($"Loading skin for {this.name}");
     if (skin == null) skin = this.player_skin;
     this.SetHeadBlendData(
             skin.shape1,
