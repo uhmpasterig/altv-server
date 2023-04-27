@@ -105,8 +105,8 @@ public class FactionWriter : IWritable
       writer.Value(_player.isOnline);
       writer.Name("frakname");
       writer.Value(player.job.ToLower());
-      writer.Name("perms");
       
+      writer.Name("perms");
       writer.BeginArray();
       foreach (string perm in _player.player_society.FactionPerms) writer.Value(perm);
       writer.EndArray();
