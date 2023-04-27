@@ -62,6 +62,11 @@ public partial class ServerContext : DbContext
         .WithOne(d => d.Player)
         .HasForeignKey(d => d.player_id)
         .HasPrincipalKey(d => d.id);
+
+      entity.HasOne(d => d.faction)
+        .WithMany(p => p.members)
+        .HasForeignKey(d => d.faction_id)
+        .HasPrincipalKey(p => p.id);
     });
 
     modelBuilder.Entity<Vehicle>(entity =>
@@ -88,6 +93,13 @@ public partial class ServerContext : DbContext
         .WithMany(p => p.vehicle_keys)
         .HasForeignKey(d => d.vehicle_id)
         .HasPrincipalKey(p => p.id);
+    });
+
+    modelBuilder.Entity<Faction>(entity => {
+      entity.HasMany(d => d.members)
+        .WithOne(d => d.faction)
+        .HasForeignKey(d => d.faction_id)
+        .HasPrincipalKey(d => d.id);
     });
 
     OnModelCreatingPartial(modelBuilder);

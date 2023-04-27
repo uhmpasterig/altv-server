@@ -47,6 +47,10 @@ public partial class Player
   public Player_Cloth player_cloth { get; set; }
   
   public List<Vehicle_Key> vehicle_keys { get; set; }
+  
+  [ForeignKey("faction_id")]
+  public int faction_id { get; set; }
+  public Faction faction { get; set; }
 
   [NotMapped]
   public Dictionary<string, int> boundStorages
