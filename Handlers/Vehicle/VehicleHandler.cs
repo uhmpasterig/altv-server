@@ -186,8 +186,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async void OnLoad()
   {
-    await using ServerContext serverContext = new ServerContext();
-    foreach (Models.Vehicle vehicle in serverContext.Vehicles.Where(v => v.garage_id == -1))
+    foreach (Models.Vehicle vehicle in _serverContext.Vehicles.Include(v => v.vehicle_data).Where(v => v.garage_id == -1).ToList())
     {
       await CreateVehicleFromDb(vehicle);
     }
