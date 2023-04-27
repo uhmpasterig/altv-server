@@ -80,7 +80,7 @@ public class FactionWriter : IWritable
 
     writer.Name("perms");
     writer.BeginArray();
-    foreach (string perm in player.job_perm) writer.Value(perm);
+    foreach (string perm in player.player_society.FactionPerms) writer.Value(perm);
     writer.EndArray();
 
     #region Members 
@@ -105,6 +105,12 @@ public class FactionWriter : IWritable
       writer.Value(_player.isOnline);
       writer.Name("frakname");
       writer.Value(player.job.ToLower());
+      writer.Name("perms");
+      
+      writer.BeginArray();
+      foreach (string perm in _player.player_society.FactionPerms) writer.Value(perm);
+      writer.EndArray();
+
       writer.EndObject();
     }
     writer.EndArray();
