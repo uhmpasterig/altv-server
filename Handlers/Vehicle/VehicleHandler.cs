@@ -52,10 +52,13 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   {
     await using ServerContext serverContext = new ServerContext();
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
-
+    _logger.Log($"Creating vehicle {vehicle.id} from database");
     Vehicles.Add(vehicle.id, xvehicle);
     xvehicle.SetDataFromDatabase(vehicle);
-
+    _logger.Log($"Setting vehicle {vehicle.id} data from database");
+    _logger.Log($"Color {vehicle.vehicle_data.r} {vehicle.vehicle_data.g} {vehicle.vehicle_data.b}");
+    _logger.Log($"Color {vehicle.vehicle_data.sr} {vehicle.vehicle_data.sg} {vehicle.vehicle_data.sb}");
+    
     xvehicle.PrimaryColorRgb = new Rgba((byte)vehicle.vehicle_data.r, (byte)vehicle.vehicle_data.g, (byte)vehicle.vehicle_data.b, 255);
     xvehicle.SecondaryColorRgb = new Rgba((byte)vehicle.vehicle_data.sr, (byte)vehicle.vehicle_data.sg, (byte)vehicle.vehicle_data.sb, 255);
     xvehicle.NumberplateText = vehicle.vehicle_data.plate;
