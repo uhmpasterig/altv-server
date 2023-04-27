@@ -89,6 +89,6 @@ internal class WeaponCommands : IScript
   {
     xVehicle veh = await _vehicleHandler.GetVehicle(id);
     if (veh == null) return;
-    veh.storeInGarage(gid);
+    await _vehicleHandler.SaveDbVehicleInGarage(veh, gid);
   }
 }

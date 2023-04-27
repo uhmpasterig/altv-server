@@ -52,14 +52,14 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return await SetVehicleData(xvehicle, vehicle);
   }
 
-  public async Task SaveDbVehicleInGarage(xVehicle vehicle, Garage garage)
+  public async Task SaveDbVehicleInGarage(xVehicle vehicle, int garage_id)
   {
     try
     {
       VehicleHandler.Vehicles.Remove(vehicle.id);
       var dbVehicle = _serverContext.Vehicles.Find(vehicle.id);
       if (dbVehicle == null) return;
-      dbVehicle.garage_id = garage.id;
+      dbVehicle.garage_id = garage_id;
       _serverContext.SaveChanges();
 
       vehicle.Destroy();

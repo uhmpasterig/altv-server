@@ -18,4 +18,5 @@ public interface IVehicleHandler
   Task<List<xVehicle>> GetVehiclesInRadius(Position position, int range = 5);
   Task<xVehicle> GetVehicle(int id);
   Task<List<Models.Vehicle>> GetVehiclesInGarage(xPlayer player, int garageId);
+  Task SaveDbVehicleInGarage(xVehicle vehicle, int garage_id);
 }
