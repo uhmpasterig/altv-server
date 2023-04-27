@@ -23,17 +23,6 @@ public class Server : IServer
   private readonly IPlayerHandler _playerHandler;
   private readonly IStorageHandler _storageHandler;
 
-  public static List<string> _serverWeapons = new List<string>() {
-    "weapon_specialcarbine_mk2",
-    "weapon_specialcarbine",
-    "weapon_pistol",
-    "weapon_advancedrifle",
-    "weapon_bullpuprifle",
-    "weapon_bullpuprifle_mk2",
-    "weapon_bat",
-    "weapon_battleaxe"
-  };
-
   public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)
   {
     _serverContext = serverContext;

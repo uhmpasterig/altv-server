@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using AltV.Net.Data;
-namespace server.Util.Config;
+namespace server.Config;
 
 
 

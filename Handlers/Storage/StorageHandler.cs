@@ -3,7 +3,7 @@ using server.Core;
 using server.Models;
 using AltV.Net.Data;
 using Newtonsoft.Json;
-using server.Util.Config;
+using server.Config;
 using _logger = server.Logger.Logger;
 using server.Modules.Items;
 

@@ -7,7 +7,7 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Factions;
 using server.Modules.Inventory;
-using server.Util.Config;
+using server.Config;
 
 namespace server.Modules.Factions;
 
@@ -32,9 +32,9 @@ class FactionShopModule : ILoadEvent
     AltAsync.OnClient<xPlayer, string>("faction:shop:buyItem", async (player, itemName) =>
     {
       if (itemName == "weapon_pistol_mk2") {
-        BuyItem(player, itemName, FrakPrices.main_weapon);
+        BuyItem(player, itemName, Faction_Shop_Prices.main_weapon);
       } else if(itemName == player.player_society.Faction.weapon) {
-        BuyItem(player, itemName, FrakPrices.meele_weapon);
+        BuyItem(player, itemName, Faction_Shop_Prices.meele_weapon);
       } else {
         _logger.Log($"CHEATER!!!");
         return;
