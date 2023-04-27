@@ -23,7 +23,7 @@ class FactionModule : ILoadEvent, IPressedEEvent
 
   public async void OnLoad()
   {
-    factionList = _serverContext.Factions.Include(f => f.Ranks).ToList();
+    factionList = _serverContext.Factions.Include(f => f.Ranks).Include(f => f.Members).ThenInclude(m => m.Player).ToList();
     _logger.Startup($"x{factionList.Count} Fraktionen wurden geladen!");
   }
 
@@ -62,17 +62,12 @@ class FactionModule : ILoadEvent, IPressedEEvent
 
   public static Faction GetFaction(string name)
   {
-    return _serverContext.Factions.FirstOrDefault(f => f.name == name);
-  }
-
-  public static async Task<Faction> GetFactionAsync(string name)
-  {
-    return await _serverContext.Factions.FirstOrDefaultAsync(f => f.name == name);
+    return factionList.Where(f => f.name == name).FirstOrDefault();
   }
 
   public static async Task<Faction> GetFaction(int id)
   {
-    return await _serverContext.Factions.FirstOrDefaultAsync(f => f.id == id);
+    return factionList.Where(f => f.id == id).FirstOrDefault();
   }
 
   public static async Task<Faction> GetFaction(Faction faction)

@@ -74,7 +74,6 @@ public class FactionWriter : IWritable
       writer.Name("price");
       writer.Value(1000);
       writer.EndObject();
-
     writer.EndArray();
     #endregion
 
@@ -119,21 +118,30 @@ public class FactionWriter : IWritable
     writer.BeginArray();
     writer.EndArray();
 
+    int leaderPerms = 1;
+    int storagePerms = faction.Members.Where(x => x.FactionPerms.Contains("faction.storage")).Count();
+    int vehiclePerms = faction.Members.Where(x => x.FactionPerms.Contains("faction.vehicle")).Count();
+    int bankPerms = faction.Members.Where(x => x.FactionPerms.Contains("faction.bank")).Count(); 
+    int online = faction.Members.Where(x => x.Player.isOnline).Count();
+    int offline = faction.Members.Where(x => !x.Player.isOnline).Count();
+
     writer.Name("info");
     writer.BeginObject();
 
       writer.Name("member");
       writer.BeginObject();
         writer.Name("leader");
-        writer.Value(2);
+        writer.Value(leaderPerms);
         writer.Name("lager");
-        writer.Value(2);
+        writer.Value(storagePerms);
         writer.Name("bank");
-        writer.Value(2);
+        writer.Value(bankPerms);
+        writer.Name("vehicle");
+        writer.Value(vehiclePerms);
         writer.Name("online");
-        writer.Value(2);
+        writer.Value(online);
         writer.Name("insgesamt");
-        writer.Value(2);
+        writer.Value(online + offline);
       writer.EndObject();
 
       writer.Name("vehicle");
