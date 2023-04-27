@@ -43,15 +43,13 @@ class BackPacks : IItemsLoaded
 
   public static async void PackBackPack(xPlayer player)
   {
-    if (player.dataCache.TryGetValue("backpack", out var backpack))
-    {
-      if ((string)backpack != "small-backpack" && (string)backpack != "big-backpack") return;
-
-      player.dataCache.Remove("backpack");
-      xStorage storage = storageHandler.GetStorage(player.boundStorages["Inventar"]).Result;
-      storage.maxWeight = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == (string)backpack).FirstOrDefault().maxWeight;
-      storage.slots = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == (string)backpack).FirstOrDefault().slots;
-      await player.GiveItem((string)backpack, 1);
-    }
+    string backpack = (string)player.dataCache.Where(x => x.Key == "backpack").FirstOrDefault().Value;
+    if (backpack == null) return;
+    if (backpack != "small-backpack" && backpack != "big-backpack") return;
+    player.dataCache.Remove("backpack");
+    xStorage storage = storageHandler.GetStorage(player.boundStorages["Inventar"]).Result;
+    storage.maxWeight = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == backpack).FirstOrDefault().maxWeight;
+    storage.slots = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == backpack).FirstOrDefault().slots;
+    await player.GiveItem(backpack, 1);
   }
 }
