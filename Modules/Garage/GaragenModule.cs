@@ -49,8 +49,6 @@ class GaragenModule : ILoadEvent, IPressedEEvent
   public GaragenModule()
   {
   }
-
-  ServerContext _serverContext = new ServerContext();
   VehicleHandler _vehicleHandler = new VehicleHandler();
   public static List<Models.Garage> garageList = new List<Models.Garage>();
 
@@ -67,6 +65,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
   public async void OnLoad()
   {
+    ServerContext _serverContext = new ServerContext();
     garageList = _serverContext.Garages
       .Include(x => x.GarageSpawns)
       .ToList();
