@@ -23,7 +23,7 @@ public class FactionWriter : IWritable
     this.storage = _storage;
   }
 
-  public void OnWrite(IMValueWriter writer)
+  public async void OnWrite(IMValueWriter writer)
   {
     writer.BeginObject();
     writer.Name("name");
@@ -31,9 +31,9 @@ public class FactionWriter : IWritable
 
     
     writer.Name("rank");
-    writer.Value(FactionModule.GetRankName(faction, player.job_rank));
+    writer.Value(FactionModule.GetRankName(faction, player.player_society.faction_rank_id));
     writer.Name("rank_id");
-    writer.Value(player.job_rank);
+    writer.Value(player.player_society.faction_rank_id);
     writer.Name("uicolor");
     writer.Value(faction.uicolor);
     
@@ -86,7 +86,7 @@ public class FactionWriter : IWritable
     #region Members 
     writer.Name("members");
     writer.BeginArray();
-    foreach(Models.Player _player in FactionModule.GetFactionMembers(faction.name))
+    foreach(Models.Player _player in await FactionModule.GetFactionMembers(faction.name))
     {
       writer.BeginObject();
       writer.Name("id");
@@ -94,9 +94,9 @@ public class FactionWriter : IWritable
       writer.Name("name");
       writer.Value(_player.name);
       writer.Name("rank");
-      writer.Value(FactionModule.GetRankName(faction, _player.job_rank));
+      writer.Value(FactionModule.GetRankName(faction, _player.player_society.faction_rank_id));
       writer.Name("rank_id");
-      writer.Value(_player.job_rank);
+      writer.Value(_player.player_society.faction_rank_id);
       writer.Name("phone");
       writer.Value(_player.phone);
       writer.Name("lastseen");
@@ -104,8 +104,8 @@ public class FactionWriter : IWritable
       writer.Name("online");
       writer.Value(_player.isOnline);
       writer.Name("frakname");
-      writer.Value(player.job.ToLower());
-      
+      writer.Value(player.player_society.Faction.name);
+      Console.WriteLine("Perms: " + _player.player_society.FactionPerms.Count);
       writer.Name("perms");
       writer.BeginArray();
       foreach (string perm in _player.player_society.FactionPerms) writer.Value(perm);

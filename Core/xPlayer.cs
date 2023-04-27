@@ -45,9 +45,6 @@ public partial class xPlayer : AsyncPlayer
   public int bank { get; set; }
   public Dictionary<string, int> boundStorages { get; set; } = new Dictionary<string, int>();
   public List<xWeapon> weapons { get; set; } = new List<xWeapon>();
-  public string job { get; set; }
-  public int job_rank { get; set; }
-  public List<string> job_perm { get; set; } = new List<string>();
   public DateTime creationDate { get; set; }
   public DateTime lastLogin { get; set; }
   public Dictionary<string, object> dataCache { get; set; } = new Dictionary<string, object>();
@@ -74,9 +71,6 @@ public partial class xPlayer : AsyncPlayer
     this.bank = _player.bank;
     this.boundStorages = _player.boundStorages;
     this.weapons = _player.weapons;
-    this.job = _player.job;
-    this.job_rank = _player.job_rank;
-    this.job_perm = _player.job_perm;
     this.dataCache = _player.dataCache;
 
     this.creationDate = _player.creationDate;

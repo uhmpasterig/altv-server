@@ -18,8 +18,8 @@ class FactionStorageModule : ILoadEvent
   public async void OnLoad()
   {
     AltAsync.OnClient<xPlayer>("fraktion:lager:open", async (player) => {
-      if(!player.job_perm.Contains("faction.storage") && !player.job_perm.Contains("faction.leader")) return;
-      Faction faction = await FactionModule.GetFaction(player.job);
+      if(!player.player_society.FactionPerms.Contains("faction.storage") && !player.player_society.FactionPerms.Contains("faction.leader")) return;
+      Faction faction = await FactionModule.GetFaction(player.player_society.faction_id);
       InventoryModule.OpenStorage(player, faction.storage_id);
     });
   }

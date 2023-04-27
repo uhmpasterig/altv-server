@@ -30,10 +30,6 @@ public partial class Player
   public string _boundStorages { get; set; }
   public string _weapons { get; set; }
 
-  public string job { get; set; }
-  public int job_rank { get; set; }
-  public string _job_perm { get; set; }
-
   public string _pos { get; set; }
   public string _rot { get; set; }
 
@@ -52,53 +48,22 @@ public partial class Player
   [NotMapped]
   public Dictionary<string, int> boundStorages
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Dictionary<string, int>>(_boundStorages);
-    }
-    set
-    {
-      _boundStorages = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Dictionary<string, int>>(_boundStorages); }
+    set { _boundStorages = JsonConvert.SerializeObject(value); }
   }
 
   [NotMapped]
   public List<xWeapon> weapons
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<List<xWeapon>>(_weapons);
-    }
-    set
-    {
-      _weapons = JsonConvert.SerializeObject(value);
-    }
-  }
-
-  [NotMapped]
-  public List<string> job_perm
-  {
-    get
-    {
-      return JsonConvert.DeserializeObject<List<string>>(_job_perm);
-    }
-    set
-    {
-      _job_perm = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<List<xWeapon>>(_weapons); }
+    set { _weapons = JsonConvert.SerializeObject(value); }
   }
 
   [NotMapped]
   public Dictionary<string, object> dataCache
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Dictionary<string, object>>(_dataCache);
-    }
-    set
-    {
-      _dataCache = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Dictionary<string, object>>(_dataCache); }
+    set { _dataCache = JsonConvert.SerializeObject(value); }
   }
 
   [NotMapped]

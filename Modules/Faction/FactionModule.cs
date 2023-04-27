@@ -52,9 +52,10 @@ class FactionModule : ILoadEvent, IPressedEEvent
     return faction.Ranks.FirstOrDefault(r => r.rank_id == rank).label;
   }
 
-  public static List<Models.Player> GetFactionMembers(string frakname)
+  public static async Task<List<Models.Player>> GetFactionMembers(string frakname)
   {
-    List<Models.Player> players = _serverContext.Players.Include(p => p.player_society).ThenInclude(p => p.Faction).Where(p => p.job == frakname.ToLower()).ToList();
+    Faction faction = await GetFaction(frakname);
+    List<Models.Player> players = _serverContext.Players.Include(p => p.player_society).ThenInclude(p => p.Faction).Where(p => p.player_society.faction_id == faction.id).ToList();
     return players;
   }
 
