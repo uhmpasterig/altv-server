@@ -5,6 +5,8 @@ using server.Core;
 using server.Events;
 using server.Extensions;
 using _logger = server.Logger.Logger;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace server.Handlers.Event;
 
@@ -100,12 +102,16 @@ public class EventHandler : IEventHandler
 
   public async void OnKeyPressE(IPlayer iplayer)
   {
+    Stopwatch stopwatch = new Stopwatch();
+    stopwatch.Start();
     xPlayer player = (xPlayer)iplayer;
     if (!player.CanInteract()) return;
     foreach (var pressedEEvent in _pressedEEvents)
     {
       if (await pressedEEvent.OnKeyPressE((xPlayer)player)) return;
     }
+    stopwatch.Stop();
+    _logger.Debug($"OnKeyPressE took {stopwatch.ElapsedMilliseconds}ms | {stopwatch.ElapsedTicks} ticks");
   }
 
   public async void OnKeyPressI(IPlayer iplayer)
