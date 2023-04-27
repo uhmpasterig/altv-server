@@ -16,7 +16,7 @@ using server.Modules.Fraktionen;
 
 namespace server.Handlers.Player;
 
-public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconnectEvent
+public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconnectEvent, IOneMinuteUpdateEvent, ITwoMinuteUpdateEvent, IFiveSecondsUpdateEvent
 {
   public static List<xPlayer> Players = new List<xPlayer>();
   StorageHandler _storageHandler = new StorageHandler();
@@ -35,7 +35,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         .Include(p => p.player_society)
         .Include(p => p.player_society.Faction)
         .Include(p => p.player_society.Business)
-        
+
         .FirstOrDefaultAsync(p => p.name == player.Name);
 
       if (dbPlayer == null) return null;
@@ -44,9 +44,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       // STORAGES
       await _storageHandler.CreateAllStorages(player);
       if (player.boundStorages.Count != dbPlayer.boundStorages.Count) dbPlayer.boundStorages = player.boundStorages;
-      foreach (KeyValuePair<string, int> storage in player.boundStorages) 
+      foreach (KeyValuePair<string, int> storage in player.boundStorages)
         if (StorageConfig.StoragesDieJederHabenSollte.Where(s => s.name == storage.Key).FirstOrDefault().loadOnConnect) await _storageHandler.LoadStorage(storage.Value);
-      
+
       // SPAWN AND SET PED VALUES
       player.Model = (uint)Alt.Hash(player.ped);
       player.Spawn(dbPlayer.Position, 0);
@@ -157,6 +157,43 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     _logger.Info($"{player.Name} disconnected from the server!");
     await SavePlayerToDatabase((xPlayer)player, true);
     Players.Remove((xPlayer)player);
+  }
+
+  public async Task<int> CalculateSocialGrade(int playtime)
+  {
+    int hours = playtime / 60;
+    int grade = 0;
+    // from grade 1 to 2 it takes one hour from 2 - 3 it takes 2 hours and so on the max time per grade is 100 hours
+
+    return grade;
+  }
+
+  public async void OnFiveSecondsUpdate()
+  {
+    Players.ForEach(async p =>
+    {
+      if (p.Dimension == (int)DIMENSIONEN.WORLD)
+      {
+        p.Position = p.Position;
+        p.Rotation = p.Rotation;
+      }
+    });
+  }
+
+  public async void OnOneMinuteUpdate()
+  {
+    ServerContext __serverContext = new ServerContext();
+    __serverContext.Players.Where(p => p.isOnline).ToList().ForEach(async p =>
+    {
+      p.player_society.playtime += 1;
+      p.player_society.grade = await CalculateSocialGrade(p.player_society.playtime);
+    });
+    __serverContext.SaveChanges();
+  }
+
+  public async void OnTwoMinuteUpdate()
+  {
+    await _serverContext.SaveChangesAsync();
   }
 
   #endregion Player Events

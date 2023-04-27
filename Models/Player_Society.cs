@@ -28,4 +28,23 @@ public partial class Player_Society
   [ForeignKey("business_id")]
   public int business_id { get; set; }
   public Business Business { get; set; }
+
+  public string faction_perms { get; set; }
+  public string business_perms { get; set; }
+
+  public int grade { get; set; }
+  public int playtime { get; set; }
+
+  [NotMapped]
+  public List<string> FactionPerms
+  {
+    get { return JsonConvert.DeserializeObject<List<string>>(faction_perms); }
+    set { faction_perms = JsonConvert.SerializeObject(value); }
+  }
+  [NotMapped]
+  public List<string> BusinessPerms
+  {
+    get { return JsonConvert.DeserializeObject<List<string>>(business_perms); }
+    set { business_perms = JsonConvert.SerializeObject(value); }
+  }
 }

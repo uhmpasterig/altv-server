@@ -20,6 +20,8 @@ public class EventHandler : IEventHandler
 
   // Timer event
   private readonly IEnumerable<IFiveSecondsUpdateEvent> _fiveSecondsUpdateEvents;
+  private readonly IEnumerable<IOneMinuteUpdateEvent> _oneMinuteUpdateEvents;
+  private readonly IEnumerable<ITwoMinuteUpdateEvent> _twoMinuteUpdateEvents;
 
   // keypress event
   private readonly IEnumerable<IPressedEEvent> _pressedEEvents;
@@ -34,7 +36,10 @@ public class EventHandler : IEventHandler
                       IEnumerable<IPlayerDeadEvent> playerDeadEvents,
                       IEnumerable<ILoadEvent> loadEvents,
                       IEnumerable<IItemsLoaded> itemsLoadedEvent,
+                      
                       IEnumerable<IFiveSecondsUpdateEvent> fiveSecondsUpdateEvents,
+                      IEnumerable<IOneMinuteUpdateEvent> oneMinuteUpdateEvents,
+                      IEnumerable<ITwoMinuteUpdateEvent> twoMinuteUpdateEvents,
 
                       IEnumerable<IPressedEEvent> pressedEEvents,
                       IEnumerable<IPressedIEvent> pressedIEvents
@@ -49,7 +54,10 @@ public class EventHandler : IEventHandler
     _playerDeadEvents = playerDeadEvents;
     _loadEvents = loadEvents;
     _itemsLoadedEvent = itemsLoadedEvent;
+
     _fiveSecondsUpdateEvents = fiveSecondsUpdateEvents;
+    _oneMinuteUpdateEvents = oneMinuteUpdateEvents;
+    _twoMinuteUpdateEvents = twoMinuteUpdateEvents;
 
     _pressedEEvents = pressedEEvents;
     _pressedIEvents = pressedIEvents;
@@ -75,7 +83,13 @@ public class EventHandler : IEventHandler
 
     _timerHandler.AddInterval(1000 * 5, async (s, e) =>
       _fiveSecondsUpdateEvents?.ForEach(fiveSecondsUpdateEvent => fiveSecondsUpdateEvent.OnFiveSecondsUpdate()));
+    
+    _timerHandler.AddInterval(1000 * 60, async (s, e) =>
+      _oneMinuteUpdateEvents?.ForEach(oneMinuteUpdateEvent => oneMinuteUpdateEvent.OnOneMinuteUpdate()));
 
+    _timerHandler.AddInterval(1000 * 60 * 2, async (s, e) =>
+      _twoMinuteUpdateEvents?.ForEach(twoMinuteUpdateEvent => twoMinuteUpdateEvent.OnTwoMinuteUpdate()));
+      
     return Task.CompletedTask;
   }
 
