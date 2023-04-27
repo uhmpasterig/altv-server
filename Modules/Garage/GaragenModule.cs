@@ -121,7 +121,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
         data[player.id]["important"] = important;
       };
       vehicle.vehicle_data.UIData = data;
-
+      vehicle.model = "huso";
       _serverContext.Vehicles.Update(vehicle);
     });
   }
