@@ -23,7 +23,7 @@ public class FactionWriter : IWritable
     this.storage = _storage;
   }
 
-  public async void OnWrite(IMValueWriter writer)
+  public void OnWrite(IMValueWriter writer)
   {
     writer.BeginObject();
     writer.Name("name");
@@ -86,8 +86,7 @@ public class FactionWriter : IWritable
     #region Members 
     writer.Name("members");
     writer.BeginArray();
-    foreach(Models.Player _player in await FactionModule.GetFactionMembers(faction.name))
-    {
+    foreach(Models.Player _player in FactionModule.GetFactionMembers(faction.name)) {
       writer.BeginObject();
       writer.Name("id");
       writer.Value(_player.id);

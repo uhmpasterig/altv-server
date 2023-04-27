@@ -52,14 +52,20 @@ class FactionModule : ILoadEvent, IPressedEEvent
     return faction.Ranks.FirstOrDefault(r => r.rank_id == rank).label;
   }
 
-  public static async Task<List<Models.Player>> GetFactionMembers(string frakname)
+  public static List<Models.Player> GetFactionMembers(string frakname)
   {
-    Faction faction = await GetFaction(frakname);
+    Faction faction = GetFaction(frakname);
+
     List<Models.Player> players = _serverContext.Players.Include(p => p.player_society).ThenInclude(p => p.Faction).Where(p => p.player_society.faction_id == faction.id).ToList();
     return players;
   }
 
-  public static async Task<Faction> GetFaction(string name)
+  public static Faction GetFaction(string name)
+  {
+    return _serverContext.Factions.FirstOrDefault(f => f.name == name);
+  }
+
+  public static async Task<Faction> GetFactionAsync(string name)
   {
     return await _serverContext.Factions.FirstOrDefaultAsync(f => f.name == name);
   }

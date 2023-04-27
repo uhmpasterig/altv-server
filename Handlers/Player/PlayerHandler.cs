@@ -18,7 +18,7 @@ namespace server.Handlers.Player;
 
 public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconnectEvent, IOneMinuteUpdateEvent, ITwoMinuteUpdateEvent, IFiveSecondsUpdateEvent
 {
-  public static List<xPlayer> Players = new List<xPlayer>();
+  public static Dictionary<int, xPlayer> Players = new Dictionary<int, xPlayer>();
   StorageHandler _storageHandler = new StorageHandler();
   ServerContext _serverContext = new ServerContext();
 
@@ -111,7 +111,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async Task SaveAllPlayers()
   {
-    foreach (xPlayer player in Players)
+    foreach (xPlayer player in Players.Values)
     {
       await SavePlayerToDatabase(player);
     }
@@ -120,8 +120,9 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async Task<xPlayer?> GetPlayer(int id)
   {
-    xPlayer? player = Players.Find(p => p.id == id);
-    return player!;
+    if(!Players.ContainsKey(id)) return null;
+    xPlayer? player = Players[id];
+    return player;
   }
 
   #endregion Player Functions
@@ -145,7 +146,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     }
 
     _logger.Info($"{xplayer.Name} connected to the server!");
-    Players.Add(xplayer);
+    Players.Add(xplayer.id, xplayer);
 
     stopwatch.Stop();
     _logger.Info($"Player {xplayer.Name} loaded in {stopwatch.ElapsedMilliseconds}ms (~{stopwatch.ElapsedTicks} Ticks)!");
@@ -153,10 +154,11 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async void OnPlayerDisconnect(IPlayer player, string reason)
   {
-    if (Players.Find(p => p.id == ((xPlayer)player).id) == null) return;
+    xPlayer xplayer = (xPlayer)player;
+    if(!Players.ContainsKey(xplayer.id)) return;
     _logger.Info($"{player.Name} disconnected from the server!");
     await SavePlayerToDatabase((xPlayer)player, true);
-    Players.Remove((xPlayer)player);
+    Players.Remove(xplayer.id);
   }
 
   public async Task<int> CalculateSocialGrade(int playtime)

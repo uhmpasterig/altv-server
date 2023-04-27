@@ -44,6 +44,7 @@ class FactionManageModule : ILoadEvent
       _logger.Info($"SetMember: {targetId} {perms} {rank}");
 
       xPlayer? target = await playerHandler.GetPlayer(targetId);  
+
       if(target != null) {
         _logger.Info("Member is online");
         target.player_society.FactionPerms = perms;
