@@ -52,21 +52,18 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     if (player.IsInVehicle)
     {
       xVehicle vehicle = (xVehicle)player.Vehicle;
-      if (vehicle.storage_id_glovebox == 0) goto load;
-      xStorage gloveStorage = await _storageHandler.GetStorage(vehicle.storage_id_glovebox);
-      openInventorys.Add(gloveStorage.id);
-      uiStorages.Add(gloveStorage);
+      if (vehicle.storage_glovebox == null) goto load;
+      openInventorys.Add(vehicle.storage_glovebox.id);
+      uiStorages.Add(vehicle.storage_glovebox);
       goto load;
     }
-    xVehicle closestVehicle = await vehicleHandler.GetClosestVehicle(player.Position);
-    if (closestVehicle != null && (closestVehicle.storage_id_trunk != 0))
-    {
-      if (closestVehicle.storage_id_trunk == 0) goto load;
-      if (closestVehicle.canTrunkBeOpened() == false) goto load;
 
-      xStorage trunkStorage = await _storageHandler.GetStorage(closestVehicle.storage_id_trunk);
-      openInventorys.Add(trunkStorage.id);
-      uiStorages.Add(trunkStorage);
+    xVehicle closestVehicle = await vehicleHandler.GetClosestVehicle(player.Position);
+    if (closestVehicle != null)
+    {
+      if (closestVehicle.canTrunkBeOpened() == false) goto load;
+      openInventorys.Add(closestVehicle.storage_trunk.id);
+      uiStorages.Add(closestVehicle.storage_trunk);
       goto load;
     }
 

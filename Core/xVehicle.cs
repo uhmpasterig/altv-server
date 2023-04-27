@@ -92,7 +92,13 @@ public class xVehicle : AsyncVehicle
 
   public bool canTrunkBeOpened()
   {
-    return isAccesable && !Locked && !Engine && Trunk;
+    bool canUse = true;
+    if (this.storage_trunk == null)
+    {
+      canUse = false;
+    }
+    canUse = isAccesable && !Locked && !Engine && Trunk;
+    return canUse;
   }
 
   public bool hasControl(xPlayer player)
