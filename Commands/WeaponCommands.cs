@@ -80,7 +80,7 @@ internal class WeaponCommands : IScript
   {
     foreach (xVehicle veh in await _vehicleHandler.GetVehiclesInRadius(player.Position, 2))
     {
-      player.SendChatMessage($"{veh.id} - {veh.model} - {veh.NumberplateText}");
+      player.SendMessage($"{veh.id} - {veh.model} - {veh.NumberplateText}", NOTIFYS.INFO);
     }
   }
 
