@@ -10,7 +10,6 @@ namespace server.Models;
 public partial class Garage
 {
   public Garage() {
-    GarageSpawn = new List<GarageSpawn>();
   }
 
   public int id { get; set; }
@@ -19,6 +18,7 @@ public partial class Garage
   public string _pos { get; set; }
   public float heading { get; set; }
   public string ped { get; set; }
+  public List<GarageSpawn> GarageSpawns { get; set; }
 
   [NotMapped]
   public Position Position {
@@ -30,6 +30,4 @@ public partial class Garage
     }
   }
 
-  [NotMapped]
-  public List<GarageSpawn> GarageSpawn { get; set; }
 }

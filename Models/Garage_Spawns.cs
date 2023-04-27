@@ -13,9 +13,12 @@ public partial class GarageSpawn
   }
 
   public int id { get; set; }
-  public int garage_id { get; set; }
   public string _pos { get; set; }
   public string _rot { get; set; }
+
+  [ForeignKey("garage_id")]
+  public int garage_id { get; set; }
+  public Garage Garage { get; set; }
 
   [NotMapped]
   public Position Position {

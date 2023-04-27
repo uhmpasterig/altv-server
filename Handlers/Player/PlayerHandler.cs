@@ -40,20 +40,10 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
       // STORAGES
       await _storageHandler.CreateAllStorages(player);
-
-      if (player.boundStorages.Count != dbPlayer.boundStorages.Count)
-      {
-        dbPlayer.boundStorages = player.boundStorages;
-      }
-
-      foreach (KeyValuePair<string, int> storage in player.boundStorages)
-      {
-        if (StorageConfig.StoragesDieJederHabenSollte.Where(s => s.name == storage.Key).FirstOrDefault().loadOnConnect)
-        {
-          _logger.Debug($"Lade Storage {storage.Key} für {player.Name}!");
-          await _storageHandler.LoadStorage(storage.Value);
-        }
-      }
+      if (player.boundStorages.Count != dbPlayer.boundStorages.Count) dbPlayer.boundStorages = player.boundStorages;
+      foreach (KeyValuePair<string, int> storage in player.boundStorages) 
+        if (StorageConfig.StoragesDieJederHabenSollte.Where(s => s.name == storage.Key).FirstOrDefault().loadOnConnect) await _storageHandler.LoadStorage(storage.Value);
+      
       // SPAWN AND SET PED VALUES
       player.Model = (uint)Alt.Hash(player.ped);
       player.Spawn(dbPlayer.Position, 0);
