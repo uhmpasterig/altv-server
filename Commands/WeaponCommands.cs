@@ -95,6 +95,6 @@ internal class WeaponCommands : IScript
   [Command("packbackpack")]
   public static async void PackBackpack(xPlayer player)
   {
-    BackPacks.PackBackPack(player);
+    await BackPacks.PackBackPack(player);
   }
 }

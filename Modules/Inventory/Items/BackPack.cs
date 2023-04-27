@@ -26,6 +26,10 @@ class BackPacks : IItemsLoaded
 
     Items.RegisterUsableItem("big-backpack", async (xPlayer player) =>
     {
+      if(player.dataCache.ContainsKey("backpack")) {
+        await PackBackPack(player);
+      };
+
       xStorage storage = await storageHandler.GetStorage(player.boundStorages["Inventar"]);
       storage.maxWeight = backpackWeight["big-backpack"];
       storage.slots = backpackSlots["big-backpack"];
@@ -34,6 +38,10 @@ class BackPacks : IItemsLoaded
 
     Items.RegisterUsableItem("small-backpack", async (xPlayer player) =>
     {
+      if(player.dataCache.ContainsKey("backpack")) {
+        await PackBackPack(player);
+      };
+      
       xStorage storage = await storageHandler.GetStorage(player.boundStorages["Inventar"]);
       storage.maxWeight = backpackWeight["small-backpack"];
       storage.slots = backpackSlots["small-backpack"];
@@ -42,17 +50,16 @@ class BackPacks : IItemsLoaded
 
   }
 
-  public static async void PackBackPack(xPlayer player)
+  public static async Task PackBackPack(xPlayer player)
   {
     _logger.Log(JsonConvert.SerializeObject(player.dataCache));
     string backpack = (string)player.dataCache.Where(x => x.Key == "backpack").FirstOrDefault().Value;
     if (backpack == null) return;
     if (backpack != "small-backpack" && backpack != "big-backpack") return;
     player.dataCache.Remove("backpack");
-
     xStorage storage = await storageHandler.GetStorage(player.boundStorages["Inventar"]);
-    storage.maxWeight = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == backpack).FirstOrDefault().maxWeight;
-    storage.slots = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == backpack).FirstOrDefault().slots;
+    storage.maxWeight = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == "Inventar").FirstOrDefault().maxWeight;
+    storage.slots = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == "Inventar").FirstOrDefault().slots;
     await player.GiveItem(backpack, 1);
   }
 }
