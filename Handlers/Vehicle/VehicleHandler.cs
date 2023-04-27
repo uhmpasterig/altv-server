@@ -132,22 +132,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return await _serverContext.Vehicles.Include(v => v.vehicle_data).FirstAsync(v => v.id == id);
   }
 
-  public async Task TestFunc(int id)
-  {
-    Models.Vehicle? dbveh = await _serverContext.Vehicles.FindAsync(id);
-    if (dbveh == null) return;
-    dbveh.model = "SAIMECUF";
-    await _serverContext.SaveChangesAsync();
-  }
-
-  public async Task TestFunc2(int id)
-  {
-    Models.Vehicle? dbveh = await this.GetDbVehicle(id);
-    if (dbveh == null) return;
-    dbveh.model = "SAIMECUF2525";
-    await _serverContext.SaveChangesAsync();
-  }
-
   public async Task<xVehicle> GetVehicle(int id)
   {
     return Vehicles.Values.FirstOrDefault(v => v.id == id)!;

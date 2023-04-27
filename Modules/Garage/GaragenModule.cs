@@ -56,7 +56,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
   public static Dictionary<string, int> GetGarageBlipByType(int type)
   {
-    
+
     string typeName = Enum.GetName(typeof(GARAGE_TYPES), type)!;
 
     Dictionary<string, int> dict = new Dictionary<string, int>();
@@ -104,8 +104,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
     AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
     {
-      /* Models.Vehicle vehicle = await _vehicleHandler.GetDbVehicle(vehid);
-      
+      Models.Vehicle? vehicle = await _vehicleHandler.GetDbVehicle(vehid);
+      if (vehicle == null) return;
+      vehicle.model = "huso";
+
       Dictionary<int, Dictionary<string, object>>? data = vehicle.vehicle_data.UIData;
 
       if (!data.ContainsKey(player.id))
@@ -115,18 +117,16 @@ class GaragenModule : ILoadEvent, IPressedEEvent
         data[player.id].Add("keyword", keyword);
         data[player.id].Add("important", important);
         _logger.Warning("add player to vehicle");
-      } else {
+      }
+      else
+      {
         data[player.id]["name"] = name;
         data[player.id]["keyword"] = keyword;
         data[player.id]["important"] = important;
       };
       vehicle.vehicle_data.UIData = data;
-      vehicle.model = "huso";
 
-      await _serverContext.SaveChangesAsync(); */
-
-      await _vehicleHandler.TestFunc(vehid);
-      await _vehicleHandler.TestFunc2(vehid);
+      await _serverContext.SaveChangesAsync();
     });
   }
 
