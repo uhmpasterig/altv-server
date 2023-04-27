@@ -25,6 +25,9 @@ class FactionManageModule : ILoadEvent
     ServerContext _serverContext = new ServerContext();
     Models.Player? offlinePlayer = await _serverContext.Players.Include(p => p.player_society).FirstOrDefaultAsync(p => p.id == target);
     if (offlinePlayer == null) return;
+    if(offlinePlayer.player_society.faction_rank_id == 12) {
+      perms.Add("faction.leader");
+    };
     offlinePlayer.player_society.FactionPerms = perms;
 
     if((offlinePlayer.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
@@ -47,6 +50,10 @@ class FactionManageModule : ILoadEvent
 
       if(target != null) {
         _logger.Info("Member is online");
+        if(target.player_society.faction_rank_id == 12) {
+          perms.Add("faction.leader");
+        };
+
         target.player_society.FactionPerms = perms;
         if((target.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
           target.player_society.faction_rank_id = rank;
