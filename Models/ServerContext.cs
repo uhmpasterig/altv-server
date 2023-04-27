@@ -72,6 +72,18 @@ public partial class ServerContext : DbContext
         .HasPrincipalKey<Vehicle>(d => d.id);
     });
 
+    modelBuilder.Entity<Vehicle_Key>(entity =>
+    {
+      entity.HasOne(d => d.Player)
+        .WithMany(p => p.vehicle_keys)
+        .HasForeignKey(d => d.player_id)
+        .HasPrincipalKey(p => p.id);
+
+      entity.HasOne(d => d.Vehicle)
+        .WithMany(p => p.vehicle_keys)
+        .HasForeignKey(d => d.vehicle_id)
+        .HasPrincipalKey(p => p.id);
+    });
 
     OnModelCreatingPartial(modelBuilder);
   }

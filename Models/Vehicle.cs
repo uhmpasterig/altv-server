@@ -30,6 +30,7 @@ public partial class Vehicle
   public DateTime creationDate { get; set; }
 
   public Vehicle_Data vehicle_data { get; set; }
+  public List<Vehicle_Key> vehicle_keys { get; set; }
 
   [NotMapped]
   public Position Position
