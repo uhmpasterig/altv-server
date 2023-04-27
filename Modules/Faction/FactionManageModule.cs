@@ -30,6 +30,8 @@ class FactionManageModule : ILoadEvent
     if((offlinePlayer.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
       offlinePlayer.player_society.faction_rank_id = rank;
     };
+
+    _logger.Info("SetMember: " + offlinePlayer.player_society.FactionPerms + " " + offlinePlayer.player_society.faction_rank_id);
     await _serverContext.SaveChangesAsync();
   }
 
@@ -39,9 +41,11 @@ class FactionManageModule : ILoadEvent
       if(!(player.player_society.FactionPerms.Contains("faction.leader") || player.player_society.FactionPerms.Contains("faction.management"))) return;
       List<string> perms = JsonConvert.DeserializeObject<List<string>>(_perms)!;
       if(!player.player_society.FactionPerms.Contains("faction.leader") && perms.Contains("faction.management")) return;
+      _logger.Info($"SetMember: {targetId} {perms} {rank}");
 
       xPlayer? target = await playerHandler.GetPlayer(targetId);  
       if(target != null) {
+        _logger.Info("Member is online");
         target.player_society.FactionPerms = perms;
         if((target.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
           target.player_society.faction_rank_id = rank;
