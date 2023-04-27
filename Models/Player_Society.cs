@@ -25,10 +25,12 @@ public partial class Player_Society
   public int faction_id { get; set; }
   public Faction Faction { get; set; }
 
+
   [ForeignKey("business_id")]
   public int business_id { get; set; }
   public Business Business { get; set; }
 
+  public int faction_rank_id { get; set; }
   public string faction_perms { get; set; }
   public string business_perms { get; set; }
 
