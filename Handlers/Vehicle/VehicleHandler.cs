@@ -6,6 +6,7 @@ using server.Events;
 using server.Models;
 using _logger = server.Logger.Logger;
 using AltV.Net.Async;
+using Microsoft.EntityFrameworkCore;
 
 namespace server.Handlers.Vehicle;
 
@@ -24,6 +25,7 @@ public enum VEHICLE_TYPES {
 
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
+  ServerContext _serverContext = new ServerContext();
   public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
   public VehicleHandler() { }
@@ -129,8 +131,10 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async Task<List<Models.Vehicle>> GetVehiclesInGarage(int garage_id)
   {
-    await using ServerContext serverContext = new ServerContext();
-    List<Models.Vehicle> vehicles = serverContext.Vehicles.Where(v => v.garage_id == garage_id).ToList();
+    List<Models.Vehicle> vehicles = await _serverContext.Vehicles
+      .Include(v => v.vehicle_data)
+      .Where(v => v.garage_id == garage_id)
+      .ToListAsync();
     return vehicles;
   }
 

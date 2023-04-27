@@ -10,10 +10,8 @@ public partial class ServerContext : DbContext
   public ServerContext(DbContextOptions<ServerContext> options) : base(options) { }
 
   public virtual DbSet<Player> Players { get; set; }
-  /* public virtual DbSet<Player_Skin> Player_Skins { get; set; }
-  public virtual DbSet<Player_Cloth> Player_Cloths { get; set; } */
-
   public virtual DbSet<Vehicle> Vehicles { get; set; }
+
   public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Item> Items { get; set; }
 
