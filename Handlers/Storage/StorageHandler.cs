@@ -51,6 +51,12 @@ public class StorageHandler : IStorageHandler
     _logger.Debug($"Storage {storageId} unloaded from memory.");
   }
 
+  public async Task UnloadStorage(xStorage? storage)
+  {
+    if(storage != null)
+      await UnloadStorage(storage.id);
+  }
+
   public async Task<int> CreateStorage(string name, int slots, float maxWeight, Position? position, int ownerId = -1)
   {
     bool usePos = position == null ? false : true;

@@ -29,6 +29,9 @@ public class xVehicle : AsyncVehicle
   public int storage_id_trunk { get; set; } = 0;
   public int storage_id_glovebox { get; set; } = 0;
 
+  public xStorage? storage_trunk { get; set; }
+  public xStorage? storage_glovebox { get; set; }
+
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
 
@@ -96,25 +99,5 @@ public class xVehicle : AsyncVehicle
   {
     _logger.Log("Vehicle OwnerId: " + this.owner_id + " | PlayerId: " + player.id);
     return player.id == this.owner_id;
-  }
-
-  public void storeInGarage(int gid)
-  {
-    //Todo : Unload Inventory
-    try
-    {
-      VehicleHandler.Vehicles.Remove(this.id);
-      var svehicle = _serverContext.Vehicles.Find(this.id);
-      if (svehicle == null) return;
-      svehicle.id = gid;
-      _serverContext.SaveChanges();
-      this.Destroy();
-      _storageHandler.UnloadStorage(this.storage_id_trunk);
-      _storageHandler.UnloadStorage(this.storage_id_glovebox);
-    }
-    catch (Exception e)
-    {
-      _logger.Exception(e.Message);
-    }
   }
 }

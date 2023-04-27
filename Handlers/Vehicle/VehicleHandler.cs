@@ -7,16 +7,19 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
+using server.Handlers.Storage;
 
 namespace server.Handlers.Vehicle;
 
-public enum OWNER_TYPES : int {
+public enum OWNER_TYPES : int
+{
   PLAYER,
   FACTION,
   BUSINESS
 }
 
-public enum VEHICLE_TYPES : int {
+public enum VEHICLE_TYPES : int
+{
   PKW,
   LKW,
   PLANE,
@@ -26,6 +29,7 @@ public enum VEHICLE_TYPES : int {
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
   ServerContext _serverContext = new ServerContext();
+  IStorageHandler _storageHandler = new StorageHandler();
   public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
   public VehicleHandler() { }
@@ -48,21 +52,39 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return await SetVehicleData(xvehicle, vehicle);
   }
 
+  public async Task SaveDbVehicleInGarage(xVehicle vehicle, Garage garage)
+  {
+    try
+    {
+      VehicleHandler.Vehicles.Remove(vehicle.id);
+      var dbVehicle = _serverContext.Vehicles.Find(vehicle.id);
+      if (dbVehicle == null) return;
+      dbVehicle.garage_id = garage.id;
+      _serverContext.SaveChanges();
+
+      vehicle.Destroy();
+      await _storageHandler.UnloadStorage(vehicle.storage_trunk);
+      await _storageHandler.UnloadStorage(vehicle.storage_glovebox);
+    }
+    catch (Exception e)
+    {
+      _logger.Exception(e.Message);
+    }
+  }
+
   public async Task<xVehicle> SetVehicleData(xVehicle xvehicle, Models.Vehicle vehicle)
   {
     await using ServerContext serverContext = new ServerContext();
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
-    _logger.Log($"Creating vehicle {vehicle.id} from database");
     Vehicles.Add(vehicle.id, xvehicle);
     xvehicle.SetDataFromDatabase(vehicle);
-    _logger.Log($"Setting vehicle {vehicle.id} data from database");
-    _logger.Log($"Color {vehicle.vehicle_data.r} {vehicle.vehicle_data.g} {vehicle.vehicle_data.b}");
-    _logger.Log($"Color {vehicle.vehicle_data.sr} {vehicle.vehicle_data.sg} {vehicle.vehicle_data.sb}");
 
     xvehicle.PrimaryColorRgb = new Rgba((byte)vehicle.vehicle_data.r, (byte)vehicle.vehicle_data.g, (byte)vehicle.vehicle_data.b, 255);
     xvehicle.SecondaryColorRgb = new Rgba((byte)vehicle.vehicle_data.sr, (byte)vehicle.vehicle_data.sg, (byte)vehicle.vehicle_data.sb, 255);
     xvehicle.NumberplateText = vehicle.vehicle_data.plate;
-    
+
+    xvehicle.storage_glovebox = await _storageHandler.GetStorage(vehicle.storage_id_glovebox);
+    xvehicle.storage_trunk = await _storageHandler.GetStorage(vehicle.storage_id_trunk);
 
     if (vehicle != null)
     {
@@ -147,12 +169,12 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
     List<Models.Vehicle> vehicles = await _serverContext.Vehicles
       .Where(v => (v.garage_id == garage_id) &&
-      (v.owner_id == player.id && v.owner_type == (int)OWNER_TYPES.PLAYER) || 
+      (v.owner_id == player.id && v.owner_type == (int)OWNER_TYPES.PLAYER) ||
       (v.owner_id == player.player_society.Faction.id && v.owner_type == (int)OWNER_TYPES.FACTION))
       .Include(v => v.vehicle_data)
       .ToListAsync();
 
-    List<Vehicle_Key> keyOwnedVehicles = await _serverContext.Vehicle_Keys.Where(p => 
+    List<Vehicle_Key> keyOwnedVehicles = await _serverContext.Vehicle_Keys.Where(p =>
       (p.player_id == player.id) &&
       (p.Vehicle.garage_id == garage_id))
       .Include(v => v.Vehicle)
