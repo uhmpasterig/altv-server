@@ -16,5 +16,8 @@ public partial class Faction_rank
   public int id { get; set; }
   public string label { get; set; }
   public int rank_id { get; set; }
-  public int fraktions_id { get; set; }
+
+  [ForeignKey("faction_id")]
+  public int faction_id { get; set; }
+  public Faction Faction { get; set; }
 }

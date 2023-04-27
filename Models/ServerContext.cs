@@ -19,6 +19,8 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Faction_rank> Faction_ranks { get; set; }
   public virtual DbSet<Faction_ug> Faction_ugs { get; set; }
 
+  public virtual DbSet<Business> Businesses { get; set; }
+
   public virtual DbSet<Farming_Collector> Farming_Collectors { get; set; }
   public virtual DbSet<Farming_Processor> Farming_Processors { get; set; }
 
@@ -115,7 +117,7 @@ public partial class ServerContext : DbContext
 
     #endregion
 
-    #region Faction
+    #region Faction and Business
 
     modelBuilder.Entity<Faction>(entity =>
     {
@@ -123,7 +125,28 @@ public partial class ServerContext : DbContext
         .WithOne(d => d.Faction)
         .HasForeignKey(d => d.faction_id)
         .HasPrincipalKey(d => d.id);
+
+      entity.HasMany(d => d.Ranks)
+        .WithOne(d => d.Faction)
+        .HasForeignKey(d => d.faction_id)
+        .HasPrincipalKey(d => d.id);
     });
+
+    modelBuilder.Entity<Faction_rank>(entity =>
+    {
+      entity.HasOne(d => d.Faction)
+        .WithMany(p => p.Ranks)
+        .HasForeignKey(d => d.faction_id)
+        .HasPrincipalKey(p => p.id);
+    });
+
+    modelBuilder.Entity<Business>(entity => {
+      entity.HasMany(d => d.Members)
+        .WithOne(d => d.Business)
+        .HasForeignKey(d => d.business_id)
+        .HasPrincipalKey(d => d.id);
+    });
+
 
     #endregion
 

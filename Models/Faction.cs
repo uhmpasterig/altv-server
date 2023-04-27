@@ -34,8 +34,7 @@ public partial class Faction
 
   public List<Player_Society> Members { get; set; }
 
-  [NotMapped]
-  public Dictionary<int, Faction_rank> raenge { get; set; }
+  public List<Faction_rank> Ranks { get; set; }
 
   [NotMapped]
   public Faction_ug untergruppe { get; set; }
