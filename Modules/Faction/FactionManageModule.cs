@@ -27,7 +27,7 @@ class FactionManageModule : ILoadEvent
     if (offlinePlayer == null) return;
     offlinePlayer.player_society.FactionPerms = perms;
 
-    if((offlinePlayer.player_society.faction_rank_id < player.player_society.faction_rank_id) && (rank < player.player_society.faction_rank_id)) {
+    if((offlinePlayer.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
       offlinePlayer.player_society.faction_rank_id = rank;
     };
     await _serverContext.SaveChangesAsync();
@@ -43,7 +43,7 @@ class FactionManageModule : ILoadEvent
       xPlayer? target = await playerHandler.GetPlayer(targetId);  
       if(target != null) {
         target.player_society.FactionPerms = perms;
-        if((target.player_society.faction_rank_id < player.player_society.faction_rank_id) && (rank < player.player_society.faction_rank_id)) {
+        if((target.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
           target.player_society.faction_rank_id = rank;
         };
       };
