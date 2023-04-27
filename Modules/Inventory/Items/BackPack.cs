@@ -3,6 +3,7 @@ using server.Events;
 using _logger = server.Logger.Logger;
 using server.Handlers.Storage;
 using server.Config;
+using Newtonsoft.Json;
 
 namespace server.Modules.Items;
 
@@ -43,11 +44,13 @@ class BackPacks : IItemsLoaded
 
   public static async void PackBackPack(xPlayer player)
   {
+    _logger.Log(JsonConvert.SerializeObject(player.dataCache));
     string backpack = (string)player.dataCache.Where(x => x.Key == "backpack").FirstOrDefault().Value;
     if (backpack == null) return;
     if (backpack != "small-backpack" && backpack != "big-backpack") return;
     player.dataCache.Remove("backpack");
-    xStorage storage = storageHandler.GetStorage(player.boundStorages["Inventar"]).Result;
+
+    xStorage storage = await storageHandler.GetStorage(player.boundStorages["Inventar"]);
     storage.maxWeight = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == backpack).FirstOrDefault().maxWeight;
     storage.slots = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == backpack).FirstOrDefault().slots;
     await player.GiveItem(backpack, 1);
