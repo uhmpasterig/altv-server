@@ -186,11 +186,12 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
   public async void OnOneMinuteUpdate()
   {
     ServerContext __serverContext = new ServerContext();
-    __serverContext.Players.Where(p => p.isOnline).ToList().ForEach(async p =>
+    __serverContext.Players.Include(p => p.player_society).Where(p => p.isOnline).ToList().ForEach(async p =>
     {
       p.player_society.playtime += 1;
       p.player_society.grade = await CalculateSocialGrade(p.player_society.playtime);
     });
+    _logger.Info("Saved all players!");
     __serverContext.SaveChanges();
   }
 
