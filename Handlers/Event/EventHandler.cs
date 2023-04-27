@@ -102,6 +102,7 @@ public class EventHandler : IEventHandler
 
   public async void OnKeyPressE(IPlayer iplayer)
   {
+    _logger.Debug("OnKeyPressE");
     Stopwatch stopwatch = new Stopwatch();
     stopwatch.Start();
     xPlayer player = (xPlayer)iplayer;
