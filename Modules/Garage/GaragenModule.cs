@@ -106,6 +106,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       Models.Vehicle? vehicle = await _vehicleHandler.GetDbVehicle(vehid);
       if (vehicle == null) return;
+      _logger.Error($"{important}");
       Dictionary<int, Dictionary<string, object>>? data = vehicle.vehicle_data.UIData;
       if (!data.ContainsKey(player.id))
       {
