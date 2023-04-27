@@ -104,7 +104,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
     AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
     {
-      Models.Vehicle? vehicle = await _vehicleHandler.GetDbVehicle(vehid);
+      Models.Vehicle? vehicle = await _serverContext.Vehicles.Include(v => v.vehicle_data).FirstAsync(v => v.id == vehid);
       if (vehicle == null) return;
       vehicle.model = "huso";
 
