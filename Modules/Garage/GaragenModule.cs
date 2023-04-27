@@ -8,9 +8,7 @@ using AltV.Net.Async;
 using server.Handlers.Entities;
 using server.Handlers.Vehicle;
 using server.Util.Garage;
-using server.Modules.Blip;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace server.Modules.Garage;
 
@@ -94,7 +92,8 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     AltAsync.OnClient<xPlayer, int>("parkVehicle", async (player, vehicleId) =>
     {
       Models.Garage? garage = garageList.FirstOrDefault(x => x.Position.Distance(player.Position) < 30);
-      Models.Vehicle? vehicle = _serverContext.Vehicles.FirstOrDefault(x => x.id == vehicleId);
+
+      Models.Vehicle vehicle = await _vehicleHandler.GetDbVehicle(vehicleId);
       if (vehicle == null) return;
       Models.GarageSpawn spawn = await GetFreeSpawn(garage!);
       if (spawn == null) return;
@@ -103,7 +102,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
     AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
     {
-      Models.Vehicle? vehicle = _serverContext.Vehicles.FirstOrDefault(x => x.id == vehid);
+      Models.Vehicle? vehicle = await _vehicleHandler.GetDbVehicle(vehid);
       if (vehicle == null) return;
       Dictionary<int, Dictionary<string, object>>? data = vehicle.vehicle_data.UIData;
 
