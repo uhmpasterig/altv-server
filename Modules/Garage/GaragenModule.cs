@@ -126,7 +126,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     if (garage.GarageSpawn.Count == 0) return null;
     foreach (Models.GarageSpawn spawn in garage.GarageSpawn.ToList())
     {
-      if (_vehicleHandler.GetClosestVehicle(spawn.Position, 1) == null)
+      if (await _vehicleHandler.GetClosestVehicle(spawn.Position, 1) == null)
         return spawn;
     }
     return null;
