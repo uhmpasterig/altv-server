@@ -30,6 +30,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       Models.Player? dbPlayer = await _serverContext.Players
         .Include(p => p.player_skin)
         .Include(p => p.player_cloth)
+        .Include(p => p.vehicle_keys)
+        .Include(p => p.faction)
         .FirstOrDefaultAsync(p => p.name == player.Name);
 
       if (dbPlayer == null) return null;
