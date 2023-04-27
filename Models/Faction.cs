@@ -42,26 +42,14 @@ public partial class Faction
   [NotMapped]
   public Position Position
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Position>(_pos);
-    }
-    set
-    {
-      _pos = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Position>(_pos); }
+    set { _pos = JsonConvert.SerializeObject(value); }
   }
 
   [NotMapped]
   public Position StoragePosition
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Position>(_posLager);
-    }
-    set
-    {
-      _posLager = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Position>(_posLager); }
+    set { _posLager = JsonConvert.SerializeObject(value); }
   }
 }

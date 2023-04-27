@@ -47,7 +47,6 @@ class FactionModule : ILoadEvent, IPressedEEvent
     player.Emit("frontend:open", "faction", new FactionWriter(faction, player, storage));
   }
 
-
   public static string GetRankName(Faction faction, int rank)
   {
     return faction.Ranks.FirstOrDefault(r => r.rank_id == rank).label;

@@ -46,7 +46,7 @@ class SHOP_NAMES
   }
 }
 
-class GaragenModule : IItemsLoaded, IPressedEEvent
+class ShopModule : IItemsLoaded, IPressedEEvent
 {
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Shop> shopList = new List<Models.Shop>();
@@ -106,16 +106,10 @@ class GaragenModule : IItemsLoaded, IPressedEEvent
       Models.ShopItems? item = shopList.Find(x => x.Position.Distance(player.Position) < 10).items.Find(x => x.id == _item.id);
       if (item == null) continue;
       bool hasMoney = await player.HasMoney(item.price * _item.count);
-      if (!hasMoney)
-      {
-        continue;
-      };
+      if (!hasMoney) continue;
 
       bool hasSpace = await player.GiveItem(item.item, _item.count);
-      if (!hasSpace)
-      {
-        continue;
-      };
+      if (!hasSpace) continue;
       player.RemoveMoney(item.price * _item.count);
     }
     player.SaveMoney();

@@ -10,9 +10,9 @@ using server.Modules.Inventory;
 
 namespace server.Modules.Factions;
 
-class FrakLagerModule : ILoadEvent
+class FactionStorageModule : ILoadEvent
 {
-  public FrakLagerModule()
+  public FactionStorageModule()
   {
   }
   public async void OnLoad()
