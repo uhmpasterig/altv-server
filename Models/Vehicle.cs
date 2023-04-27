@@ -34,25 +34,13 @@ public partial class Vehicle
   [NotMapped]
   public Position Position
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Position>(_pos);
-    }
-    set
-    {
-      _pos = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Position>(_pos); }
+    set { _pos = JsonConvert.SerializeObject(value); }
   }
   [NotMapped]
   public Rotation Rotation
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Rotation>(_rot);
-    }
-    set
-    {
-      _rot = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Rotation>(_rot); }
+    set { _rot = JsonConvert.SerializeObject(value); }
   }
 }

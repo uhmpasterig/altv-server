@@ -35,7 +35,7 @@ internal class WeaponCommands : IScript
   {
     StorageHandler _storageHandler = new StorageHandler();
     
-    Modles.Faction frak = FraktionsModuleMain.GetFrak(player.job);
+    Modles.Faction frak = FactionModule.GetFaction(player.job);
     xStorage inventory = await _storageHandler.GetStorage(player.boundStorages["Inventar"]);
     if(frak == null) return;
     inventory.AddItem(frak.weapon, 1);

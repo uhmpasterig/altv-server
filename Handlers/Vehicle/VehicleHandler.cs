@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace server.Handlers.Vehicle;
 
-public enum OWNER_TYPES {
+public enum OWNER_TYPES : int {
   PLAYER,
   FACTION,
   BUSINESS
 }
 
-public enum VEHICLE_TYPES {
+public enum VEHICLE_TYPES : int {
   PKW,
   LKW,
   PLANE,
@@ -142,12 +142,23 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return Vehicles.Values.FirstOrDefault(v => v.id == id)!;
   }
 
-  public async Task<List<Models.Vehicle>> GetVehiclesInGarage(int garage_id)
+  public async Task<List<Models.Vehicle>> GetVehiclesInGarage(xPlayer player, int garage_id)
   {
     List<Models.Vehicle> vehicles = await _serverContext.Vehicles
+      .Where(v => (v.garage_id == garage_id) &&
+      ((v.owner_id == player.id && v.owner_type == (int)OWNER_TYPES.PLAYER) ||
+      (v.owner_id == player.faction.id && v.owner_type == (int)OWNER_TYPES.FACTION)))
       .Include(v => v.vehicle_data)
-      .Where(v => v.garage_id == garage_id)
       .ToListAsync();
+
+    List<Vehicle_Key> keyOwnedVehicles = await _serverContext.Vehicle_Keys.Where(p => 
+      (p.player_id == player.id) &&
+      (p.Vehicle.garage_id == garage_id))
+      .Include(v => v.Vehicle)
+      .ThenInclude(v => v.vehicle_data)
+      .ToListAsync();
+
+    vehicles.AddRange(keyOwnedVehicles.Select(v => v.Vehicle));
     return vehicles;
   }
 

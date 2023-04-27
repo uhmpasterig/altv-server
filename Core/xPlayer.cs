@@ -10,6 +10,7 @@ using AltV.Net.Data;
 using server.Modules.Clothing;
 using server.Handlers.Storage;
 using server.Models;
+using server.Handlers.Vehicle;
 
 namespace server.Core;
 
@@ -35,29 +36,25 @@ public enum NOTIFYS
 public partial class xPlayer : AsyncPlayer
 {
   ServerContext _serverContext = new ServerContext();
-
   private string[] _notifys = new string[] { "default", "error", "success", "warning" };
-
   public int id { get; set; }
   public string name { get; set; }
   public string ped { get; set; }
   public int cash { get; set; }
   public int bank { get; set; }
-
   public Dictionary<string, int> boundStorages { get; set; } = new Dictionary<string, int>();
   public List<xWeapon> weapons { get; set; } = new List<xWeapon>();
-
   public string job { get; set; }
   public int job_rank { get; set; }
   public List<string> job_perm { get; set; } = new List<string>();
-
   public DateTime creationDate { get; set; }
   public DateTime lastLogin { get; set; }
-
   public Dictionary<string, object> dataCache { get; set; } = new Dictionary<string, object>();
-
+  
   public Player_Skin player_skin { get; set; }
   public Player_Cloth player_cloth { get; set; }
+  public List<Vehicle_Key> vehicle_keys { get; set; }
+  public Faction faction { get; set; }
 
   public int isDead { get; set; }
 
@@ -87,9 +84,13 @@ public partial class xPlayer : AsyncPlayer
 
     this.player_skin = _player.player_skin;
     this.player_cloth = _player.player_cloth;
+    this.vehicle_keys = _player.vehicle_keys;
   }
 
-  #region Methods
+#region Methods
+  
+  #region UiStuff
+
   public void SendMessage(string message, NOTIFYS notifyType)
   {
     this.SendMessage("SERVER", message, 5000, notifyType);
@@ -130,7 +131,9 @@ public partial class xPlayer : AsyncPlayer
 
     return true;
   }
-
+  #endregion
+  
+  #region Inventory and Weapon Stuff
   public async Task<bool> GiveItem(string name, int count)
   {
     IStorageHandler _storageHandler = new StorageHandler();
@@ -183,7 +186,15 @@ public partial class xPlayer : AsyncPlayer
     this.GiveWeapon(Alt.Hash(name), ammo, hold);
     return Task.FromResult(true);
   }
+  public async Task<bool> HasItem(string name, int count = 1)
+  {
+    IStorageHandler _storageHandler = new StorageHandler();
+    xStorage inv = await _storageHandler.GetStorage(this.boundStorages["Inventar"]);
+    return inv.HasItem(name, count);
+  }
+  #endregion
 
+  #region Death and Revive
   public void SetDead(int isDead)
   {
     this.isDead = isDead;
@@ -204,13 +215,9 @@ public partial class xPlayer : AsyncPlayer
     this.Health = this.MaxHealth;
   }
 
-  public async Task<bool> HasItem(string name, int count = 1)
-  {
-    IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(this.boundStorages["Inventar"]);
-    return inv.HasItem(name, count);
-  }
+  #endregion
 
+  #region Money
   public async void GiveMoney(int amount)
   {
     this.cash += amount;
@@ -233,8 +240,9 @@ public partial class xPlayer : AsyncPlayer
     player.bank = this.bank;
     await _serverContext.SaveChangesAsync();
   }
-
-  // SKIN
+  #endregion
+  
+  #region Skin
   public async Task LoadSkin(Player_Skin? skin = null)
   {
     _logger.Info($"Loading skin for {this.name}");
@@ -282,6 +290,14 @@ public partial class xPlayer : AsyncPlayer
     }
     _logger.Info($"Loaded clothes for {this.name}");
   }
-
   #endregion
+    
+
+  public async Task<bool> CanControllVehicle(xVehicle vehicle)
+  {
+    if(vehicle.owner_id == this.id && vehicle.owner_type == (int)OWNER_TYPES.PLAYER) return true;
+
+    return false;
+  }
+#endregion
 }

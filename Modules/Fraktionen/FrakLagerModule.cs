@@ -19,7 +19,7 @@ class FrakLagerModule : ILoadEvent
   {
     AltAsync.OnClient<xPlayer>("fraktion:lager:open", async (player) => {
       if(!player.job_perm.Contains("faction.storage") && !player.job_perm.Contains("faction.leader")) return;
-      Faction fraktion = FraktionsModuleMain.GetFrak(player.job);
+      Faction fraktion = await FactionModule.GetFaction(player.job);
       InventoryModule.OpenStorage(player, fraktion.storage_id);
     });
   }

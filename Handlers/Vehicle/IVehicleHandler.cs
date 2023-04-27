@@ -17,5 +17,5 @@ public interface IVehicleHandler
   Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation);
   Task<List<xVehicle>> GetVehiclesInRadius(Position position, int range = 5);
   Task<xVehicle> GetVehicle(int id);
-  Task<List<Models.Vehicle>> GetVehiclesInGarage(int garageId);
+  Task<List<Models.Vehicle>> GetVehiclesInGarage(xPlayer player, int garageId);
 }

@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using server.Util.Player;
 using System.Diagnostics;
 using server.Util.Config;
+using server.Modules.Fraktionen;
 
 namespace server.Handlers.Player;
 
@@ -96,6 +97,10 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       await _storageHandler.UnloadStorage(playerInventory.Value);
     }
+
+    // FACTION AND BUSINESS
+    Faction faction = await FactionModule.GetFaction(player.job);
+    player.faction = faction;
 
     // PED VALUES
     if (player.Dimension == 0) dbPlayer.Position = player.Position;

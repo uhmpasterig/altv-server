@@ -32,17 +32,17 @@ public partial class Vehicle_Data
   public double fuel { get; set; }
   public double mileage { get; set; }
   public string _uidata { get; set; }
-
+  public string keys { get; set; }
+  [NotMapped]
+  public List<int> Keys
+  {
+    get { return JsonConvert.DeserializeObject<List<int>>(keys); }
+    set { keys = JsonConvert.SerializeObject(value); }
+  }
   [NotMapped]
   public Dictionary<int, Dictionary<string, object>> UIData
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Dictionary<int, Dictionary<string, object>>>(_uidata);
-    }
-    set
-    {
-      _uidata = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Dictionary<int, Dictionary<string, object>>>(_uidata); }
+    set { _uidata = JsonConvert.SerializeObject(value); }
   }
 }

@@ -10,9 +10,9 @@ using server.Modules.Inventory;
 
 namespace server.Modules.Fraktionen;
 
-class FraktionsModuleMain : ILoadEvent, IPressedEEvent
+class FactionModule : ILoadEvent, IPressedEEvent
 {
-  public FraktionsModuleMain()
+  public FactionModule()
   {
   }
 
@@ -74,13 +74,13 @@ class FraktionsModuleMain : ILoadEvent, IPressedEEvent
     return frak.raenge.FirstOrDefault(r => r.Key == rank)!.Value.label;
   }
 
-  public static List<Models.Player> GetFrakMembers(string frakname)
+  public static List<Models.Player> GetFactionMembers(string frakname)
   {
     List<Models.Player> players = _serverContext.Players.Where(p => p.job == frakname.ToLower()).ToList();
     return players;
   }
 
-  public static Faction GetFrak(string name)
+  public static async Task<Faction> GetFaction(string name)
   {
     if (frakList.Where(f => f.Key.ToLower() == name.ToLower()) != null)
     {

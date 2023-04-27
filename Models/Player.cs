@@ -27,8 +27,6 @@ public partial class Player
   public ushort max_armor { get; set; }
 
   public string phone { get; set; }
-
-
   public string _boundStorages { get; set; }
   public string _weapons { get; set; }
 
@@ -47,6 +45,8 @@ public partial class Player
 
   public Player_Skin player_skin { get; set; }
   public Player_Cloth player_cloth { get; set; }
+  
+  public List<Vehicle_Key> vehicle_keys { get; set; }
 
   [NotMapped]
   public Dictionary<string, int> boundStorages

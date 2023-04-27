@@ -145,7 +145,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       if (garage.Position.Distance(player.Position) < 2)
       {
         // List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 30);
-        List<Models.Vehicle> outVehs = await _vehicleHandler.GetVehiclesInGarage(garage.id);
+        List<Models.Vehicle> outVehs = await _vehicleHandler.GetVehiclesInGarage(player, garage.id);
 
         player.Emit("frontend:open", "garage", new garagenWriter(
           outVehs,

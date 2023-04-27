@@ -31,7 +31,7 @@ public class FraktionsWriter : IWritable
 
     
     writer.Name("rank");
-    writer.Value(FraktionsModuleMain.GetRankName(fraktion, player.job_rank));
+    writer.Value(FactionModule.GetRankName(fraktion, player.job_rank));
     writer.Name("rank_id");
     writer.Value(player.job_rank);
     writer.Name("uicolor");
@@ -86,7 +86,7 @@ public class FraktionsWriter : IWritable
     #region Members 
     writer.Name("members");
     writer.BeginArray();
-    foreach(Models.Player _player in FraktionsModuleMain.GetFrakMembers(fraktion.name))
+    foreach(Models.Player _player in FactionModule.GetFactionMembers(fraktion.name))
     {
       writer.BeginObject();
       writer.Name("id");
@@ -94,7 +94,7 @@ public class FraktionsWriter : IWritable
       writer.Name("name");
       writer.Value(_player.name);
       writer.Name("rank");
-      writer.Value(FraktionsModuleMain.GetRankName(fraktion, _player.job_rank));
+      writer.Value(FactionModule.GetRankName(fraktion, _player.job_rank));
       writer.Name("rank_id");
       writer.Value(_player.job_rank);
       writer.Name("phone");

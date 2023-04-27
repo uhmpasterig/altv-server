@@ -31,6 +31,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Bank> Banks { get; set; }
 
   public virtual DbSet<Cloth> Clothes { get; set; }
+  public virtual DbSet<Vehicle_Key> Vehicle_Keys { get; set; }
 
   public virtual DbSet<Prop> Props { get; set; }
 
@@ -56,6 +57,11 @@ public partial class ServerContext : DbContext
         .WithOne(d => d.Player)
         .HasForeignKey<Player_Cloth>(d => d.player_id)
         .HasPrincipalKey<Player>(d => d.id);
+
+      entity.HasMany(d => d.vehicle_keys)
+        .WithOne(d => d.Player)
+        .HasForeignKey(d => d.player_id)
+        .HasPrincipalKey(d => d.id);
     });
 
     modelBuilder.Entity<Vehicle>(entity =>
