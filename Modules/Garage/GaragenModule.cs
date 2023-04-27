@@ -111,13 +111,18 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       if (!data.ContainsKey(player.id))
       {
         data.Add(player.id, new Dictionary<string, object>());
+        data[player.id].Add("name", name);
+        data[player.id].Add("keyword", keyword);
+        data[player.id].Add("important", important);
         _logger.Warning("add player to vehicle");
+      } else {
+        data[player.id]["name"] = name;
+        data[player.id]["keyword"] = keyword;
+        data[player.id]["important"] = important;
       };
-      data[player.id].Add("name", name);
-      data[player.id].Add("keyword", keyword);
-      data[player.id].Add("important", important);
       vehicle.vehicle_data.UIData = data;
-      await _serverContext.SaveChangesAsync();
+
+      _serverContext.Vehicles.Update(vehicle);
     });
   }
 
