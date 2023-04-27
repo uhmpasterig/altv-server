@@ -11,7 +11,7 @@ namespace server.Handlers.Storage;
 
 public class StorageHandler : IStorageHandler
 {
-  ServerContext _serverContext = new ServerContext();
+  ServerContext _storageCtx = new ServerContext();
   public static readonly Dictionary<int, xStorage> Storages = new Dictionary<int, xStorage>();
 
   public StorageHandler()
@@ -32,7 +32,7 @@ public class StorageHandler : IStorageHandler
   public async Task<bool> LoadStorage(int storageId)
   {
 
-    var storage = await _serverContext.Storages.FindAsync(storageId);
+    var storage = await _storageCtx.Storages.FindAsync(storageId);
     if (storage == null)
       return false;
 
@@ -48,11 +48,11 @@ public class StorageHandler : IStorageHandler
     Storages.Remove(storageId);
     _logger.Debug($"Storage {storageId} unloaded from memory.");
 
-    Models.Storage? dbStorage = await _serverContext.Storages.FindAsync(storageId);
+    Models.Storage? dbStorage = await _storageCtx.Storages.FindAsync(storageId);
     if (dbStorage == null)
       return;
     dbStorage._items = JsonConvert.SerializeObject(storage.items);
-    await _serverContext.SaveChangesAsync();
+    await _storageCtx.SaveChangesAsync();
     _logger.Debug($"Storage {storageId} saved to database.");
   }
 
@@ -78,8 +78,8 @@ public class StorageHandler : IStorageHandler
       _items = JsonConvert.SerializeObject(new List<InventoryItem>())
     };
 
-    await _serverContext.Storages.AddAsync(storage);
-    await _serverContext.SaveChangesAsync();
+    await _storageCtx.Storages.AddAsync(storage);
+    await _storageCtx.SaveChangesAsync();
     return storage.id;
   }
 
@@ -87,14 +87,14 @@ public class StorageHandler : IStorageHandler
   {
     foreach (var storage in Storages.Values)
     {
-      var dbStorage = await _serverContext.Storages.FindAsync(storage.id);
+      var dbStorage = await _storageCtx.Storages.FindAsync(storage.id);
 
       dbStorage!.name = storage.name;
       dbStorage.slots = storage.slots;
       dbStorage.maxWeight = storage.maxWeight;
       dbStorage._items = JsonConvert.SerializeObject(storage.items);
     }
-    await _serverContext.SaveChangesAsync();
+    await _storageCtx.SaveChangesAsync();
   }
 
   public async Task CreateAllStorages(xPlayer player)
@@ -106,7 +106,7 @@ public class StorageHandler : IStorageHandler
 
       int storageId = await CreateStorage(storageData.name, storageData.slots, storageData.maxWeight, storageData.position, player.id);
       player.boundStorages.Add(storageData.name, storageId);
-      await _serverContext.SaveChangesAsync();
+      await _storageCtx.SaveChangesAsync();
     }
   }
 

@@ -28,8 +28,8 @@ public class StorageConfig
     {
       name = "Inventar",
       loadOnConnect = true,
-      slots = 20,
-      maxWeight = 200,
+      slots = 10,
+      maxWeight = 150,
       position = null
     },
     new StorageData()

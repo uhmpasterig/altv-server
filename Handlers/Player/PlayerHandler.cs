@@ -20,14 +20,15 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 {
   public static Dictionary<int, xPlayer> Players = new Dictionary<int, xPlayer>();
   StorageHandler _storageHandler = new StorageHandler();
-  ServerContext _serverContext = new ServerContext();
+  
+  public static ServerContext _playerCtx = new ServerContext();
 
   #region Player Functions
   public async Task<xPlayer?> LoadPlayerFromDatabase(xPlayer player)
   {
     try
     {
-      Models.Player? dbPlayer = await _serverContext.Players
+      Models.Player? dbPlayer = await _playerCtx.Players
         .Include(p => p.player_skin)
         .Include(p => p.player_cloth)
         .Include(p => p.vehicle_keys)
@@ -66,7 +67,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       dbPlayer.lastLogin = DateTime.Now;
       dbPlayer.isOnline = true;
 
-      await _serverContext.SaveChangesAsync();
+      await _playerCtx.SaveChangesAsync();
       return player;
     }
     catch (Exception e)
@@ -78,7 +79,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async Task SavePlayerToDatabase(xPlayer player, bool isDisconnect = false)
   {
-    Models.Player? dbPlayer = await _serverContext.Players.FindAsync(player.id);
+    Models.Player? dbPlayer = await _playerCtx.Players.FindAsync(player.id);
 
     // PLAYER INFO
     dbPlayer.isOnline = false;
@@ -106,7 +107,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       player.Kick("Du wurdest gekickt!");
     }
-    await _serverContext.SaveChangesAsync();
+    await _playerCtx.SaveChangesAsync();
   }
 
   public async Task SaveAllPlayers()
@@ -115,7 +116,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       await SavePlayerToDatabase(player);
     }
-    await _serverContext.SaveChangesAsync();
+    await _playerCtx.SaveChangesAsync();
   }
 
   public async Task<xPlayer?> GetPlayer(int id)
@@ -172,8 +173,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async void OnFiveSecondsUpdate()
   {
-    ServerContext __serverContext = new ServerContext();
-    __serverContext.Players.Where(p => p.isOnline).ToList().ForEach(async p =>
+    ServerContext __playerCtx = new ServerContext();
+    __playerCtx.Players.Where(p => p.isOnline).ToList().ForEach(async p =>
     {
       xPlayer? player = await GetPlayer(p.id);
       if (player.Dimension == (int)DIMENSIONEN.WORLD)
@@ -182,13 +183,13 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         p.Rotation = player.Rotation;
       }
     });
-    __serverContext.SaveChanges();
+    __playerCtx.SaveChanges();
   }
 
   public async void OnOneMinuteUpdate()
   {
-    ServerContext __serverContext = new ServerContext();
-    __serverContext.Players
+    ServerContext __playerCtx = new ServerContext();
+    __playerCtx.Players
       .Include(p => p.player_society)
       .Where(p => p.isOnline)
       .ToList()
@@ -198,12 +199,12 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       p.player_society.grade = await CalculateSocialGrade(p.player_society.playtime);
     });
     _logger.Info("Saved all players!");
-    __serverContext.SaveChanges();
+    __playerCtx.SaveChanges();
   }
 
   public async void OnTwoMinuteUpdate()
   {
-    await _serverContext.SaveChangesAsync();
+    await _playerCtx.SaveChangesAsync();
   }
 
   #endregion Player Events

@@ -28,7 +28,7 @@ public enum VEHICLE_TYPES : int
 
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
-  ServerContext _serverContext = new ServerContext();
+  public static ServerContext _vehicleCtx = new ServerContext();
   IStorageHandler _storageHandler = new StorageHandler();
   public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
@@ -57,10 +57,10 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     try
     {
       VehicleHandler.Vehicles.Remove(vehicle.id);
-      var dbVehicle = _serverContext.Vehicles.Find(vehicle.id);
+      var dbVehicle = _vehicleCtx.Vehicles.Find(vehicle.id);
       if (dbVehicle == null) return;
       dbVehicle.garage_id = garage_id;
-      _serverContext.SaveChanges();
+      _vehicleCtx.SaveChanges();
 
       vehicle.Destroy();
       await _storageHandler.UnloadStorage(vehicle.storage_trunk);
@@ -91,7 +91,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
       vehicle.Rotation = xvehicle.Rotation;
       vehicle.garage_id = -1;
     }
-    await _serverContext.SaveChangesAsync();
+    await _vehicleCtx.SaveChangesAsync();
 
     return xvehicle;
   }
@@ -150,12 +150,12 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async Task<Models.Vehicle> GetDbVehicle(int id)
   {
-    return await _serverContext.Vehicles.Include(v => v.vehicle_data).FirstAsync(v => v.id == id);
+    return await _vehicleCtx.Vehicles.Include(v => v.vehicle_data).FirstAsync(v => v.id == id);
   }
 
   public async Task SaveDbVehicle()
   {
-    await _serverContext.SaveChangesAsync();
+    await _vehicleCtx.SaveChangesAsync();
   }
 
   public async Task<xVehicle> GetVehicle(int id)
@@ -166,14 +166,14 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<List<Models.Vehicle>> GetVehiclesInGarage(xPlayer player, int garage_id)
   {
 
-    List<Models.Vehicle> vehicles = await _serverContext.Vehicles
+    List<Models.Vehicle> vehicles = await _vehicleCtx.Vehicles
       .Where(v => (v.garage_id == garage_id) &&
       ((v.owner_id == player.id && v.owner_type == (int)OWNER_TYPES.PLAYER) ||
       (v.owner_id == player.player_society.Faction.id && v.owner_type == (int)OWNER_TYPES.FACTION)))
       .Include(v => v.vehicle_data)
       .ToListAsync();
 
-    List<Vehicle_Key> keyOwnedVehicles = await _serverContext.Vehicle_Keys.Where(p =>
+    List<Vehicle_Key> keyOwnedVehicles = await _vehicleCtx.Vehicle_Keys.Where(p =>
       (p.player_id == player.id) &&
       (p.Vehicle.garage_id == garage_id))
       .Include(v => v.Vehicle)
@@ -186,7 +186,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async void OnLoad()
   {
-    foreach (Models.Vehicle vehicle in _serverContext.Vehicles.Include(v => v.vehicle_data).Where(v => v.garage_id == -1).ToList())
+    foreach (Models.Vehicle vehicle in _vehicleCtx.Vehicles.Include(v => v.vehicle_data).Where(v => v.garage_id == -1).ToList())
     {
       await CreateVehicleFromDb(vehicle);
     }
