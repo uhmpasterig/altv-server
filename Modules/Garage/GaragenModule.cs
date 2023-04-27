@@ -91,12 +91,9 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       Models.Garage? garage = garageList.FirstOrDefault(x => x.Position.Distance(player.Position) < 30);
       Models.Vehicle vehicle = await _vehicleHandler.GetDbVehicle(vehicleId);
-      _logger.Warning("Before Not null");
       if (vehicle == null) return;
-      _logger.Warning("Not null");
       Models.GarageSpawn spawn = await GetFreeSpawn(garage!);
       if (spawn == null) return;
-      _logger.Warning("spawn vehicle");
       await _vehicleHandler.CreateVehicleFromDb(vehicle, spawn.Position, spawn.Rotation);
     });
 

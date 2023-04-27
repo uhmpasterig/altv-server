@@ -74,7 +74,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async Task<xVehicle> SetVehicleData(xVehicle xvehicle, Models.Vehicle vehicle)
   {
-    await using ServerContext serverContext = new ServerContext();
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
     Vehicles.Add(vehicle.id, xvehicle);
     xvehicle.SetDataFromDatabase(vehicle);
@@ -92,7 +91,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
       vehicle.Rotation = xvehicle.Rotation;
       vehicle.garage_id = -1;
     }
-    await serverContext.SaveChangesAsync();
+    await _serverContext.SaveChangesAsync();
 
     return xvehicle;
   }
