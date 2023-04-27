@@ -127,7 +127,6 @@ public class FactionWriter : IWritable
 
     writer.Name("info");
     writer.BeginObject();
-
       writer.Name("member");
       writer.BeginObject();
         writer.Name("leader");

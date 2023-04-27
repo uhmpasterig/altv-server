@@ -11,21 +11,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace server.Modules.Factions;
 
-class FactionModule : ILoadEvent, IPressedEEvent
+class FactionModule : IPressedEEvent
 {
   public FactionModule()
   {
   }
 
-  public static List<Faction> factionList = new List<Faction>();
-  static ServerContext _serverContext = new ServerContext();
   static StorageHandler storageHandler = new StorageHandler();
-
-  public async void OnLoad()
-  {
-    factionList = _serverContext.Factions.Include(f => f.Ranks).Include(f => f.Members).ThenInclude(m => m.Player).ToList();
-    _logger.Startup($"x{factionList.Count} Fraktionen wurden geladen!");
-  }
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
@@ -54,24 +46,28 @@ class FactionModule : ILoadEvent, IPressedEEvent
 
   public static List<Models.Player> GetFactionMembers(string frakname)
   {
+    ServerContext serverContext = new ServerContext();
     Faction faction = GetFaction(frakname);
 
-    List<Models.Player> players = _serverContext.Players.Include(p => p.player_society).ThenInclude(p => p.Faction).Where(p => p.player_society.faction_id == faction.id).ToList();
+    List<Models.Player> players = serverContext.Players.Include(p => p.player_society).ThenInclude(p => p.Faction).Where(p => p.player_society.faction_id == faction.id).ToList();
     return players;
   }
 
   public static Faction GetFaction(string name)
   {
-    return factionList.Where(f => f.name == name).FirstOrDefault();
+    ServerContext _serverContext = new ServerContext();
+    return _serverContext.Factions.Include(f => f.Ranks).Include(f => f.Members).ThenInclude(m => m.Player).FirstOrDefault(f => f.name == name);
   }
 
   public static async Task<Faction> GetFaction(int id)
   {
-    return factionList.Where(f => f.id == id).FirstOrDefault();
+    ServerContext _serverContext = new ServerContext();
+    return await _serverContext.Factions.Include(f => f.Ranks).Include(f => f.Members).ThenInclude(m => m.Player).FirstOrDefaultAsync(f => f.id == id);
   }
 
   public static async Task<Faction> GetFaction(Faction faction)
   {
-    return factionList.Where(f => f.id == faction.id).FirstOrDefault();
+    ServerContext _serverContext = new ServerContext();
+    return await _serverContext.Factions.Include(f => f.Ranks).Include(f => f.Members).ThenInclude(m => m.Player).FirstOrDefaultAsync(f => f.id == faction.id);
   }
 }

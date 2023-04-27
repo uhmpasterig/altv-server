@@ -28,6 +28,7 @@ class FactionManageModule : ILoadEvent
     if(offlinePlayer.player_society.faction_rank_id == 12) {
       perms.Add("faction.leader");
     };
+
     offlinePlayer.player_society.FactionPerms = perms;
 
     if((offlinePlayer.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
@@ -41,15 +42,15 @@ class FactionManageModule : ILoadEvent
   public async void OnLoad()
   {
     AltAsync.OnClient<xPlayer, int, string, int>("faction:leader:setMember", async (player, targetId, _perms, rank) => {
+      _logger.Log($"{player.player_society.ToString()}");
       if(!(player.player_society.FactionPerms.Contains("faction.leader") || player.player_society.FactionPerms.Contains("faction.management"))) return;
       List<string> perms = JsonConvert.DeserializeObject<List<string>>(_perms)!;
       if(!player.player_society.FactionPerms.Contains("faction.leader") && perms.Contains("faction.management")) return;
-      _logger.Info($"SetMember: {targetId} {perms} {rank}");
+      _logger.Info($"SetMember: {targetId} {perms.ToString()} {rank}");
 
       xPlayer? target = await playerHandler.GetPlayer(targetId);  
 
       if(target != null) {
-        _logger.Info("Member is online");
         if(target.player_society.faction_rank_id == 12) {
           perms.Add("faction.leader");
         };
@@ -60,7 +61,6 @@ class FactionManageModule : ILoadEvent
         };
       };
       SetPlayerFactionDatabase(player, targetId, perms, rank);
-
     });
   }
 }
