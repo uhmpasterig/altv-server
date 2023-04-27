@@ -99,8 +99,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     }
 
     // FACTION AND BUSINESS
-    Faction faction = await FactionModule.GetFaction(player.job);
-    player.faction = faction;
+    player.faction = dbPlayer.faction;
 
     // PED VALUES
     if (player.Dimension == 0) dbPlayer.Position = player.Position;
