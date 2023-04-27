@@ -29,7 +29,7 @@ class FactionModule : ILoadEvent, IPressedEEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
-    if (!factionList.Contains(player.player_society.Faction)) return false;
+    if (factionList.Where(f => f.id == player.player_society.Faction.id) == null) return false;
 
     if (player.Position.Distance(player.player_society.Faction.Position) < 2) {
       _logger.Log($"Fraktions Menu von {player.Name} wurde geöffnet!");
