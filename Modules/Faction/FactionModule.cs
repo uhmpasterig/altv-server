@@ -29,33 +29,24 @@ class FactionModule : ILoadEvent, IPressedEEvent
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
-    if (factionList.Where(f => f.id == player.player_society.Faction.id) == null) return false;
+    Faction faction = await GetFaction(player.player_society.Faction);
+    if (faction == null) return false;
 
-    if (player.Position.Distance(player.player_society.Faction.Position) < 2) {
+    if (player.Position.Distance(player.player_society.Faction.Position) < 2)
+    {
       _logger.Log($"Fraktions Menu von {player.Name} wurde geöffnet!");
-      OpenFrakMenu(player); 
+      OpenFrakMenu(player, faction);
       return true;
     }
-
-    if (player.Position.Distance(player.player_society.Faction.StoragePosition) < 2){
-      _logger.Log($"Fraktions Tresor von {player.Name} wurde geöffnet!");
-      OpenFrakStorage(player);
-      return true;
-    }
-    
     return false;
   }
 
-  static async void OpenFrakMenu(xPlayer player)
+  static async void OpenFrakMenu(xPlayer player, Faction faction)
   {
-    xStorage storage = await storageHandler.GetStorage(player.player_society.Faction.storage_id);
-    player.Emit("frontend:open", "faction", new FactionWriter(player.player_society.Faction, player, storage));
+    xStorage storage = await storageHandler.GetStorage(faction.storage_id);
+    player.Emit("frontend:open", "faction", new FactionWriter(faction, player, storage));
   }
 
-  static async void OpenFrakStorage(xPlayer player)
-  {
-    InventoryModule.OpenStorage(player, player.boundStorages["Fraktions Tresor"]);
-  }
 
   public static string GetRankName(Faction faction, int rank)
   {
@@ -71,5 +62,15 @@ class FactionModule : ILoadEvent, IPressedEEvent
   public static async Task<Faction> GetFaction(string name)
   {
     return await _serverContext.Factions.FirstOrDefaultAsync(f => f.name == name);
+  }
+
+  public static async Task<Faction> GetFaction(int id)
+  {
+    return await _serverContext.Factions.FirstOrDefaultAsync(f => f.id == id);
+  }
+
+  public static async Task<Faction> GetFaction(Faction faction)
+  {
+    return factionList.Where(f => f.id == faction.id).FirstOrDefault();
   }
 }
