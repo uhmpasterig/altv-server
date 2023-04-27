@@ -117,10 +117,4 @@ public class xVehicle : AsyncVehicle
       _logger.Exception(e.Message);
     }
   }
-
-  // public new IxVehicle ToAsync(IAsyncContext _) => this;
 }
-
-/* public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
-{
-} */

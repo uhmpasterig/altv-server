@@ -284,9 +284,4 @@ public partial class xPlayer : AsyncPlayer
   }
 
   #endregion
-  // public new IxPlayer ToAsync(IAsyncContext _) => this;
 }
-
-/* public partial interface IxPlayer : IPlayer, IAsyncConvertible<IxPlayer>
-{
-} */
