@@ -52,6 +52,10 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         }
       }
 
+      // FACTION AND BUSINESS
+      player.faction = dbPlayer.faction;
+      _logger.Error($"Faction: {player.faction.name}");
+
       // SPAWN AND SET PED VALUES
       player.Model = (uint)Alt.Hash(player.ped);
       player.Spawn(dbPlayer.Position, 0);
@@ -97,10 +101,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     {
       await _storageHandler.UnloadStorage(playerInventory.Value);
     }
-
-    // FACTION AND BUSINESS
-    player.faction = dbPlayer.faction;
-    _logger.Error($"Faction: {player.faction.name}");
 
     // PED VALUES
     if (player.Dimension == 0) dbPlayer.Position = player.Position;
