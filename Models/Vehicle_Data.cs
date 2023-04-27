@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 namespace server.Models;
 
 [Table("vehicle_data")]
+[PrimaryKey("id")]
 public partial class Vehicle_Data
 {
   public Vehicle_Data()

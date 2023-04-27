@@ -99,10 +99,6 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       Models.GarageSpawn spawn = await GetFreeSpawn(garage!);
       if (spawn == null) return;
       await _vehicleHandler.CreateVehicleFromDb(vehicle, spawn.Position, spawn.Rotation);
-      // if (type == "einparken")
-      //   xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
-      //   if (vehicle == null) return;
-      //   vehicle.storeInGarage(garage.id);
     });
 
     AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
@@ -143,10 +139,10 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       if (garage.Position.Distance(player.Position) < 2)
       {
         // List<xVehicle> inVeh = await _vehicleHandler.GetVehiclesInRadius(garage.Position, 30);
-        List<Models.Vehicle> outVeh = await _vehicleHandler.GetVehiclesInGarage(garage.id);
+        List<Models.Vehicle> outVehs = await _vehicleHandler.GetVehiclesInGarage(garage.id);
 
         player.Emit("frontend:open", "garage", new garagenWriter(
-          outVeh,
+          outVehs,
           garage.name,
           player));
         return true;
