@@ -58,7 +58,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     _logger.Log($"Setting vehicle {vehicle.id} data from database");
     _logger.Log($"Color {vehicle.vehicle_data.r} {vehicle.vehicle_data.g} {vehicle.vehicle_data.b}");
     _logger.Log($"Color {vehicle.vehicle_data.sr} {vehicle.vehicle_data.sg} {vehicle.vehicle_data.sb}");
-    
+
     xvehicle.PrimaryColorRgb = new Rgba((byte)vehicle.vehicle_data.r, (byte)vehicle.vehicle_data.g, (byte)vehicle.vehicle_data.b, 255);
     xvehicle.SecondaryColorRgb = new Rgba((byte)vehicle.vehicle_data.sr, (byte)vehicle.vehicle_data.sg, (byte)vehicle.vehicle_data.sb, 255);
     xvehicle.NumberplateText = vehicle.vehicle_data.plate;
@@ -129,7 +129,23 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public async Task<Models.Vehicle> GetDbVehicle(int id)
   {
-    return await _serverContext.Vehicles.Include(v => v.vehicle_data).FirstOrDefaultAsync(v => v.id == id);
+    return await _serverContext.Vehicles.Include(v => v.vehicle_data).FirstAsync(v => v.id == id);
+  }
+
+  public async Task TestFunc(int id)
+  {
+    Models.Vehicle? dbveh = await _serverContext.Vehicles.FindAsync(id);
+    if (dbveh == null) return;
+    dbveh.model = "SAIMECUF";
+    await _serverContext.SaveChangesAsync();
+  }
+
+  public async Task TestFunc2(int id)
+  {
+    Models.Vehicle? dbveh = await this.GetDbVehicle(id);
+    if (dbveh == null) return;
+    dbveh.model = "SAIMECUF2525";
+    await _serverContext.SaveChangesAsync();
   }
 
   public async Task<xVehicle> GetVehicle(int id)

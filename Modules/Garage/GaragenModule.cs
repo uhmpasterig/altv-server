@@ -104,8 +104,8 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
     AltAsync.OnClient<xPlayer, int, string, string, bool>("garageOverwriteVehicle", async (player, vehid, name, keyword, important) =>
     {
-      Models.Vehicle? vehicle = await _vehicleHandler.GetDbVehicle(vehid);
-      if (vehicle == null) return;
+      /* Models.Vehicle vehicle = await _vehicleHandler.GetDbVehicle(vehid);
+      
       Dictionary<int, Dictionary<string, object>>? data = vehicle.vehicle_data.UIData;
 
       if (!data.ContainsKey(player.id))
@@ -122,7 +122,11 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       };
       vehicle.vehicle_data.UIData = data;
       vehicle.model = "huso";
-      _serverContext.Vehicles.Update(vehicle);
+
+      await _serverContext.SaveChangesAsync(); */
+
+      await _vehicleHandler.TestFunc(vehid);
+      await _vehicleHandler.TestFunc2(vehid);
     });
   }
 
