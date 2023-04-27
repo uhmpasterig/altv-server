@@ -100,6 +100,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
     // FACTION AND BUSINESS
     player.faction = dbPlayer.faction;
+    _logger.Warning($"Faction: {player.faction.name}");
 
     // PED VALUES
     if (player.Dimension == 0) dbPlayer.Position = player.Position;
