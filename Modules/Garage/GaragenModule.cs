@@ -101,20 +101,17 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       Models.Vehicle? vehicle = await _vehicleHandler.GetDbVehicle(vehid);
       if (vehicle == null) return;
-      _logger.Error($"{important}");
       Dictionary<int, Dictionary<string, object>>? data = vehicle.vehicle_data.UIData;
-      if (!data.ContainsKey(player.id))
-      {
+      Dictionary<string, object> playerData = data[player.id];
+      if (!data.ContainsKey(player.id)) {
         data.Add(player.id, new Dictionary<string, object>());
-        data[player.id].Add("name", name);
-        data[player.id].Add("keyword", keyword);
-        data[player.id].Add("fav", important);
-      }
-      else
-      {
-        data[player.id]["name"] = name;
-        data[player.id]["keyword"] = keyword;
-        data[player.id]["fav"] = important;
+        playerData.Add("name", name);
+        playerData.Add("keyword", keyword);
+        playerData.Add("fav", important);
+      } else {
+        playerData["name"] = name;
+        playerData["keyword"] = keyword;
+        playerData["fav"] = important;
       };
       vehicle.vehicle_data.UIData = data;
 
