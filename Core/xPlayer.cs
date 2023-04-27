@@ -58,7 +58,6 @@ public partial class xPlayer : AsyncPlayer
 
   public xPlayer(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
-    dataCache = new Dictionary<string, object>();
   }
 
   public async Task SetDataFromDatabase(Models.Player _player)

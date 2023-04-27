@@ -91,4 +91,10 @@ internal class WeaponCommands : IScript
     if (veh == null) return;
     await _vehicleHandler.SaveDbVehicleInGarage(veh, gid);
   }
+
+  [Command("packbackpack")]
+  public static async void PackBackpack(xPlayer player)
+  {
+    BackPacks.PackBackPack(player);
+  }
 }
