@@ -44,11 +44,11 @@ public partial class ServerContext : DbContext
     }
   }
 
+#region Generate Entities
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-#region Generate Entities
 
-  #region Player
+    #region Player
     modelBuilder.Entity<Player>(entity =>
     {
       entity.HasOne(d => d.player_skin)
@@ -78,15 +78,15 @@ public partial class ServerContext : DbContext
         .WithOne(p => p.player_society)
         .HasForeignKey<Player_Society>(d => d.player_id)
         .HasPrincipalKey<Player>(p => p.id);
-      
+
       entity.HasOne(d => d.Faction)
         .WithMany(p => p.Members)
         .HasForeignKey(d => d.faction_id)
         .HasPrincipalKey(p => p.id);
     });
-  #endregion
+    #endregion
 
-  #region Vehicle
+    #region Vehicle
     modelBuilder.Entity<Vehicle>(entity =>
     {
       entity.HasOne(d => d.vehicle_data)
@@ -115,7 +115,7 @@ public partial class ServerContext : DbContext
 
     #endregion
 
-  #region Faction
+    #region Faction
 
     modelBuilder.Entity<Faction>(entity =>
     {
@@ -127,7 +127,7 @@ public partial class ServerContext : DbContext
 
     #endregion
 
-  #region Garage
+    #region Garage
     modelBuilder.Entity<Garage>(entity =>
     {
       entity.HasMany(d => d.GarageSpawns)
@@ -143,7 +143,8 @@ public partial class ServerContext : DbContext
         .HasForeignKey(d => d.garage_id)
         .HasPrincipalKey(p => p.id);
     });
-  #endregion
+    #endregion
+    
     OnModelCreatingPartial(modelBuilder);
   }
 #endregion

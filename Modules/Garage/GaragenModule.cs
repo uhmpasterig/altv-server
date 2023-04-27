@@ -67,12 +67,12 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
   public async void OnLoad()
   {
-    foreach (Models.Garage garage in _serverContext.Garages.ToList())
+    garageList = _serverContext.Garages
+      .Include(x => x.GarageSpawns)
+      .ToList();
+
+    foreach (Models.Garage garage in garageList)
     {
-      foreach (Models.GarageSpawn spawn in _serverContext.GarageSpawns.Where(x => x.garage_id == garage.id).ToList())
-      {
-        garage.GarageSpawn.Add(spawn);
-      }
       xEntity ped = new xEntity();
       ped.position = garage.Position;
       ped.dimension = (int)DIMENSIONEN.WORLD;
@@ -85,8 +85,6 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       Dictionary<string, int> blip = GetGarageBlipByType(garage.type);
       Blip.Blip.Create(GARAGE_NAMES.GetName(Enum.GetName(typeof(GARAGE_TYPES), garage.type)!),
         blip["sprite"], blip["color"], .75f, garage.Position);
-
-      garageList.Add(garage);
     }
 
     AltAsync.OnClient<xPlayer, int>("parkVehicle", async (player, vehicleId) =>
@@ -129,8 +127,8 @@ class GaragenModule : ILoadEvent, IPressedEEvent
 
   public async Task<Models.GarageSpawn> GetFreeSpawn(Models.Garage garage)
   {
-    if (garage.GarageSpawn.Count == 0) return null;
-    foreach (Models.GarageSpawn spawn in garage.GarageSpawn.ToList())
+    if (garage.GarageSpawns.Count == 0) return null;
+    foreach (Models.GarageSpawn spawn in garage.GarageSpawns.ToList())
     {
       if (await _vehicleHandler.GetClosestVehicle(spawn.Position, 1) == null)
         return spawn;
