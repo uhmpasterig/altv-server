@@ -17,6 +17,7 @@ namespace server.Commands;
 internal class WeaponCommands : IScript
 {
   static ServerContext _serverContext = new ServerContext();
+  static IVehicleHandler _vehicleHandler = new VehicleHandler();
   [Command("giveweapon")]
   public static void GiveWeapon(xPlayer player, string name, int ammo = 100)
   {
@@ -72,5 +73,22 @@ internal class WeaponCommands : IScript
   public static void Test2(xPlayer player, int component, int drawable, int texture, int palette, string dlc = "mpbeach_overlays")
   {
     player.SetDlcClothes((byte)component, (byte)drawable, (byte)texture, (byte)palette, Alt.Hash(dlc));
+  }
+
+  [Command("vehs")]
+  public static async void Vehs(xPlayer player)
+  {
+    foreach (xVehicle veh in await _vehicleHandler.GetVehiclesInRadius(player.Position, 2))
+    {
+      player.SendChatMessage($"{veh.id} - {veh.model} - {veh.NumberplateText}");
+    }
+  }
+
+  [Command("parkin")]
+  public static async void ParkIn(xPlayer player, int id, int gid)
+  {
+    xVehicle veh = await _vehicleHandler.GetVehicle(id);
+    if (veh == null) return;
+    veh.storeInGarage(gid);
   }
 }

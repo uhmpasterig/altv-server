@@ -7,30 +7,50 @@ using AltV.Net.Enums;
 using server.Models;
 using server.Handlers.Vehicle;
 using _logger = server.Logger.Logger;
+using server.Handlers.Storage;
 
 namespace server.Core;
 
-public class xVehicle : AsyncVehicle, IxVehicle
+public class xVehicle : AsyncVehicle
 {
+  public static ServerContext _serverContext = new ServerContext();
+  public static IStorageHandler _storageHandler = new StorageHandler();
   public xVehicle(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
   }
 
-  public int vehicleId { get; set; }
-  public int ownerId { get; set; }
-  public int garageId { get; set; }
-
+  public int id { get; set; }
+  public int owner_id { get; set; }
+  public int owner_type { get; set; }
+  public int type { get; set; }
+  public int garage_id { get; set; }
   public string model { get; set; }
-  public string name { get; set; }
-  public string keyword { get; set; }
-  public string licensePlate { get; set; }
 
-  public int storageIdTrunk { get; set; } = 0;
-  public int storageIdGloveBox { get; set; } = 0;
+  public int storage_id_trunk { get; set; } = 0;
+  public int storage_id_glovebox { get; set; } = 0;
+
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
 
+  public double mileage { get; set; } = 0;
+
+
   public bool isAccesable { get; set; } = true;
+
+  public void SetDataFromDatabase(Models.Vehicle vehicle)
+  {
+    this.id = vehicle.id;
+    this.owner_id = vehicle.owner_id;
+    this.owner_type = vehicle.owner_type;
+    this.type = vehicle.type;
+    this.garage_id = vehicle.garage_id;
+    this.model = vehicle.model;
+    this.storage_id_trunk = vehicle.storage_id_trunk;
+    this.storage_id_glovebox = vehicle.storage_id_glovebox;
+    this.lastAction = vehicle.lastAction;
+    this.creationDate = vehicle.creationDate;
+    this.mileage = vehicle.vehicle_data.mileage;
+  }
 
   // States
   private bool _isLocked = false;
@@ -74,8 +94,8 @@ public class xVehicle : AsyncVehicle, IxVehicle
 
   public bool hasControl(xPlayer player)
   {
-    _logger.Log("Vehicle OwnerId: " + this.ownerId + " | PlayerId: " + player.id);
-    return player.id == this.ownerId;
+    _logger.Log("Vehicle OwnerId: " + this.owner_id + " | PlayerId: " + player.id);
+    return player.id == this.owner_id;
   }
 
   public void storeInGarage(int gid)
@@ -83,13 +103,14 @@ public class xVehicle : AsyncVehicle, IxVehicle
     //Todo : Unload Inventory
     try
     {
-      VehicleHandler.Vehicles.Remove(this.vehicleId);
-      ServerContext _serverContext = new ServerContext();
-      var svehicle = _serverContext.Vehicles.Find(this.vehicleId);
+      VehicleHandler.Vehicles.Remove(this.id);
+      var svehicle = _serverContext.Vehicles.Find(this.id);
       if (svehicle == null) return;
-      svehicle.garageId = gid;
+      svehicle.id = gid;
       _serverContext.SaveChanges();
       this.Destroy();
+      _storageHandler.UnloadStorage(this.storage_id_trunk);
+      _storageHandler.UnloadStorage(this.storage_id_glovebox);
     }
     catch (Exception e)
     {
@@ -97,20 +118,9 @@ public class xVehicle : AsyncVehicle, IxVehicle
     }
   }
 
-  public new IxVehicle ToAsync(IAsyncContext _) => this;
+  // public new IxVehicle ToAsync(IAsyncContext _) => this;
 }
 
-public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
+/* public partial interface IxVehicle : IVehicle, IAsyncConvertible<IxVehicle>
 {
-  int vehicleId { get; set; }
-  public int ownerId { get; set; }
-  public int garageId { get; set; }
-  public string model { get; set; }
-  public string name { get; set; }
-  public string keyword { get; set; }
-  public string licensePlate { get; set; }
-  public int storageIdTrunk { get; set; }
-  public int storageIdGloveBox { get; set; }
-  public DateTime lastAction { get; set; }
-  public DateTime creationDate { get; set; }
-}
+} */

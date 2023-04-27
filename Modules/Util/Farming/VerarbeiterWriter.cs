@@ -25,7 +25,7 @@ public class verarbeiterWriter : IWritable
     {
       writer.BeginObject();
       writer.Name("id");
-      writer.Value(veh.vehicleId);
+      writer.Value(veh.id);
       writer.Name("model");
       writer.Value(veh.model);
       writer.EndObject();

@@ -32,7 +32,7 @@ public enum NOTIFYS
 }
 #endregion
 
-public partial class xPlayer : AsyncPlayer, IxPlayer
+public partial class xPlayer : AsyncPlayer
 {
   ServerContext _serverContext = new ServerContext();
 
@@ -284,12 +284,9 @@ public partial class xPlayer : AsyncPlayer, IxPlayer
   }
 
   #endregion
-  public new IxPlayer ToAsync(IAsyncContext _) => this;
+  // public new IxPlayer ToAsync(IAsyncContext _) => this;
 }
 
-public partial interface IxPlayer : IPlayer, IAsyncConvertible<IxPlayer>
+/* public partial interface IxPlayer : IPlayer, IAsyncConvertible<IxPlayer>
 {
-  int id { get; set; }
-  string name { get; set; }
-  DateTime creationDate { get; set; }
-}
+} */

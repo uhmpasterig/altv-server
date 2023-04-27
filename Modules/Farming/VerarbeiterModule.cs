@@ -56,7 +56,7 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
 
   public async void ProcessTrunk(xVehicle vehicle, xPlayer player, int stepsToDo = 1)
   {
-    xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
+    xStorage trunk = await _storageHandler.GetStorage(vehicle.storage_id_trunk);
     if(_processes.Any(x => x.vehicle == vehicle)) return;
     Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
     
@@ -79,7 +79,7 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
 
   public async Task<int> StepsVehicleCanDo(xVehicle vehicle)
   {
-    xStorage trunk = await _storageHandler.GetStorage(vehicle.storageIdTrunk);
+    xStorage trunk = await _storageHandler.GetStorage(vehicle.storage_id_trunk);
     int steps = 0;
     Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(vehicle.Position) < 40)!;
     if (verarbeiter == null) return 0;
@@ -128,7 +128,7 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     AltAsync.OnClient<IPlayer, int>("verarbeiter:verarbeitenVehId", async (iplayer, vehicleId) =>
     {
       xPlayer player = (xPlayer)iplayer;
-      xVehicle vehicle = _vehicleHandler.GetVehicle(vehicleId);
+      xVehicle vehicle = await _vehicleHandler.GetVehicle(vehicleId);
       if (vehicle == null) return;
       ProcessTrunk(vehicle, player, await StepsVehicleCanDo(vehicle));
     });

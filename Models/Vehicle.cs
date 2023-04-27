@@ -13,26 +13,23 @@ public partial class Vehicle
   public Vehicle()
   {
   }
-
   public int id { get; set; }
-  public int ownerId { get; set; }
-  public int garageId { get; set; }
-
+  public int owner_id { get; set; }
+  public int owner_type { get; set; }
+  public int type { get; set; }
+  public int garage_id { get; set; }
   public string model { get; set; }
-  public string _uidata { get; set; }
 
-  public int storageIdTrunk { get; set; }
-  public int storageIdGloveBox { get; set; }
+  public int storage_id_trunk { get; set; }
+  public int storage_id_glovebox { get; set; }
 
   public string _pos { get; set; }
   public string _rot { get; set; }
 
-  public int color { get; set; }
-  public int color2 { get; set; }
-  public string plate { get; set; }
-
   public DateTime lastAction { get; set; }
   public DateTime creationDate { get; set; }
+
+  public Vehicle_Data vehicle_data { get; set; }
 
   [NotMapped]
   public Position Position
@@ -56,19 +53,6 @@ public partial class Vehicle
     set
     {
       _rot = JsonConvert.SerializeObject(value);
-    }
-  }
-
-  [NotMapped]
-  public Dictionary<int, Dictionary<string, object>> UIData
-  {
-    get
-    {
-      return JsonConvert.DeserializeObject<Dictionary<int, Dictionary<string, object>>>(_uidata);
-    }
-    set
-    {
-      _uidata = JsonConvert.SerializeObject(value);
     }
   }
 }

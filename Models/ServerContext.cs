@@ -10,8 +10,8 @@ public partial class ServerContext : DbContext
   public ServerContext(DbContextOptions<ServerContext> options) : base(options) { }
 
   public virtual DbSet<Player> Players { get; set; }
-  public virtual DbSet<Player_Skin> Player_Skins { get; set; }
-  public virtual DbSet<Player_Cloth> Player_Cloths { get; set; }
+  /* public virtual DbSet<Player_Skin> Player_Skins { get; set; }
+  public virtual DbSet<Player_Cloth> Player_Cloths { get; set; } */
 
   public virtual DbSet<Vehicle> Vehicles { get; set; }
   public virtual DbSet<Storage> Storages { get; set; }
@@ -47,19 +47,28 @@ public partial class ServerContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Player>(entity => {
+    modelBuilder.Entity<Player>(entity =>
+    {
       entity.HasOne(d => d.player_skin)
-        .WithOne(p => p.Player)
+        .WithOne(d => d.Player)
         .HasForeignKey<Player_Skin>(d => d.player_id)
-        .HasPrincipalKey<Player>(p => p.id);        
+        .HasPrincipalKey<Player>(d => d.id);
 
       entity.HasOne(d => d.player_cloth)
-        .WithOne(p => p.Player)
+        .WithOne(d => d.Player)
         .HasForeignKey<Player_Cloth>(d => d.player_id)
-        .HasPrincipalKey<Player>(p => p.id);
+        .HasPrincipalKey<Player>(d => d.id);
     });
 
-  
+    modelBuilder.Entity<Vehicle>(entity =>
+    {
+      entity.HasOne(d => d.vehicle_data)
+        .WithOne(d => d.Vehicle)
+        .HasForeignKey<Vehicle_Data>(d => d.vehicle_id)
+        .HasPrincipalKey<Vehicle>(d => d.id);
+    });
+
+
     OnModelCreatingPartial(modelBuilder);
   }
 

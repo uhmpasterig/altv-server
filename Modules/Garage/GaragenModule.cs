@@ -109,7 +109,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
     {
       Models.Vehicle? vehicle = _serverContext.Vehicles.FirstOrDefault(x => x.id == vehid);
       if (vehicle == null) return;
-      Dictionary<int, Dictionary<string, object>>? data = vehicle.UIData;
+      Dictionary<int, Dictionary<string, object>>? data = vehicle.vehicle_data.UIData;
 
       if (!data.ContainsKey(player.id))
       {
@@ -119,7 +119,7 @@ class GaragenModule : ILoadEvent, IPressedEEvent
       data[player.id].Add("name", name);
       data[player.id].Add("keyword", keyword);
       data[player.id].Add("important", important);
-      vehicle.UIData = data;
+      vehicle.vehicle_data.UIData = data;
       await _serverContext.SaveChangesAsync();
     });
   }

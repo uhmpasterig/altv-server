@@ -8,6 +8,20 @@ using _logger = server.Logger.Logger;
 using AltV.Net.Async;
 
 namespace server.Handlers.Vehicle;
+
+public enum OWNER_TYPES {
+  PLAYER,
+  FACTION,
+  BUSINESS
+}
+
+public enum VEHICLE_TYPES {
+  PKW,
+  LKW,
+  PLANE,
+  BOAT
+}
+
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
   public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
@@ -36,24 +50,20 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   {
     await using ServerContext serverContext = new ServerContext();
     if (Vehicles.ContainsKey(vehicle.id)) return null!;
+
     Vehicles.Add(vehicle.id, xvehicle);
-    xvehicle.vehicleId = vehicle.id;
+    xvehicle.SetDataFromDatabase(vehicle);
 
-    xvehicle.ownerId = vehicle.ownerId;
-    xvehicle.storageIdGloveBox = vehicle.storageIdGloveBox;
-    xvehicle.storageIdTrunk = vehicle.storageIdTrunk;
+    xvehicle.PrimaryColorRgb = new Rgba((byte)vehicle.vehicle_data.r, (byte)vehicle.vehicle_data.g, (byte)vehicle.vehicle_data.b, 255);
+    xvehicle.SecondaryColorRgb = new Rgba((byte)vehicle.vehicle_data.sr, (byte)vehicle.vehicle_data.sg, (byte)vehicle.vehicle_data.sb, 255);
+    xvehicle.NumberplateText = vehicle.vehicle_data.plate;
+    
 
-    xvehicle.model = vehicle.model;
-    xvehicle.PrimaryColor = (byte)vehicle.color;
-    xvehicle.SecondaryColor = (byte)vehicle.color2;
-    xvehicle.NumberplateText = vehicle.plate;
-
-    Models.Vehicle? dbVehicle = await serverContext.Vehicles.FindAsync(vehicle.id);
-    if (dbVehicle != null)
+    if (vehicle != null)
     {
-      dbVehicle.Position = xvehicle.Position;
-      dbVehicle.Rotation = xvehicle.Rotation;
-      dbVehicle.garageId = -1;
+      vehicle.Position = xvehicle.Position;
+      vehicle.Rotation = xvehicle.Rotation;
+      vehicle.garage_id = -1;
     }
     await serverContext.SaveChangesAsync();
 
@@ -63,15 +73,11 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task SaveVehicle(xVehicle xvehicle)
   {
     await using ServerContext serverContext = new ServerContext();
-    Models.Vehicle? vehicle = await serverContext.Vehicles.FindAsync(xvehicle.vehicleId);
+    Models.Vehicle? vehicle = await serverContext.Vehicles.FindAsync(xvehicle.id);
     if (vehicle != null)
     {
       vehicle.Position = xvehicle.Position;
       vehicle.Rotation = xvehicle.Rotation;
-    }
-    else
-    {
-      _logger.Error($"Vehicle with id {xvehicle.vehicleId} not found in database");
     }
     await serverContext.SaveChangesAsync();
   }
@@ -80,13 +86,13 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   {
     await using ServerContext serverContext = new ServerContext();
     _logger.Log($"Found {Vehicles.Count} vehicles in memory");
-    foreach (var vehicle in Vehicles.Values)
+    foreach (var xvehicle in Vehicles.Values)
     {
-      Models.Vehicle? dbVehicle = serverContext.Vehicles.Find(vehicle.vehicleId);
+      Models.Vehicle? vehicle = serverContext.Vehicles.Find(xvehicle.id);
 
-      if (dbVehicle == null) continue;
-      dbVehicle.Position = vehicle.Position;
-      dbVehicle.Rotation = vehicle.Rotation;
+      if (vehicle == null) continue;
+      vehicle.Position = xvehicle.Position;
+      vehicle.Rotation = xvehicle.Rotation;
     }
     await serverContext.SaveChangesAsync();
   }
@@ -98,7 +104,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return isModSet;
   }
 
-  public xVehicle GetClosestVehicle(Position position, int range = 2)
+  public async Task<xVehicle> GetClosestVehicle(Position position, int range = 2)
   {
     return Vehicles.Values.FirstOrDefault(v => v.Position.Distance(position) < range)!;
   }
@@ -116,24 +122,23 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return vehicles;
   }
 
-  public xVehicle GetVehicle(int id)
+  public async Task<xVehicle> GetVehicle(int id)
   {
-    return Vehicles.Values.FirstOrDefault(v => v.vehicleId == id)!;
+    return Vehicles.Values.FirstOrDefault(v => v.id == id)!;
   }
 
-  public async Task<List<Models.Vehicle>> GetVehiclesInGarage(int garageId)
+  public async Task<List<Models.Vehicle>> GetVehiclesInGarage(int garage_id)
   {
     await using ServerContext serverContext = new ServerContext();
-    List<Models.Vehicle> vehicles = serverContext.Vehicles.Where(v => v.garageId == garageId).ToList();
+    List<Models.Vehicle> vehicles = serverContext.Vehicles.Where(v => v.garage_id == garage_id).ToList();
     return vehicles;
   }
 
   public async void OnLoad()
   {
     await using ServerContext serverContext = new ServerContext();
-    foreach (Models.Vehicle vehicle in serverContext.Vehicles.Where(v => v.garageId == -1))
+    foreach (Models.Vehicle vehicle in serverContext.Vehicles.Where(v => v.garage_id == -1))
     {
-      _logger.Debug($"Loading vehicle with id {vehicle.id} from database");
       await CreateVehicleFromDb(vehicle);
     }
   }
