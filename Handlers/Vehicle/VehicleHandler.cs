@@ -145,11 +145,11 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   public async Task<List<Models.Vehicle>> GetVehiclesInGarage(xPlayer player, int garage_id)
   {
 
-    // (v.owner_id == player.faction.id && v.owner_type == (int)OWNER_TYPES.FACTION))
     _logger.Log($"{(int)OWNER_TYPES.PLAYER}");
     List<Models.Vehicle> vehicles = await _serverContext.Vehicles
       .Where(v => (v.garage_id == garage_id) &&
-      (v.owner_id == player.id && v.owner_type == (int)OWNER_TYPES.PLAYER))
+      (v.owner_id == player.id && v.owner_type == (int)OWNER_TYPES.PLAYER) || 
+      (v.owner_id == player.faction.id && v.owner_type == (int)OWNER_TYPES.FACTION))
       .Include(v => v.vehicle_data)
       .ToListAsync();
 

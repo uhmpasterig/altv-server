@@ -70,6 +70,11 @@ public partial class ServerContext : DbContext
         .WithOne(d => d.Vehicle)
         .HasForeignKey<Vehicle_Data>(d => d.vehicle_id)
         .HasPrincipalKey<Vehicle>(d => d.id);
+
+      entity.HasMany(d => d.vehicle_keys)
+        .WithOne(d => d.Vehicle)
+        .HasForeignKey(d => d.vehicle_id)
+        .HasPrincipalKey(d => d.id);
     });
 
     modelBuilder.Entity<Vehicle_Key>(entity =>
