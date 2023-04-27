@@ -4,12 +4,12 @@ using server.Events;
 using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
-using server.Util.Fraktionen;
+using server.Util.Factions;
 using server.Handlers.Storage;
 using server.Modules.Inventory;
 using Microsoft.EntityFrameworkCore;
 
-namespace server.Modules.Fraktionen;
+namespace server.Modules.Factions;
 
 class FactionModule : ILoadEvent, IPressedEEvent
 {
@@ -49,7 +49,7 @@ class FactionModule : ILoadEvent, IPressedEEvent
   static async void OpenFrakMenu(xPlayer player)
   {
     xStorage storage = await storageHandler.GetStorage(player.player_society.Faction.storage_id);
-    player.Emit("frontend:open", "faction", new FraktionsWriter(player.player_society.Faction, player, storage));
+    player.Emit("frontend:open", "faction", new FactionWriter(player.player_society.Faction, player, storage));
   }
 
   static async void OpenFrakStorage(xPlayer player)

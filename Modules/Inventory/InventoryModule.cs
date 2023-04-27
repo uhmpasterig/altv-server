@@ -67,7 +67,16 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       goto load;
     }
 
-    xStorage closestStorage = _storageHandler.GetClosestxStorage(player, 5);
+
+    if(player.player_society.Faction.name != "Zivilist" && player.player_society.Faction.StoragePosition.Distance(player.Position) < 3)
+    {
+      xStorage factionStorage = await _storageHandler.GetStorage(player.boundStorages["Fraktions Tresor"]);
+      openInventorys.Add(factionStorage.id);
+      uiStorages.Add(factionStorage);
+      goto load;
+    }
+
+    xStorage closestStorage = _storageHandler.GetClosestxStorage(player, 3);
     if (closestStorage != null)
     {
       openInventorys.Add(closestStorage.id);

@@ -6,19 +6,19 @@ using server.Core;
 using server.Models;
 using server.Handlers.Storage;
 using server.Modules.Items;
-using server.Modules.Fraktionen;
+using server.Modules.Factions;
 using System.Globalization;
 
-namespace server.Util.Fraktionen;
-public class FraktionsWriter : IWritable
+namespace server.Util.Factions;
+public class FactionWriter : IWritable
 {
-  public readonly Faction fraktion;
+  public readonly Faction faction;
   public readonly xPlayer player;
   public readonly xStorage storage;
 
-  public FraktionsWriter(Faction _fraktion, xPlayer _player, xStorage _storage)
+  public FactionWriter(Faction _faction, xPlayer _player, xStorage _storage)
   {
-    this.fraktion = _fraktion;
+    this.faction = _faction;
     this.player = _player;
     this.storage = _storage;
   }
@@ -27,15 +27,15 @@ public class FraktionsWriter : IWritable
   {
     writer.BeginObject();
     writer.Name("name");
-    writer.Value(fraktion.name);
+    writer.Value(faction.name);
 
     
     writer.Name("rank");
-    writer.Value(FactionModule.GetRankName(fraktion, player.job_rank));
+    writer.Value(FactionModule.GetRankName(faction, player.job_rank));
     writer.Name("rank_id");
     writer.Value(player.job_rank);
     writer.Name("uicolor");
-    writer.Value(fraktion.uicolor);
+    writer.Value(faction.uicolor);
     
     writer.Name("ugname");
     writer.Value("Hey");
@@ -43,7 +43,7 @@ public class FraktionsWriter : IWritable
     writer.Name("drogenInfo");
     writer.BeginObject();
       writer.Name("droge");
-      writer.Value(fraktion.droge);
+      writer.Value(faction.droge);
       writer.Name("einpreis");
       writer.Value(100);
       writer.Name("auspreis");
@@ -68,9 +68,9 @@ public class FraktionsWriter : IWritable
 
       writer.BeginObject();
       writer.Name("name");
-      writer.Value(fraktion.weapon);
+      writer.Value(faction.weapon);
       writer.Name("label");
-      writer.Value(Items.GetItemLabel(fraktion.weapon));
+      writer.Value(Items.GetItemLabel(faction.weapon));
       writer.Name("price");
       writer.Value(1000);
       writer.EndObject();
@@ -86,7 +86,7 @@ public class FraktionsWriter : IWritable
     #region Members 
     writer.Name("members");
     writer.BeginArray();
-    foreach(Models.Player _player in FactionModule.GetFactionMembers(fraktion.name))
+    foreach(Models.Player _player in FactionModule.GetFactionMembers(faction.name))
     {
       writer.BeginObject();
       writer.Name("id");
@@ -94,7 +94,7 @@ public class FraktionsWriter : IWritable
       writer.Name("name");
       writer.Value(_player.name);
       writer.Name("rank");
-      writer.Value(FactionModule.GetRankName(fraktion, _player.job_rank));
+      writer.Value(FactionModule.GetRankName(faction, _player.job_rank));
       writer.Name("rank_id");
       writer.Value(_player.job_rank);
       writer.Name("phone");
@@ -158,19 +158,19 @@ public class FraktionsWriter : IWritable
       writer.Name("general");
       writer.BeginObject();
         writer.Name("funk");
-        writer.Value(fraktion.funk);
+        writer.Value(faction.funk);
         writer.Name("fight_funk");
-        writer.Value(fraktion.fight_funk);
+        writer.Value(faction.fight_funk);
         writer.Name("ug_funk");
-        writer.Value(fraktion.ug_funk);
+        writer.Value(faction.ug_funk);
         writer.Name("warns");
-        writer.Value(fraktion.warns);
+        writer.Value(faction.warns);
         writer.Name("creationDate");
-        writer.Value(fraktion.creationDate.ToString("dd.MM.yyyy HH:mm", CultureInfo.CreateSpecificCulture("de-DE")));
+        writer.Value(faction.creationDate.ToString("dd.MM.yyyy HH:mm", CultureInfo.CreateSpecificCulture("de-DE")));
       writer.EndObject();
       
       writer.Name("motd");
-      writer.Value(fraktion.motd);
+      writer.Value(faction.motd);
     writer.EndObject();
 
     writer.Name("fights");

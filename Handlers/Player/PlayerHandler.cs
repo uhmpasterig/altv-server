@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using server.Util.Player;
 using System.Diagnostics;
 using server.Util.Config;
-using server.Modules.Fraktionen;
+using server.Modules.Factions;
 
 namespace server.Handlers.Player;
 
