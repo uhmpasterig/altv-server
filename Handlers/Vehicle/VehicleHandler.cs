@@ -132,6 +132,11 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     return await _serverContext.Vehicles.Include(v => v.vehicle_data).FirstAsync(v => v.id == id);
   }
 
+  public async Task SaveDbVehicle()
+  {
+    await _serverContext.SaveChangesAsync();
+  }
+
   public async Task<xVehicle> GetVehicle(int id)
   {
     return Vehicles.Values.FirstOrDefault(v => v.id == id)!;
