@@ -45,10 +45,13 @@ public class StorageHandler : IStorageHandler
   {
     if (!Storages.TryGetValue(storageId, out var storage))
       return;
-
-    await _serverContext.SaveChangesAsync();
     Storages.Remove(storageId);
-    _logger.Debug($"Storage {storageId} unloaded from memory.");
+
+    Models.Storage? dbStorage = await _serverContext.Storages.FindAsync(storageId);
+    if (dbStorage == null)
+      return;
+    dbStorage._items = JsonConvert.SerializeObject(storage.items);
+    await _serverContext.SaveChangesAsync();
   }
 
   public async Task UnloadStorage(xStorage? storage)
