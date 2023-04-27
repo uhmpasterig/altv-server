@@ -63,8 +63,21 @@ public partial class ServerContext : DbContext
         .HasForeignKey(d => d.player_id)
         .HasPrincipalKey(d => d.id);
 
-      entity.HasOne(d => d.faction)
-        .WithMany(p => p.members)
+      entity.HasOne(d => d.player_society)
+        .WithOne(d => d.Player)
+        .HasForeignKey<Player_Society>(d => d.player_id)
+        .HasPrincipalKey<Player>(d => d.id);
+    });
+
+    modelBuilder.Entity<Player_Society>(entity =>
+    {
+      entity.HasOne(d => d.Player)
+        .WithOne(p => p.player_society)
+        .HasForeignKey<Player_Society>(d => d.player_id)
+        .HasPrincipalKey<Player>(p => p.id);
+      
+      entity.HasOne(d => d.Faction)
+        .WithMany(p => p.Members)
         .HasForeignKey(d => d.faction_id)
         .HasPrincipalKey(p => p.id);
     });
@@ -95,9 +108,10 @@ public partial class ServerContext : DbContext
         .HasPrincipalKey(p => p.id);
     });
 
-    modelBuilder.Entity<Faction>(entity => {
-      entity.HasMany(d => d.members)
-        .WithOne(d => d.faction)
+    modelBuilder.Entity<Faction>(entity =>
+    {
+      entity.HasMany(d => d.Members)
+        .WithOne(d => d.Faction)
         .HasForeignKey(d => d.faction_id)
         .HasPrincipalKey(d => d.id);
     });

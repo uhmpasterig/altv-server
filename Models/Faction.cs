@@ -32,7 +32,7 @@ public partial class Faction
 
   public DateTime creationDate { get; set; }
 
-  public List<Models.Player> members { get; set; }
+  public List<Player_Society> Members { get; set; }
 
   [NotMapped]
   public Dictionary<int, Faction_rank> raenge { get; set; }

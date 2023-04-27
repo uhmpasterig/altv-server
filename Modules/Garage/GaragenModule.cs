@@ -112,13 +112,13 @@ class GaragenModule : ILoadEvent, IPressedEEvent
         data.Add(player.id, new Dictionary<string, object>());
         data[player.id].Add("name", name);
         data[player.id].Add("keyword", keyword);
-        data[player.id].Add("important", important);
+        data[player.id].Add("fav", important);
       }
       else
       {
         data[player.id]["name"] = name;
         data[player.id]["keyword"] = keyword;
-        data[player.id]["important"] = important;
+        data[player.id]["fav"] = important;
       };
       vehicle.vehicle_data.UIData = data;
 

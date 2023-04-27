@@ -31,7 +31,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         .Include(p => p.player_skin)
         .Include(p => p.player_cloth)
         .Include(p => p.vehicle_keys)
-        .Include(p => p.faction)
+        .Include(p => p.player_society)
+          .ThenInclude(p => p.Faction)
         .FirstOrDefaultAsync(p => p.name == player.Name);
 
       if (dbPlayer == null) return null;
@@ -53,10 +54,6 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
           await _storageHandler.LoadStorage(storage.Value);
         }
       }
-
-      // FACTION AND BUSINESS
-      player.faction = dbPlayer.faction;
-      _logger.Error($"Faction: {player.faction.name}");
 
       // SPAWN AND SET PED VALUES
       player.Model = (uint)Alt.Hash(player.ped);

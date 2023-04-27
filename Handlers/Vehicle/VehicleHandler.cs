@@ -148,7 +148,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     List<Models.Vehicle> vehicles = await _serverContext.Vehicles
       .Where(v => (v.garage_id == garage_id) &&
       (v.owner_id == player.id && v.owner_type == (int)OWNER_TYPES.PLAYER) || 
-      (v.owner_id == player.faction.id && v.owner_type == (int)OWNER_TYPES.FACTION))
+      (v.owner_id == player.player_society.Faction.id && v.owner_type == (int)OWNER_TYPES.FACTION))
       .Include(v => v.vehicle_data)
       .ToListAsync();
 

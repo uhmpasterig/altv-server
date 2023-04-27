@@ -42,7 +42,7 @@ public class garagenWriter : IWritable
       {
         vehname = playerUidata?["name"]?.ToString() ?? "";
         keyword = playerUidata?["keyword"]?.ToString() ?? "";
-        fav = (bool?)playerUidata?["important"] ?? false;
+        fav = (bool?)playerUidata?["fav"] ?? false;
       };
 
       writer.BeginObject();

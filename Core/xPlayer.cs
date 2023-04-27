@@ -54,7 +54,7 @@ public partial class xPlayer : AsyncPlayer
   public Player_Skin player_skin { get; set; }
   public Player_Cloth player_cloth { get; set; }
   public List<Vehicle_Key> vehicle_keys { get; set; }
-  public Faction faction { get; set; }
+  public Player_Society player_society { get; set; } 
 
   public int isDead { get; set; }
 
@@ -85,6 +85,7 @@ public partial class xPlayer : AsyncPlayer
     this.player_skin = _player.player_skin;
     this.player_cloth = _player.player_cloth;
     this.vehicle_keys = _player.vehicle_keys;
+    this.player_society = _player.player_society;
   }
 
 #region Methods
