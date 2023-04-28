@@ -44,6 +44,7 @@ class ShopModule : ILoadEvent, IPressedEEvent
         vehicle.Locked = true;
         vehicle.Collision = false;
         shop.xVehicles.Add(vehicle);
+        CreateTextForVehicle(_vehicle);
       });
       Blip.Blip.Create("Auto Händler", 326, 83, .75f, shop.Position);
     });
@@ -63,13 +64,12 @@ class ShopModule : ILoadEvent, IPressedEEvent
 
   public async void CreateTextForVehicle(Vehicle_Shop_Vehicle vehicle)
   {
-    Position position = vehicle.Position + new Position(0, 0, 1.5f);
-    CreateText("Fahrzeug:", position, "PURPLE");
-    CreateText(vehicle.model, position - new Position(0,0,.1f));
-    CreateText("Preis:", position - new Position(0,0,.2f), "GREEN");
-    CreateText(vehicle.price.ToString(), vehicle.Position + new Position(0, 0, .3f));
+    Position position = vehicle.Position + new Position(0, 0, 2);
+    CreateText("Fahrzeug:", position- new Position(0,0,.05f), "CYAN");
+    CreateText(vehicle.name, position - new Position(0,0,.15f));
+    CreateText("$"+vehicle.price.ToString(), position - new Position(0, 0, .25f), "GREEN");
 
-    CreateText("Lager:", position - -new Position(0,0,.4f), "CYAN");
+    CreateText("Kofferraum:", position - new Position(0,0,.4f), "CYAN");
     CreateText($"Slots: {vehicle.slots}", position - new Position(0,0,.5f));
     CreateText($"Kilogramm: {vehicle.maxWeight}", position - new Position(0,0,.6f));
   }

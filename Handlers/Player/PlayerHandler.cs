@@ -36,6 +36,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         .Include(p => p.player_society)
         .Include(p => p.player_society.Faction)
         .Include(p => p.player_society.Business)
+        .Include(p => p.player_factory)
 
         .FirstOrDefaultAsync(p => p.name == player.Name);
 

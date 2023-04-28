@@ -29,8 +29,9 @@ public partial class ServerContext : DbContext
 
   public virtual DbSet<Shop> Shops { get; set; }
   public virtual DbSet<ShopItems> ShopItems { get; set; }
-
   public virtual DbSet<Vehicle_Shop> Vehicle_Shops { get; set; }
+
+  public virtual DbSet<Factory_Processes> Factory_Processes { get; set; }
 
   public virtual DbSet<Bank> Banks { get; set; }
 
@@ -73,6 +74,11 @@ public partial class ServerContext : DbContext
       entity.HasOne(d => d.player_society)
         .WithOne(d => d.Player)
         .HasForeignKey<Player_Society>(d => d.player_id)
+        .HasPrincipalKey<Player>(d => d.id);
+
+      entity.HasOne(d => d.player_factory)
+        .WithOne(d => d.Player)
+        .HasForeignKey<Player_Factory>(d => d.player_id)
         .HasPrincipalKey<Player>(d => d.id);
     });
 

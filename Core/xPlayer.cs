@@ -53,6 +53,7 @@ public partial class xPlayer : AsyncPlayer
   public Player_Cloth player_cloth { get; set; }
   public List<Vehicle_Key> vehicle_keys { get; set; }
   public Player_Society player_society { get; set; }
+  public Player_Factory player_factory { get; set; }
 
   public int isDead { get; set; }
 
@@ -80,6 +81,7 @@ public partial class xPlayer : AsyncPlayer
     this.player_cloth = _player.player_cloth;
     this.vehicle_keys = _player.vehicle_keys;
     this.player_society = _player.player_society;
+    this.player_factory = _player.player_factory;
   }
 
   #region Methods

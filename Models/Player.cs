@@ -44,6 +44,7 @@ public partial class Player
   
   public List<Vehicle_Key> vehicle_keys { get; set; }
   public Player_Society player_society { get; set; }
+  public Player_Factory player_factory { get; set; }
 
   [NotMapped]
   public Dictionary<string, int> boundStorages

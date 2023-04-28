@@ -71,6 +71,22 @@ public class StorageConfig
       slots = 15,
       maxWeight = 150,
       position = null
-    }
+    },
+    new StorageData()
+    {
+      name = "Fabrik Input",
+      loadOnConnect = true,
+      slots = 32, 
+      maxWeight = 320,
+      position = Positions.WorkstationInput
+    },
+    new StorageData()
+    {
+      name = "Fabrik Output",
+      loadOnConnect = true,
+      slots = 32,
+      maxWeight = 320,
+      position = Positions.WorkstationOutput
+    },
   };
 }
