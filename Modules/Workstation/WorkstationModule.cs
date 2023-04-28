@@ -47,6 +47,7 @@ public class WorkstationModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     PlayerHandler.Players.ToList().ForEach(async (kvp) =>
     {
       xPlayer player = kvp.Value;
+      if(player.player_factory.selected_process == -1) return;
       xStorage inputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Fabrik Input"]);
       xStorage outputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Fabrik Output"]);
       int selected_process = kvp.Value.player_factory.selected_process;
@@ -71,15 +72,17 @@ public class WorkstationModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     {
       if (inputStorage.GetItemAmount(inputItem.item) < inputItem.amount)
       {
-        player.SendMessage("Du hast nicht genug " + inputItem.item + " um diesen Prozess zu starten!", NOTIFYS.ERROR);
+        player.SendMessage("Du hast nicht genug " + inputItem.item + " um diesen Prozess zu starten. Die Produktion der Fabrik ist pausiert!", NOTIFYS.ERROR);
         hasEnoughItems = false;
+        player.player_factory.selected_process = -1;
       };
     });
     if (!hasEnoughItems) goto end;
     if ((outputStorage.slots <= outputStorage.items.Count) ||
               (outputStorage.maxWeight <= outputStorage.weight + process.weightNeeded))
     {
-      player.SendMessage("Deine Fabrik ist Voll. Die Produktion ist pausiert!", NOTIFYS.ERROR);
+      player.SendMessage("Deine Fabrik ist Voll. Die Produktion der Fabrik ist pausiert!", NOTIFYS.ERROR);
+      player.player_factory.selected_process = -1;
       goto end;
     };
     #endregion
