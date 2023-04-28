@@ -43,6 +43,7 @@ class ShopModule : ILoadEvent, IPressedEEvent
 
         shop.xVehicles.Add(vehicle);
       });
+      Blip.Blip.Create("Auto Händler", 326, 83, .75f, shop.Position);
     });
   }
 

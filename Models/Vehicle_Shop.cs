@@ -15,7 +15,6 @@ public partial class Vehicle_Shop
   }
   public int id { get; set; }
   public string name { get; set; }
-  public int type { get; set; }
   public string _pos { get; set; }
   public float heading { get; set; }
   public string ped { get; set; }
