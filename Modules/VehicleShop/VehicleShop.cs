@@ -7,6 +7,9 @@ using server.Util.Shop;
 using AltV.Net.Async;
 using Newtonsoft.Json;
 using server.Modules.Items;
+using Microsoft.EntityFrameworkCore;
+using server.Handlers.Vehicle;
+using AltV.Net.Data;
 
 namespace server.Modules.VehicleShop;
 
@@ -19,11 +22,27 @@ public enum VEHICLE_SHOP_TYPE : int
 
 class ShopModule : ILoadEvent, IPressedEEvent
 {
+  IVehicleHandler _vehicleHandler = new VehicleHandler();
   ServerContext _serverContext = new ServerContext();
-  public static List<Models.Shop> vehicleShopList = new List<Models.Shop>();
+  public static List<Models.Vehicle_Shop> vehicleShopList = new List<Models.Vehicle_Shop>();
 
   public async void OnLoad()
   {
+    vehicleShopList = await _serverContext.Vehicle_Shops.Include(v => v.Vehicles).ToListAsync();
+    vehicleShopList.ForEach((shop) => {
+      
+      shop.Vehicles.ForEach(async (_vehicle) => {
+        xVehicle vehicle = await _vehicleHandler.CreateVehicle(_vehicle.model, _vehicle.Position, _vehicle.Rotation);
+        vehicle.Frozen = true;
+        vehicle.PrimaryColorRgb = new Rgba(255, 255, 255, 255);
+        vehicle.SecondaryColorRgb = new Rgba(255, 255, 255, 255);
+        vehicle.Locked = true;
+        vehicle.EngineHealth = 0;
+        vehicle.Collision = false;
+
+        shop.xVehicles.Add(vehicle);
+      });
+    });
   }
 
 

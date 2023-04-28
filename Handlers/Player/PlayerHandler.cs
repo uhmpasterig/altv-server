@@ -173,7 +173,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async void OnFiveSecondsUpdate()
   {
-    ServerContext __playerCtx = new ServerContext();
+    /* ServerContext __playerCtx = new ServerContext();
     __playerCtx.Players.Where(p => p.isOnline).ToList().ForEach(async p =>
     {
       xPlayer? player = await GetPlayer(p.id);
@@ -183,7 +183,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         p.Rotation = player.Rotation;
       }
     });
-    __playerCtx.SaveChanges();
+    __playerCtx.SaveChanges(); */
   }
 
   public async void OnOneMinuteUpdate()

@@ -30,6 +30,8 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Shop> Shops { get; set; }
   public virtual DbSet<ShopItems> ShopItems { get; set; }
 
+  public virtual DbSet<Vehicle_Shop> Vehicle_Shops { get; set; }
+
   public virtual DbSet<Bank> Banks { get; set; }
 
   public virtual DbSet<Cloth> Clothes { get; set; }
@@ -168,6 +170,14 @@ public partial class ServerContext : DbContext
     });
     #endregion
     
+
+    modelBuilder.Entity<Vehicle_Shop>(entity =>
+    {
+      entity.HasMany(d => d.Vehicles)
+        .WithOne(d => d.Vehicle_Shop)
+        .HasForeignKey(d => d.vehicle_shop_id)
+        .HasPrincipalKey(d => d.id);
+    });
     OnModelCreatingPartial(modelBuilder);
   }
 #endregion
