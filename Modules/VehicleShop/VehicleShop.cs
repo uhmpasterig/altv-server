@@ -39,7 +39,6 @@ class ShopModule : ILoadEvent, IPressedEEvent
         vehicle.PrimaryColorRgb = new Rgba(255, 255, 255, 255);
         vehicle.SecondaryColorRgb = new Rgba(255, 255, 255, 255);
         vehicle.Locked = true;
-        vehicle.EngineHealth = 0;
         vehicle.Collision = false;
 
         shop.xVehicles.Add(vehicle);
