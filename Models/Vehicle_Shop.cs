@@ -23,7 +23,7 @@ public partial class Vehicle_Shop
   public List<Vehicle_Shop_Vehicle> Vehicles { get; set; }
   
   [NotMapped]
-  public List<xVehicle> xVehicles { get; set; }
+  public List<xVehicle> xVehicles { get; set; } = new List<xVehicle>();
   
   [NotMapped]
   public Position Position

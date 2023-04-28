@@ -28,10 +28,12 @@ class ShopModule : ILoadEvent, IPressedEEvent
 
   public async void OnLoad()
   {
+    _logger.Info("Loading Vehicle Shops...");
     vehicleShopList = await _serverContext.Vehicle_Shops.Include(v => v.Vehicles).ToListAsync();
     vehicleShopList.ForEach((shop) => {
-      
+      _logger.Error("Shop: " + shop.name);
       shop.Vehicles.ForEach(async (_vehicle) => {
+        _logger.Error("Vehicle: " + _vehicle.model);
         xVehicle vehicle = await _vehicleHandler.CreateVehicle(_vehicle.model, _vehicle.Position, _vehicle.Rotation);
         vehicle.Frozen = true;
         vehicle.PrimaryColorRgb = new Rgba(255, 255, 255, 255);
