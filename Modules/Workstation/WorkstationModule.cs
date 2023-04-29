@@ -4,11 +4,12 @@ using server.Handlers.Entities;
 using server.Models;
 using _logger = server.Logger.Logger;
 using server.Handlers.Storage;
-using server.Util.Farming;
+using server.Util.Workstation;
 using server.Handlers.Player;
 using Microsoft.EntityFrameworkCore;
 using AltV.Net.Data;
 using server.Modules.Inventory;
+using AltV.Net.Async;
 
 namespace server.Modules.Workstation;
 
@@ -16,7 +17,7 @@ internal class ProcessData
 {
 }
 
-public class WorkstationModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
+public class WorkstationModule : ILoadEvent, IOneMinuteUpdateEvent, IPressedEEvent
 {
   public WorkstationModule()
   {
@@ -40,14 +41,17 @@ public class WorkstationModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     ped.CreateEntity();
 
     factoryProcesses = await _serverContext.Factory_Processes.ToListAsync();
+
+    AltAsync.OnClient<xPlayer, int>("workstation:startProcess", StartProgress);
+    AltAsync.OnClient<xPlayer>("workstation:cancelProcess", StopProgress);
   }
 
-  public async void OnFiveSecondsUpdate()
+  public async void OnOneMinuteUpdate()
   {
     PlayerHandler.Players.ToList().ForEach(async (kvp) =>
     {
       xPlayer player = kvp.Value;
-      if(player.player_factory.selected_process == -1) return;
+      if (player.player_factory.selected_process == -1) return;
       xStorage inputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Fabrik Input"]);
       xStorage outputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Fabrik Output"]);
       int selected_process = kvp.Value.player_factory.selected_process;
@@ -64,28 +68,33 @@ public class WorkstationModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     });
   }
 
-  public async void ProcessItem(xPlayer player, xStorage inputStorage, xStorage outputStorage, Factory_Processes process)
+  public async Task<bool> ContainsItem(xPlayer player, xStorage _in, xStorage _out, Factory_Processes process)
   {
-    #region Checks & Notifys
     bool hasEnoughItems = true;
+
     process.inputItemsList.ForEach((inputItem) =>
     {
-      if (inputStorage.GetItemAmount(inputItem.item) < inputItem.amount)
+      if (_in.GetItemAmount(inputItem.item) < inputItem.amount)
       {
         player.SendMessage("Du hast nicht genug " + inputItem.item + " um diesen Prozess zu starten. Die Produktion der Fabrik ist pausiert!", NOTIFYS.ERROR);
         hasEnoughItems = false;
         player.player_factory.selected_process = -1;
       };
     });
-    if (!hasEnoughItems) goto end;
-    if ((outputStorage.slots <= outputStorage.items.Count) ||
-              (outputStorage.maxWeight <= outputStorage.weight + process.weightNeeded))
+
+    if ((_out.slots <= _out.items.Count) ||
+              (_out.maxWeight <= _out.weight + process.weightNeeded))
     {
       player.SendMessage("Deine Fabrik ist Voll. Die Produktion der Fabrik ist pausiert!", NOTIFYS.ERROR);
       player.player_factory.selected_process = -1;
-      goto end;
+      hasEnoughItems = false;
     };
-    #endregion
+    return hasEnoughItems;
+  }
+
+  public async void ProcessItem(xPlayer player, xStorage inputStorage, xStorage outputStorage, Factory_Processes process)
+  {
+    if (!await ContainsItem(player, inputStorage, outputStorage, process)) return;
     process.inputItemsList.ForEach((inputItem) =>
     {
       inputStorage.RemoveItem(inputItem.item, inputItem.amount);
@@ -94,12 +103,33 @@ public class WorkstationModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
     {
       outputStorage.AddItem(outputItem.item, outputItem.amount);
     });
+  }
 
-  end: return;
+  public async void StartProgress(xPlayer player, int processId)
+  {
+    xStorage inputStorage = await _storageHandler.GetStorage(player.boundStorages["Fabrik Input"]);
+    xStorage outputStorage = await _storageHandler.GetStorage(player.boundStorages["Fabrik Output"]);
+    Factory_Processes? process = factoryProcesses.FirstOrDefault(x => x.id == processId);
+    if (process == null) return;
+    if (inputStorage == null || outputStorage == null) return;
+    if (!await ContainsItem(player, inputStorage, outputStorage, process)) return;
+    int timeInMinutes = process.ticksPerProcess * 60;
+    player.player_factory.selected_process = processId;
+    player.player_factory.ticksDone = 0;
+    player.SendMessage($"Die Produktion der Fabrik wurde gestartet! Das herstellen dauert pro Item: {timeInMinutes} Minuten", NOTIFYS.INFO);
+  }
+
+  public async void StopProgress(xPlayer player)
+  {
+    player.player_factory.selected_process = -1;
+    player.player_factory.ticksDone = 0;
+    player.SendMessage("Die Produktion der Fabrik wurde pausiert!", NOTIFYS.INFO);
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)
   {
+    if (player.Position.Distance(factoryPosition) > 2) return false;
+    player.Emit("frontend:open", "workstation", new WorkStationWriter(factoryProcesses, player.player_factory.selected_process));
     return true;
   }
 }

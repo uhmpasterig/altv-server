@@ -22,6 +22,8 @@ public partial class Factory_Processes
   {
   }
   public int id { get; set; }
+  public string name { get; set; }
+  public string label { get; set; }
   public string inputItems { get; set; }
   public string outputItems { get; set; }
   public int ticksPerProcess { get; set; }
