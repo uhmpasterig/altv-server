@@ -20,6 +20,7 @@ public partial class Cloth
   public ushort drawable { get; set; }
   public byte texture { get; set; }
   public string dlcName { get; set; }
+  public int price { get; set; }
 
   public byte palette { get; set; }
 

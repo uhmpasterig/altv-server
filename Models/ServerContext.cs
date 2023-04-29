@@ -30,6 +30,7 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Shop> Shops { get; set; }
   public virtual DbSet<ShopItems> ShopItems { get; set; }
   public virtual DbSet<Vehicle_Shop> Vehicle_Shops { get; set; }
+  public virtual DbSet<Cloth_Shop> Cloth_Shops { get; set; }
 
   public virtual DbSet<Factory_Processes> Factory_Processes { get; set; }
 
@@ -49,7 +50,7 @@ public partial class ServerContext : DbContext
     }
   }
 
-#region Generate Entities
+  #region Generate Entities
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -148,7 +149,8 @@ public partial class ServerContext : DbContext
         .HasPrincipalKey(p => p.id);
     });
 
-    modelBuilder.Entity<Business>(entity => {
+    modelBuilder.Entity<Business>(entity =>
+    {
       entity.HasMany(d => d.Members)
         .WithOne(d => d.Business)
         .HasForeignKey(d => d.business_id)
@@ -175,7 +177,7 @@ public partial class ServerContext : DbContext
         .HasPrincipalKey(p => p.id);
     });
     #endregion
-    
+
 
     modelBuilder.Entity<Vehicle_Shop>(entity =>
     {
@@ -184,8 +186,18 @@ public partial class ServerContext : DbContext
         .HasForeignKey(d => d.vehicle_shop_id)
         .HasPrincipalKey(d => d.id);
     });
+
+    modelBuilder.Entity<Cloth_Shop>(entity =>
+    {
+      entity.HasMany(d => d.cloth_items)
+        .WithOne(p => p.shop)
+        .HasForeignKey(d => d.shop_id)
+        .HasPrincipalKey(p => p.id);
+    });
+
+
     OnModelCreatingPartial(modelBuilder);
   }
-#endregion
+  #endregion
   partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
