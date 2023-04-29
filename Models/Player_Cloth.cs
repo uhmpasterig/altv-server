@@ -35,7 +35,18 @@ public partial class Player_Cloth
     var property = this.GetType().GetProperty(name);
     if (property != null)
     {
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
+      Console.WriteLine($"Setting {name} to {number}");
       property.SetValue(this, number);
+    } else {
+      Console.WriteLine($"Property {name} not found");
     }
   }
 
