@@ -24,6 +24,7 @@ public class ClothShopWriter : IWritable
     writer.BeginArray();
     foreach (var cat in shop.Categorys)
     {
+      writer.BeginObject();
       writer.Name("value");
       writer.Value(cat.name);
       writer.Name("label");
@@ -56,6 +57,7 @@ public class ClothShopWriter : IWritable
         writer.EndObject();
       }
       writer.EndArray();
+      writer.EndObject();
     }
 
     writer.EndArray();

@@ -6,7 +6,7 @@ using AltV.Net;
 
 namespace server.Models;
 
-[Table("cloth_shops")]
+[Table("cloth_shop_clothes")]
 [PrimaryKey("id")]
 public partial class Cloth_Shop_Cloth
 {

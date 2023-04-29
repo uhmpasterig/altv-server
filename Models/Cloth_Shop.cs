@@ -10,7 +10,7 @@ public class Cloth_Shop_Category
 {
   public string name { get; set; }
   public string label { get; set; }
-  public List<Cloth_Shop_Cloth> items { get; set; } = new List<Cloth_Shop_Cloth>();
+  public List<Cloth_Shop_Cloth>? items { get; set; } = new List<Cloth_Shop_Cloth>();
 }
 
 [Table("cloth_shops")]
