@@ -35,12 +35,17 @@ class ClothShopModule : ILoadEvent, IPressedEEvent
   {
     _logger.Log("BuyPiece");
     Cloth? cloth = ClothModule.GetCloth(cloth_id);
+    _logger.Log("BuyPiece23");
     if (cloth == null) return;
+    _logger.Log("BuyPiece3");
     string categoryName = ClothModule.GetCategoryName(cloth.component);
     if (!await player.HasMoney(cloth.price)) return;
+    _logger.Log("BuyPiece5");
+
     player.RemoveMoney(cloth.price);
     player.player_cloth.SetPiece(categoryName, cloth.id);
     player.SaveMoney();
+
     await player.LoadClothes(player.player_cloth);
   }
 
