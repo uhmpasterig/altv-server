@@ -113,10 +113,9 @@ public class WorkstationModule : ILoadEvent, IOneMinuteUpdateEvent, IPressedEEve
     if (process == null) return;
     if (inputStorage == null || outputStorage == null) return;
     if (!await ContainsItem(player, inputStorage, outputStorage, process)) return;
-    int timeInMinutes = process.ticksPerProcess * 60;
     player.player_factory.selected_process = processId;
     player.player_factory.ticksDone = 0;
-    player.SendMessage($"Die Produktion der Fabrik wurde gestartet! Das herstellen dauert pro Item: {timeInMinutes} Minuten", NOTIFYS.INFO);
+    player.SendMessage($"Die Produktion der Fabrik wurde gestartet! Das herstellen dauert pro Item: {process.ticksPerProcess} Minuten", NOTIFYS.INFO);
   }
 
   public async void StopProgress(xPlayer player)
