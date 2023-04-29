@@ -22,20 +22,17 @@ public enum VEHICLE_SHOP_TYPE : int
 
 class ShopModule : ILoadEvent, IPressedEEvent
 {
-  IVehicleHandler _vehicleHandler = new VehicleHandler();
+  static IVehicleHandler _vehicleHandler = new VehicleHandler();
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Vehicle_Shop> vehicleShopList = new List<Models.Vehicle_Shop>();
 
   public async void OnLoad()
   {
-    _logger.Info("Loading Vehicle Shops...");
     vehicleShopList = await _serverContext.Vehicle_Shops.Include(v => v.Vehicles).ToListAsync();
     vehicleShopList.ForEach((shop) =>
     {
-      _logger.Error("Shop: " + shop.name);
       shop.Vehicles.ForEach(async (_vehicle) =>
       {
-        _logger.Error("Vehicle: " + _vehicle.model);
         xVehicle vehicle = await _vehicleHandler.CreateVehicle(_vehicle.model, _vehicle.Position, _vehicle.Rotation);
         vehicle.NumberplateText = "SHOP VEH";
         vehicle.Frozen = true;
@@ -62,16 +59,29 @@ class ShopModule : ILoadEvent, IPressedEEvent
     text.CreateEntity();
   }
 
-  public async void CreateTextForVehicle(Vehicle_Shop_Vehicle vehicle)
+  async void CreateTextForVehicle(Vehicle_Shop_Vehicle vehicle)
   {
     Position position = vehicle.Position + new Position(0, 0, 2);
-    CreateText("Fahrzeug:", position- new Position(0,0,.05f), "CYAN");
-    CreateText(vehicle.name, position - new Position(0,0,.15f));
-    CreateText("$"+vehicle.price.ToString(), position - new Position(0, 0, .25f), "GREEN");
+    CreateText("Fahrzeug:", position - new Position(0, 0, .05f), "CYAN");
+    CreateText(vehicle.name, position - new Position(0, 0, .15f));
+    CreateText("$" + vehicle.price.ToString(), position - new Position(0, 0, .25f), "GREEN");
 
-    CreateText("Kofferraum:", position - new Position(0,0,.4f), "CYAN");
-    CreateText($"Slots: {vehicle.slots}", position - new Position(0,0,.5f));
-    CreateText($"Kilogramm: {vehicle.maxWeight}", position - new Position(0,0,.6f));
+    CreateText("Kofferraum:", position - new Position(0, 0, .4f), "CYAN");
+    CreateText($"Slots: {vehicle.slots}", position - new Position(0, 0, .5f));
+    CreateText($"Kilogramm: {vehicle.maxWeight}", position - new Position(0, 0, .6f));
+  }
+
+  public static async Task BuyVehicle(xPlayer player, Vehicle_Shop_Vehicle vehicle, int price, int garage_id = -1)
+  {
+    if (!await player.HasMoney(price))
+    {
+      player.SendMessage("Du hast nicht genug Geld!", NOTIFYS.ERROR);
+      return;
+    }
+    player.RemoveMoney(price);
+    await _vehicleHandler.AddVehicleShopVehicle(player, vehicle, player.Position, player.Rotation, garage_id);
+    player.SaveMoney();
+    player.SendMessage($"Du hast das Fahrzeug {vehicle.name} für ${price} gekauft!", NOTIFYS.SUCCESS);
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)

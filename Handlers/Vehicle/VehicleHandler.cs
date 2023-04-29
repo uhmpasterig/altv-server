@@ -34,6 +34,30 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
 
   public VehicleHandler() { }
 
+  public async Task AddVehicleShopVehicle(xPlayer player, Vehicle_Shop_Vehicle _veh, Position position, Rotation rotation, int garageId = -1)
+  {
+    Models.Vehicle veh = new Models.Vehicle();
+    veh.owner_id = player.id;
+    veh.owner_type = (int)OWNER_TYPES.PLAYER;
+    veh.type = (int)VEHICLE_TYPES.PKW;
+    veh.garage_id = garageId;
+    veh.model = _veh.model;
+
+    veh.storage_id_glovebox = await _storageHandler.CreateStorage($"Handschuhfach [{veh.id}]", _veh.slots, _veh.maxWeight, new Position(0, 0, 0));
+    veh.storage_id_trunk = await _storageHandler.CreateStorage("Kofferraum [{veh.id}]", _veh.slots, _veh.maxWeight, new Position(0, 0, 0));
+
+    veh.Position = position;
+    veh.Rotation = rotation;
+
+    veh.lastAction = DateTime.Now;
+    veh.creationDate = DateTime.Now;
+
+    veh.vehicle_data = new Vehicle_Data();
+    veh.vehicle_keys = new List<Vehicle_Key>();
+    _vehicleCtx.Vehicles.Add(veh);
+    _vehicleCtx.SaveChanges();
+  }
+
   public async Task<xVehicle> CreateVehicle(string model, Position position, Rotation rotation)
   {
     xVehicle vehicle = (xVehicle)await AltAsync.CreateVehicle(model, position, rotation);

@@ -52,8 +52,8 @@ public class WorkstationModule : ILoadEvent, IOneMinuteUpdateEvent, IPressedEEve
     {
       xPlayer player = kvp.Value;
       if (player.player_factory.selected_process == -1) return;
-      xStorage inputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Fabrik Input"]);
-      xStorage outputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Fabrik Output"]);
+      xStorage inputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Warenannahme Fabrik"]);
+      xStorage outputStorage = await _storageHandler.GetStorage(kvp.Value.boundStorages["Warenausgabe Fabrik"]);
       int selected_process = kvp.Value.player_factory.selected_process;
       Factory_Processes? process = factoryProcesses.FirstOrDefault(x => x.id == selected_process);
       if (process == null) return;
@@ -107,8 +107,8 @@ public class WorkstationModule : ILoadEvent, IOneMinuteUpdateEvent, IPressedEEve
 
   public async void StartProgress(xPlayer player, int processId)
   {
-    xStorage inputStorage = await _storageHandler.GetStorage(player.boundStorages["Fabrik Input"]);
-    xStorage outputStorage = await _storageHandler.GetStorage(player.boundStorages["Fabrik Output"]);
+    xStorage inputStorage = await _storageHandler.GetStorage(player.boundStorages["Warenannahme Fabrik"]);
+    xStorage outputStorage = await _storageHandler.GetStorage(player.boundStorages["Warenausgabe Fabrik"]);
     Factory_Processes? process = factoryProcesses.FirstOrDefault(x => x.id == processId);
     if (process == null) return;
     if (inputStorage == null || outputStorage == null) return;

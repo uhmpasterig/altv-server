@@ -74,7 +74,7 @@ public class StorageConfig
     },
     new StorageData()
     {
-      name = "Fabrik Input",
+      name = "Warenannahme Fabrik",
       loadOnConnect = true,
       slots = 32, 
       maxWeight = 320,
@@ -82,7 +82,7 @@ public class StorageConfig
     },
     new StorageData()
     {
-      name = "Fabrik Output",
+      name = "Warenausgabe Fabrik",
       loadOnConnect = true,
       slots = 32,
       maxWeight = 320,

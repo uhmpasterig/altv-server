@@ -19,7 +19,7 @@ public partial class Storage
   public float currentWeight { get; set; }
   public int slots { get; set; }
   public string _pos { get; set; }
-  public bool usePos { get; set; }
+  public bool usePos { get; set; } = false;
   public string _items { get; set; }
 
   [NotMapped]

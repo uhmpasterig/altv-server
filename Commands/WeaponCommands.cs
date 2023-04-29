@@ -97,4 +97,13 @@ internal class WeaponCommands : IScript
   {
     await BackPacks.PackBackPack(player);
   }
+
+  [Command("buyvehicle")]
+  public static async void BuyVehicle(xPlayer player, int shopid, int vehicleid, int garageid = -1)
+  {
+    Vehicle_Shop_Vehicle vehicle = server.Modules.VehicleShop.ShopModule.vehicleShopList.Where(v => v.id == shopid).FirstOrDefault()!
+    .Vehicles.Where(v => v.id == vehicleid).FirstOrDefault()!;
+
+    await server.Modules.VehicleShop.ShopModule.BuyVehicle(player, vehicle, 200, garageid);
+  }
 }

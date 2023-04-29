@@ -8,6 +8,7 @@ namespace server.Handlers.Vehicle;
 public interface IVehicleHandler
 {
 
+  Task AddVehicleShopVehicle(xPlayer player, Vehicle_Shop_Vehicle _veh, Position position, Rotation rotation, int garageId = -1);
   Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle);
   Task<xVehicle> CreateVehicleFromDb(Models.Vehicle vehicle, Position position, Rotation rotation);
 
