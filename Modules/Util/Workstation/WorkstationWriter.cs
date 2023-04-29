@@ -39,7 +39,7 @@ public class WorkStationWriter : IWritable
       process.inputItemsList.ForEach((item) =>
       {
         writer.BeginObject();
-        writer.Name("item");
+        writer.Name("name");
         writer.Value(item.item);
         writer.Name("amount");
         writer.Value(item.amount);
@@ -54,7 +54,7 @@ public class WorkStationWriter : IWritable
       process.outputItemsList.ForEach((item) =>
       {
         writer.BeginObject();
-        writer.Name("item");
+        writer.Name("name");
         writer.Value(item.item);
         writer.Name("amount");
         writer.Value(item.amount);
