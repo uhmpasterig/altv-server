@@ -99,7 +99,7 @@ internal class WeaponCommands : IScript
   }
 
   [Command("buyvehicle")]
-  public static async void BuyVehicle(xPlayer player, int shopid, int vehicleid, int garageid = -1)
+  public static async void BuyVehicle(xPlayer player, int shopid, int vehicleid, int garageid = 20)
   {
     Vehicle_Shop_Vehicle vehicle = server.Modules.VehicleShop.ShopModule.vehicleShopList.Where(v => v.id == shopid).FirstOrDefault()!
     .Vehicles.Where(v => v.id == vehicleid).FirstOrDefault()!;

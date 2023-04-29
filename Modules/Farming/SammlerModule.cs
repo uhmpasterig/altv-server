@@ -23,7 +23,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
   public async void LoadSammler(Farming_Collector sammlerData)
   {
     sammlerData.PropPositions = JsonConvert.DeserializeObject<List<propData>>(sammlerData._propPositions)!;
-    
+
     foreach (propData prop in sammlerData.PropPositions)
     {
       xEntity _entity = new xEntity();
@@ -70,11 +70,11 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     });
     if (_currentEntity == null) return false;
 
-   /*  if (await player.HasItem(_currentSammler.tool) == false)
+    if (await player.HasItem(_currentSammler.tool) == false)
     {
       player.SendMessage("Du benötigst ein " + _currentSammler.tool, NOTIFYS.ERROR);
       return false;
-    }; */
+    };
     #endregion
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.position.X, _currentEntity.position.Y, _currentEntity.position.Z);
@@ -118,7 +118,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     int random = new Random().Next(feld.amountmin, feld.amountmax);
     inv.AddItem(feld.item, random);
     player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);
-    
+
     return true;
   }
 

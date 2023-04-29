@@ -44,7 +44,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     veh.model = _veh.model;
 
     veh.storage_id_glovebox = await _storageHandler.CreateStorage($"Handschuhfach [{veh.id}]", _veh.slots, _veh.maxWeight, new Position(0, 0, 0));
-    veh.storage_id_trunk = await _storageHandler.CreateStorage("Kofferraum [{veh.id}]", _veh.slots, _veh.maxWeight, new Position(0, 0, 0));
+    veh.storage_id_trunk = await _storageHandler.CreateStorage($"Kofferraum [{veh.id}]", _veh.slots, _veh.maxWeight, new Position(0, 0, 0));
 
     veh.Position = position;
     veh.Rotation = rotation;
