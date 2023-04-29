@@ -34,10 +34,14 @@ class ClothModule : ILoadEvent
     allClothes = _serverContext.Clothes.ToList();
   }
 
+  public static string GetCategoryName(int componentId)
+  {
+    return ((CLOTH_TYPES)componentId).ToString();
+  }
+
   public static Cloth? GetCloth(int id)
   {
     Cloth? cloth = allClothes.Where(c => c.id == id).FirstOrDefault();
-    cloth.CategoryName = Enum.GetName(typeof(CLOTH_TYPES), cloth.component)!;
     return cloth;
   }
 }
