@@ -53,6 +53,9 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     veh.creationDate = DateTime.Now;
 
     veh.vehicle_data = new Vehicle_Data();
+    veh.vehicle_data.plate = "";
+    veh.vehicle_data._uidata = "{}";
+    veh.vehicle_data.keys = "[]";
     veh.vehicle_keys = new List<Vehicle_Key>();
     _vehicleCtx.Vehicles.Add(veh);
     _vehicleCtx.SaveChanges();
