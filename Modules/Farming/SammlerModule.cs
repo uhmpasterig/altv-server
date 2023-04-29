@@ -72,7 +72,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
     if (await player.HasItem(_currentSammler.tool) == false)
     {
-      player.SendMessage("Du benötigst ein/eine " + _currentSammler.tool, NOTIFYS.ERROR);
+      player.SendMessage("Du benötigst ein/eine " + Items.Items.GetItemLabel(_currentSammler.tool), NOTIFYS.ERROR);
       return false;
     };
     #endregion
