@@ -5,6 +5,7 @@ using _logger = server.Logger.Logger;
 using server.Handlers.Entities;
 using server.Util.ClothShop;
 using Microsoft.EntityFrameworkCore;
+using AltV.Net.Async;
 
 namespace server.Modules.Clothing;
 
@@ -24,6 +25,22 @@ class ClothShopModule : ILoadEvent, IPressedEEvent
     {
       Blip.Blip.Create("Kleidungsladen", 73, 37, .75f, shop.Position);
     });
+
+    AltAsync.OnClient<xPlayer, int>("clothshop:tryItem", TryOnPiece);
+    AltAsync.OnClient<xPlayer>("clothshop:close", ResetPlayerCloth);
+  }
+
+  public async void TryOnPiece(xPlayer player, int cloth_id)
+  {
+    _logger.Log("TryOnPiece");
+    Cloth? cloth = ClothModule.GetCloth(cloth_id);
+    if (cloth == null) return;
+    _logger.Log("Cloth not null");
+    player.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
+  }
+
+  public async void ResetPlayerCloth(xPlayer player) {
+    await player.LoadClothes(player.player_cloth);
   }
 
   public async Task<Cloth_Shop> GetShop(int id)

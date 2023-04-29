@@ -27,7 +27,7 @@ public class ClothShopWriter : IWritable
       writer.BeginObject();
       writer.Name("value");
       writer.Value(cat.name);
-      writer.Name("label");
+      writer.Name("name");
       writer.Value(cat.label);
 
       writer.Name("items");
