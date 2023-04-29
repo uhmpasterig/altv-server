@@ -30,6 +30,15 @@ public partial class Player_Cloth
   public int decal { get; set; }
   public int top { get; set; }
 
+  public void SetPiece(string name, int number)
+  {
+    var property = this.GetType().GetProperty(name);
+    if (property != null)
+    {
+      property.SetValue(this, number);
+    }
+  }
+
   public List<int> ToList()
   {
     return new List<int>() { mask, torso, leg, bag, shoe, accessories, undershirt, armor, decal, top };

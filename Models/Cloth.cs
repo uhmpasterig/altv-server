@@ -25,6 +25,9 @@ public partial class Cloth
   public byte palette { get; set; }
 
   [NotMapped]
+  public string CategoryName { get; set; } = "Unknown";
+
+  [NotMapped]
   public uint dlc
   {
     get

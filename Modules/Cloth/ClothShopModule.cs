@@ -30,6 +30,17 @@ class ClothShopModule : ILoadEvent, IPressedEEvent
     AltAsync.OnClient<xPlayer>("clothshop:close", ResetPlayerCloth);
   }
 
+  public async void BuyPiece(xPlayer player, int cloth_id)
+  {
+    Cloth? cloth = ClothModule.GetCloth(cloth_id);
+    if (cloth == null) return;
+    if (!await player.HasMoney(cloth.price)) return;
+    player.RemoveMoney(cloth.price);
+    player.player_cloth.SetPiece(cloth.CategoryName, cloth.id);
+    player.SaveMoney();
+    await player.LoadClothes(player.player_cloth);
+  }
+
   public async void TryOnPiece(xPlayer player, int cloth_id)
   {
     _logger.Log("TryOnPiece");
@@ -39,7 +50,8 @@ class ClothShopModule : ILoadEvent, IPressedEEvent
     player.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
   }
 
-  public async void ResetPlayerCloth(xPlayer player) {
+  public async void ResetPlayerCloth(xPlayer player)
+  {
     await player.LoadClothes(player.player_cloth);
   }
 
