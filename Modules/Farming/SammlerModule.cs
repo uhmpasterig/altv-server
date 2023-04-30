@@ -9,6 +9,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Data;
 using server.Handlers.Storage;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
@@ -22,21 +23,30 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
   public async void LoadSammler(Farming_Collector sammlerData)
   {
-    sammlerData.PropPositions = JsonConvert.DeserializeObject<List<propData>>(sammlerData._propPositions)!;
 
-    foreach (propData prop in sammlerData.PropPositions)
+    foreach (Farming_Props prop in sammlerData.Props)
     {
       xEntity _entity = new xEntity();
       _entity.entityType = ENTITY_TYPES.PROP;
       _entity.dimension = (int)DIMENSIONEN.WORLD;
-      _entity.position = prop.position;
+      _entity.position = prop.Position;
       _entity.range = 20;
       _entity.data.Add("model", prop.model);
-      _entity.data.Add("rotation", JsonConvert.SerializeObject(prop.rotation));
+      _entity.data.Add("rotation", JsonConvert.SerializeObject(prop.Rotation));
       _entity.CreateEntity();
-      // _entity.SetSyncedData("sideProducts", sammlerData.sideProducts);
       sammlerData.Entities.Add(_entity);
     }
+  }
+
+  public async void OnLoad()
+  {
+    _farmingPlayers = new Dictionary<xPlayer, int>();
+    await using ServerContext serverContext = new ServerContext();
+    _sammler = await serverContext.Farming_Collectors.Include(f => f.Props).ToListAsync();
+    _sammler.ForEach((sammler) =>
+    {
+      LoadSammler(sammler);
+    });
   }
 
   public async Task<bool> OnKeyPressE(xPlayer player)
@@ -83,21 +93,6 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
     _farmingPlayers.Add(player, _currentSammler.id);
     return true;
-  }
-
-  public async void OnLoad()
-  {
-    _farmingPlayers = new Dictionary<xPlayer, int>();
-
-    await using ServerContext serverContext = new ServerContext();
-    _logger.Startup("Lade Sammler!");
-    foreach (Farming_Collector sammler in serverContext.Farming_Collectors.ToList())
-    {
-      _sammler.Add(sammler);
-      LoadSammler(sammler);
-      _logger.Debug($"Sammler {sammler.name} geladen");
-    }
-    _logger.Startup($"x{_sammler.Count} Farming Sammler geladen");
   }
 
   public Farming_Collector GetSammler(int id)

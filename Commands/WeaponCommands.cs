@@ -62,6 +62,12 @@ internal class WeaponCommands : IScript
     player.Emit("propCreator", "createprop", prop);
   }
 
+  [Command("createroutenprop")]
+  public static void CreateRouteNProp(xPlayer player, string routenName)
+  {
+    
+  }
+
   [Command("anziehen")]
   public static void Test(xPlayer player, int id)
   {

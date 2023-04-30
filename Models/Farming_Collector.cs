@@ -7,20 +7,6 @@ using server.Core;
 
 namespace server.Models;
 
-public class propData
-{
-  public Rotation rotation { get; set; }
-  public Position position { get; set; }
-  public string model { get; set; }
-
-  public propData(Rotation rotation, Position position, string model)
-  {
-    this.rotation = rotation;
-    this.position = position;
-    this.model = model;
-  }
-}
-
 [Table("farming_collectors")]
 [PrimaryKey("id")]
 public partial class Farming_Collector
@@ -37,8 +23,9 @@ public partial class Farming_Collector
   public int amountmax { get; set; }
   public string prop { get; set; }
   public string _pos { get; set; }
-  public string _propPositions { get; set; }
   public string sideProducts { get; set; }
+
+  public List<Farming_Props> Props { get; set; } = new List<Farming_Props>();
 
   [NotMapped]
   public Position Position
@@ -52,11 +39,6 @@ public partial class Farming_Collector
       _pos = JsonConvert.SerializeObject(value);
     }
   }
-
-
-
-  [NotMapped]
-  public List<propData> PropPositions { get; set; } = new List<propData>();
 
   [NotMapped]
   public List<string> SideProducts
@@ -76,6 +58,6 @@ public partial class Farming_Collector
 
   public override string ToString()
   {
-    return $"Name: {name}, Tool: {tool}, Time: {timeS}, Item: {item}, Prop: {prop}, Position: {Position}, PropPositions: {PropPositions}, SideProducts: {SideProducts}";
+    return $"Name: {name}, Tool: {tool}, Time: {timeS}, Item: {item}, Prop: {prop}, Position: {Position}, SideProducts: {SideProducts}";
   }
 }

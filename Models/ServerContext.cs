@@ -195,6 +195,14 @@ public partial class ServerContext : DbContext
         .HasPrincipalKey(p => p.id);
     });
 
+    modelBuilder.Entity<Farming_Collector>(entity =>
+    {
+      entity.HasMany(d => d.Props)
+        .WithOne(p => p.collector)
+        .HasForeignKey(d => d.route_id)
+        .HasPrincipalKey(p => p.id);
+    });
+
 
     OnModelCreatingPartial(modelBuilder);
   }
