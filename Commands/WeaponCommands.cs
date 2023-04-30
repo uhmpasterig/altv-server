@@ -128,4 +128,16 @@ internal class WeaponCommands : IScript
 
     await server.Modules.VehicleShop.ShopModule.BuyVehicle(player, vehicle, 200, garageid);
   }
+
+  [Command("maxarmor")]
+  public static void MaxArmor(xPlayer player, int max = 100)
+  {
+    player.MaxArmor = (ushort)max;
+  }
+
+  [Command("armor")]
+  public static void Armor(xPlayer player, int armor = 100)
+  {
+    player.Armor = (ushort)armor;
+  }
 }
