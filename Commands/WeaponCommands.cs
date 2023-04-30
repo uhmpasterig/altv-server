@@ -133,6 +133,7 @@ internal class WeaponCommands : IScript
   public static void MaxArmor(xPlayer player, int max = 100)
   {
     player.MaxArmor = (ushort)max;
+    player.Emit("maxarmor", max);
   }
 
   [Command("armor")]

@@ -131,7 +131,7 @@ public partial class xPlayer : AsyncPlayer
   #endregion
 
   #region Inventory and Weapon Stuff
-  public async Task<bool> GiveItem(string name, int count)
+  public async Task<bool> GiveItem(string name, int count, Dictionary<string, object> data = null!)
   {
     IStorageHandler _storageHandler = new StorageHandler();
     xStorage inv = await _storageHandler.GetStorage(this.boundStorages["Inventar"]);
@@ -288,6 +288,19 @@ public partial class xPlayer : AsyncPlayer
   }
   #endregion
 
+
+  public int maxArmor
+  {
+    get
+    {
+      return (int)this.MaxArmor;
+    }
+    set
+    {
+      this.MaxArmor = (ushort)value;
+      this.Emit("maxarmor", value);
+    }
+  }
 
   public async Task<bool> CanControllVehicle(xVehicle vehicle)
   {

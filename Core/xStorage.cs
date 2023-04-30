@@ -84,10 +84,10 @@ public class xStorage : Models.Storage
     return -1;
   }
 
-  public bool AddItem(string itemname, int count = 1)
+  public bool AddItem(string itemname, int count = 1, Dictionary<string, object> data = null!)
   {
     xItem? item = Items.GetItem(itemname);
-    if(item == null) return false;
+    if (item == null) return false;
 
     if (this.items.Count > this.slots)
     {
@@ -155,13 +155,13 @@ public class xStorage : Models.Storage
     if (items.Count == 0) return false;
     foreach (var item in items)
     {
-      
-      if(item.count == count)
+
+      if (item.count == count)
       {
         this.items.Remove(item);
         return true;
       }
-      else if(item.count > count)
+      else if (item.count > count)
       {
         item.count -= count;
         return true;
