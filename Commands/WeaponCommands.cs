@@ -136,9 +136,9 @@ internal class WeaponCommands : IScript
     player.Emit("maxarmor", max);
   }
 
-  [Command("armor")]
-  public static void Armor(xPlayer player, int armor = 100)
+  [Command("packweste")]
+  public static void Armor(xPlayer player)
   {
-    player.Armor = (ushort)armor;
+    server.Modules.Items.Westen.PackWeste(player);
   }
 }

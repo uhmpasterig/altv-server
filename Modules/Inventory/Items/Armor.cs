@@ -4,10 +4,10 @@ using _logger = server.Logger.Logger;
 
 namespace server.Modules.Items;
 
-class UsabelMedikit : IItemsLoaded
+class Westen : IItemsLoaded
 {
   static int time = 5000;
-  public async void PackWeste(xPlayer player)
+  public static async void PackWeste(xPlayer player)
   {
     if (player.dataCache.ContainsKey("weste"))
     {
