@@ -64,12 +64,13 @@ internal class WeaponCommands : IScript
   }
 
   [Command("createroutenprop")]
-  public static async void CreateRouteNProp(xPlayer player, string routenName)
+  public static async void CreateRouteNProp(xPlayer player, string model)
   {
+    player.Emit("propCreator", "routenprop", model);
   }
 
   [ClientEvent("routenprop")]
-  public static void RouteNProp(xPlayer player, string model, string _pos, string _rot)
+  public static async void RouteNProp(xPlayer player, string model, string _pos, string _rot)
   {
     ServerContext serverContext = new ServerContext();
     Farming_Prop prop = new Farming_Prop();
@@ -79,6 +80,8 @@ internal class WeaponCommands : IScript
     prop.route_id = 1;
     serverContext.Farming_Props.Add(prop);
     serverContext.SaveChanges();
+
+    xEntity entity = await server.Modules.Farming.Sammler.SammlerMain.CreatePropForRoute(prop);
   }
 
   [Command("anziehen")]

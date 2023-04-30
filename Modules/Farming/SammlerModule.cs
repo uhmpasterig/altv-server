@@ -18,23 +18,30 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
   {
   }
 
-  private List<Farming_Collector> _sammler = new List<Farming_Collector>();
+  public static List<Farming_Collector> _sammler = new List<Farming_Collector>();
   private Dictionary<xPlayer, int> _farmingPlayers;
+
+  public static async Task<xEntity> CreatePropForRoute(Farming_Prop prop)
+  {
+    xEntity _entity = new xEntity();
+    _entity.entityType = ENTITY_TYPES.PROP;
+    _entity.dimension = (int)DIMENSIONEN.WORLD;
+    _entity.position = prop.Position;
+    _entity.range = 250;
+    _entity.data.Add("model", prop.model);
+    _entity.data.Add("rotation", JsonConvert.SerializeObject(prop.Rotation));
+    _entity.CreateEntity();
+
+    return _entity;
+  }
 
   public async void LoadSammler(Farming_Collector sammlerData)
   {
 
     foreach (Farming_Prop prop in sammlerData.Props)
     {
-      xEntity _entity = new xEntity();
-      _entity.entityType = ENTITY_TYPES.PROP;
-      _entity.dimension = (int)DIMENSIONEN.WORLD;
-      _entity.position = prop.Position;
-      _entity.range = 20;
-      _entity.data.Add("model", prop.model);
-      _entity.data.Add("rotation", JsonConvert.SerializeObject(prop.Rotation));
-      _entity.CreateEntity();
-      sammlerData.Entities.Add(_entity);
+      xEntity entity = await CreatePropForRoute(prop);
+      sammlerData.Entities.Add(entity);
     }
   }
 
@@ -59,6 +66,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
       player.Emit("stopAnim");
       return true;
     };
+
     Farming_Collector _currentSammler = null!;
     // Get the Closest Sammler
     _sammler.ForEach((sammler) =>
@@ -73,7 +81,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     xEntity _currentEntity = null!;
     _currentSammler.Entities.ForEach((entity) =>
     {
-      if (entity.position.Distance(player.Position) < 2)
+      if (entity.position.Distance(player.Position) < 3)
       {
         _currentEntity = entity;
       }
@@ -89,7 +97,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.position.X, _currentEntity.position.Y, _currentEntity.position.Z);
     await Task.Delay(1000);
-    player.Emit("playAnim", "farming_spitzhacke");
+    player.Emit("playAnim", _currentSammler.animation);
 
     _farmingPlayers.Add(player, _currentSammler.id);
     return true;

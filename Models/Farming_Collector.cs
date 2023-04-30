@@ -17,11 +17,10 @@ public partial class Farming_Collector
   public int id { get; set; }
   public string name { get; set; }
   public string tool { get; set; }
-  public int timeS { get; set; }
+  public string animation { get; set; }
   public string item { get; set; }
   public int amountmin { get; set; }
   public int amountmax { get; set; }
-  public string prop { get; set; }
   public string _pos { get; set; }
   public string sideProducts { get; set; }
 
@@ -56,8 +55,4 @@ public partial class Farming_Collector
   [NotMapped]
   public List<xEntity> Entities { get; set; } = new List<xEntity>();
 
-  public override string ToString()
-  {
-    return $"Name: {name}, Tool: {tool}, Time: {timeS}, Item: {item}, Prop: {prop}, Position: {Position}, SideProducts: {SideProducts}";
-  }
 }
