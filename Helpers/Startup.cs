@@ -54,6 +54,8 @@ public static class Startup
     {
       if (IsHandler(type))
         handlers.Add(type);
+      if (IsModule(type))
+        modules.Add(type);
     }
   }
 
