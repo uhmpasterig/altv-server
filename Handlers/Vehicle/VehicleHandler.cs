@@ -28,6 +28,8 @@ public enum VEHICLE_TYPES : int
 
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
+  public static IVehicleHandler Instance = new VehicleHandler();
+  
   public static ServerContext _vehicleCtx = new ServerContext();
   IStorageHandler _storageHandler = new StorageHandler();
   public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();

@@ -12,8 +12,9 @@ public partial class ServerContext : DbContext
   public virtual DbSet<Player> Players { get; set; }
   public virtual DbSet<Vehicle> Vehicles { get; set; }
 
-  public virtual DbSet<Storage> Storages { get; set; }
   public virtual DbSet<Item> Items { get; set; }
+  public virtual DbSet<Storage> Storages { get; set; }
+  public virtual DbSet<Storage_Item> Storage_Items { get; set; }
 
   public virtual DbSet<Faction> Factions { get; set; }
   public virtual DbSet<Faction_rank> Faction_ranks { get; set; }
@@ -128,7 +129,6 @@ public partial class ServerContext : DbContext
     #endregion
 
     #region Faction and Business
-
     modelBuilder.Entity<Faction>(entity =>
     {
       entity.HasMany(d => d.Members)
@@ -179,7 +179,7 @@ public partial class ServerContext : DbContext
     });
     #endregion
 
-
+    #region Shops
     modelBuilder.Entity<Vehicle_Shop>(entity =>
     {
       entity.HasMany(d => d.Vehicles)
@@ -195,6 +195,8 @@ public partial class ServerContext : DbContext
         .HasForeignKey(d => d.shop_id)
         .HasPrincipalKey(p => p.id);
     });
+    #endregion
+
 
     modelBuilder.Entity<Farming_Collector>(entity =>
     {
@@ -204,6 +206,27 @@ public partial class ServerContext : DbContext
         .HasPrincipalKey(p => p.id);
     });
 
+
+    modelBuilder.Entity<Storage>(entity =>
+    {
+      entity.HasMany(d => d.Items)
+        .WithOne(p => p.Storage)
+        .HasForeignKey(d => d.storage_id)
+        .HasPrincipalKey(p => p.id);
+    });
+
+    modelBuilder.Entity<Storage_Item>(entity =>
+    {
+      entity.HasOne(d => d.Storage)
+        .WithMany(p => p.Items)
+        .HasForeignKey(d => d.storage_id)
+        .HasPrincipalKey(p => p.id);
+
+      entity.HasOne(d => d.Item_Data)
+        .WithMany()
+        .HasForeignKey(d => d.item_id)
+        .HasPrincipalKey(p => p.id);
+    });
 
     OnModelCreatingPartial(modelBuilder);
   }

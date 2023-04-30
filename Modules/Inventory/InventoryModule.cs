@@ -4,11 +4,11 @@ using server.Core;
 using server.Events;
 using Newtonsoft.Json;
 using server.Handlers.Vehicle;
-using _items = server.Modules.Items.Items;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using server.Modules.Items;
 using server.Handlers.Player;
+using server.Config;
 using server.Util.Inventory;
 using _logger = server.Logger.Logger;
 
@@ -17,7 +17,9 @@ namespace server.Modules.Inventory;
 public class InventoryModule : IPressedIEvent, ILoadEvent
 {
   internal static IPlayerHandler playerHandler = new PlayerHandler();
-  internal static Dictionary<xPlayer, List<int>> userOpenInventorys = new Dictionary<xPlayer, List<int>>();
+
+  internal static Dictionary<int, List<xPlayer>> storagePlayers = new Dictionary<int, List<xPlayer>>();
+
   static IStorageHandler _storageHandler = new StorageHandler();
   IVehicleHandler vehicleHandler = new VehicleHandler();
 
@@ -26,17 +28,16 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     List<xStorage> uiStorages = new List<xStorage>();
     List<int> openInventorys = new List<int>();
 
-    xStorage playerStorage = await _storageHandler.GetStorage(player.boundStorages["Inventar"]);
-    uiStorages.Add(playerStorage);
+    xStorage? playerStorage = await _storageHandler.GetStorage(player.boundStorages[1]);
+    uiStorages.Add(playerStorage!);
     openInventorys.Add(playerStorage.id);
 
-    xStorage storage = await _storageHandler.GetStorage(storage_id);
+    xStorage? storage = await _storageHandler.GetStorage(storage_id)!;
     if (storage != null)
     {
       openInventorys.Add(storage.id);
       uiStorages.Add(storage);
     }
-    userOpenInventorys[player] = openInventorys;
     player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
   }
 
@@ -45,8 +46,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     List<xStorage> uiStorages = new List<xStorage>();
     List<int> openInventorys = new List<int>();
 
-    xStorage playerStorage = await _storageHandler.GetStorage(player.boundStorages["Inventar"]);
-    uiStorages.Add(playerStorage);
+    xStorage? playerStorage = await _storageHandler.GetStorage(player.boundStorages[(int)STORAGES.INVENTORY]);
+    uiStorages.Add(playerStorage!);
     openInventorys.Add(playerStorage.id);
 
     if (player.IsInVehicle)
@@ -70,13 +71,13 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
     if(player.player_society.Faction.name != "Zivilist" && player.player_society.Faction.StoragePosition.Distance(player.Position) < 2)
     {
-      xStorage factionStorage = await _storageHandler.GetStorage(player.boundStorages["Fraktions Tresor"]);
+      xStorage? factionStorage = await _storageHandler.GetStorage(player.boundStorages[(int)STORAGES.FACTION]);
       openInventorys.Add(factionStorage.id);
-      uiStorages.Add(factionStorage);
+      uiStorages.Add(factionStorage!);
       goto load;
     }
 
-    xStorage closestStorage = _storageHandler.GetClosestxStorage(player, 2);
+    xStorage? closestStorage = await _storageHandler.GetClosestStorage(player, 2);
     if (closestStorage != null)
     {
       openInventorys.Add(closestStorage.id);
@@ -122,8 +123,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       List<xStorage> uiStorages = new List<xStorage>();
       foreach (int storageId in userOpenInventorys[(xPlayer)player])
       {
-        xStorage storage = await storageHandler.GetStorage(storageId);
-        uiStorages.Add(storage);
+        xStorage? storage = await storageHandler.GetStorage(storageId);
+        uiStorages.Add(storage!);
       }
       
       if(fromStorage != toStorage)

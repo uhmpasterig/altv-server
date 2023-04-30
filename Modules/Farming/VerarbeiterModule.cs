@@ -21,12 +21,12 @@ internal class ProcessData
   public int stepsDone { get; set; } = 0;
   public int stepsToDo { get; set; } = 0;
 
-  public void RemoveAndAddItems()
+  public async void RemoveAndAddItems()
   {
     int amount = stepsDone * verarbeiter.ratio;
-    bool hasEnough = trunk.RemoveItem(verarbeiter.inputitem, amount);
+    bool hasEnough = await trunk.RemoveItem(verarbeiter.inputitem, amount);
     if (!hasEnough) return;
-    trunk.AddItem(verarbeiter.outputitem, stepsDone);
+    await trunk.AddItem(verarbeiter.outputitem, stepsDone);
     vehicle.isAccesable = true;
     player.SendMessage($"Du hast {stepsDone}x {verarbeiter.outputitem} erhalten", NOTIFYS.INFO);
   }
@@ -56,11 +56,14 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
 
   public async void ProcessTrunk(xVehicle vehicle, xPlayer player, int stepsToDo = 1)
   {
-    xStorage trunk = await _storageHandler.GetStorage(vehicle.storage_id_trunk);
-    if(_processes.Any(x => x.vehicle == vehicle)) return;
+    xStorage? trunk = await _storageHandler.GetStorage(vehicle.storage_id_trunk);
+    if (trunk == null) return;
+
+    if (_processes.Any(x => x.vehicle == vehicle)) return;
     Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(player.Position) < 40)!;
-    
-    if(!trunk.HasItem(verarbeiter.inputitem, verarbeiter.ratio)) {
+
+    if (!await trunk.ContainsItem(verarbeiter.inputitem, verarbeiter.ratio))
+    {
       player.SendMessage($"Du hast nicht genug {verarbeiter.inputitem} dabei", NOTIFYS.ERROR);
       return;
     };
@@ -79,11 +82,12 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
 
   public async Task<int> StepsVehicleCanDo(xVehicle vehicle)
   {
-    xStorage trunk = await _storageHandler.GetStorage(vehicle.storage_id_trunk);
+    xStorage? trunk = await _storageHandler.GetStorage(vehicle.storage_id_trunk);
+    if (trunk == null) return 0;
     int steps = 0;
     Farming_Processor verarbeiter = _verarbeiter.Find(x => x.Position.Distance(vehicle.Position) < 40)!;
     if (verarbeiter == null) return 0;
-    int amount = trunk.GetItemAmount(verarbeiter.inputitem);
+    int amount = await trunk.GetAmount(verarbeiter.inputitem);
     if (amount == 0) return 0;
     steps = amount / verarbeiter.ratio;
     return steps;
@@ -124,7 +128,7 @@ public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEE
 
       _verarbeiter.Add(verarbeiter);
     }
-    
+
     AltAsync.OnClient<IPlayer, int>("verarbeiter:verarbeitenVehId", async (iplayer, vehicleId) =>
     {
       xPlayer player = (xPlayer)iplayer;

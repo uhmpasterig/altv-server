@@ -9,29 +9,25 @@ namespace server.Models;
 [PrimaryKey("id")]
 public partial class Storage
 {
-  public Storage() {
+  public Storage()
+  {
   }
   public int id { get; set; }
   public int ownerId { get; set; }
 
-  public string name { get; set; }  
+  public string name { get; set; }
   public float maxWeight { get; set; }
   public float currentWeight { get; set; }
   public int slots { get; set; }
   public string _pos { get; set; }
   public bool usePos { get; set; } = false;
-  public string _items { get; set; }
+
+  public List<Storage_Item> Items { get; set; }
 
   [NotMapped]
-  public Position? Position
+  public Position Position
   {
-    get
-    {
-      return JsonConvert.DeserializeObject<Position>(_pos);
-    }
-    set
-    {
-      _pos = JsonConvert.SerializeObject(value);
-    }
+    get { return JsonConvert.DeserializeObject<Position>(_pos); }
+    set { _pos = JsonConvert.SerializeObject(value); }
   }
 }

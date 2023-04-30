@@ -7,12 +7,13 @@ namespace server.Handlers.Storage;
 
 public interface IStorageHandler
 {
-  Task<xStorage> GetStorage(int storageId);
-  Task<bool> LoadStorage(int storageId);
-  Task UnloadStorage(int storageId);
-  Task UnloadStorage(xStorage? storage);
+  Task<xStorage?> GetStorage(int id);
+  Task<bool> LoadStorage(int id);
+  Task UnloadStorage(int id);
+  Task UnloadStorage(xStorage storage);
   Task<int> CreateStorage(string name, int slots, float maxWeight, Position? position, int ownerId = -1);
-  xStorage GetClosestxStorage(xPlayer player, int range = 2);
-  Task CreateAllStorages(xPlayer player);
   Task SaveAllStorages();
+  Task CreateAllStorages(xPlayer player);
+  Task<xStorage?> GetClosestStorage(xPlayer player, int range = 2);
+
 }

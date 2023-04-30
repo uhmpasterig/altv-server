@@ -49,7 +49,7 @@ public class EventHandler : IEventHandler
   {
     AltAsync.OnClient<IPlayer>("PressE", OnKeyPressE);
     AltAsync.OnClient<IPlayer>("PressI", OnKeyPressI);
-    AltAsync.OnServer("ItemsLoaded", ItemsLoaded);
+    AltAsync.OnServer("items:loaded", ItemsLoaded);
     _timerHandler = timerHandler;
     _playerConnectedEvents = playerConnectedEvents;
     _playerDisconnectedEvents = playerDisconnectEvents;

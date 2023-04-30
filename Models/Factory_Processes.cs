@@ -36,7 +36,7 @@ public partial class Factory_Processes
       float weight = 0;
       foreach (Factory_Reciep item in inputItemsList)
       {
-        xItem _item = Items.GetItem(item.item);
+        Item _item = Items.GetItem(item.item);
         weight += _item.weight * item.amount;
       }
       return weight;

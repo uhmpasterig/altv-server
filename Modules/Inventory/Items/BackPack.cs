@@ -1,4 +1,4 @@
-using server.Core;
+/* using server.Core;
 using server.Events;
 using _logger = server.Logger.Logger;
 using server.Handlers.Storage;
@@ -62,4 +62,4 @@ class BackPacks : IItemsLoaded
     storage.slots = StorageConfig.StoragesDieJederHabenSollte.Where(x => x.name == "Inventar").FirstOrDefault().slots;
     await player.GiveItem(backpack, 1);
   }
-}
+} */

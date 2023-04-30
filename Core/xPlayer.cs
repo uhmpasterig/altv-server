@@ -43,7 +43,7 @@ public partial class xPlayer : AsyncPlayer
   public string ped { get; set; }
   public int cash { get; set; }
   public int bank { get; set; }
-  public Dictionary<string, int> boundStorages { get; set; } = new Dictionary<string, int>();
+  public Dictionary<int, int> boundStorages { get; set; } = new Dictionary<int, int>();
   public List<xWeapon> weapons { get; set; } = new List<xWeapon>();
   public DateTime creationDate { get; set; }
   public DateTime lastLogin { get; set; }
@@ -134,16 +134,20 @@ public partial class xPlayer : AsyncPlayer
   public async Task<bool> GiveItem(string name, int count, Dictionary<string, object> data = null!)
   {
     IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(this.boundStorages["Inventar"]);
-    if (inv == null)
-    {
-      this.SendMessage("Du hast kein Inventar!", NOTIFYS.ERROR);
-      return false;
-    }
-    return inv.AddItem(name, count);
+    xStorage? inv = await _storageHandler.GetStorage(this.boundStorages[1]);
+    if (inv == null) return false;
+    return await inv.AddItem(name, count);
   }
 
-  public void SetPlayerInventoryId(string key, int value)
+  public async Task<bool> HasItem(string name, int count = 1)
+  {
+    IStorageHandler _storageHandler = new StorageHandler();
+    xStorage? inv = await _storageHandler.GetStorage(this.boundStorages[1]);
+    if (inv == null) return false;
+    return await inv.ContainsItem(name, count);
+  }
+
+  public void SetPlayerInventoryId(int key, int value)
   {
     if (boundStorages.ContainsKey(key))
     {
@@ -182,12 +186,6 @@ public partial class xPlayer : AsyncPlayer
     this.weapons.Add(weapon);
     this.GiveWeapon(Alt.Hash(name), ammo, hold);
     return true;
-  }
-  public async Task<bool> HasItem(string name, int count = 1)
-  {
-    IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(this.boundStorages["Inventar"]);
-    return inv.HasItem(name, count);
   }
   #endregion
 

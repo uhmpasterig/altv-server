@@ -53,8 +53,7 @@ internal class WeaponCommands : IScript
   public async static void GiveItem(xPlayer player, string name, int amount = 1)
   {
     StorageHandler _storageHandler = new StorageHandler();
-    xStorage inventory = await _storageHandler.GetStorage(player.boundStorages["Inventar"]);
-    inventory.AddItem(name, amount);
+    await player.GiveItem(name, amount);
   }
 
   [Command("createprop")]

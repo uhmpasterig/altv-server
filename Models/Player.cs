@@ -47,9 +47,9 @@ public partial class Player
   public Player_Factory player_factory { get; set; }
 
   [NotMapped]
-  public Dictionary<string, int> boundStorages
+  public Dictionary<int, int> boundStorages
   {
-    get { return JsonConvert.DeserializeObject<Dictionary<string, int>>(_boundStorages); }
+    get { return JsonConvert.DeserializeObject<Dictionary<int, int>>(_boundStorages); }
     set { _boundStorages = JsonConvert.SerializeObject(value); }
   }
 

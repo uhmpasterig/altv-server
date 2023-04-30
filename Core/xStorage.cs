@@ -5,17 +5,16 @@ using _logger = server.Logger.Logger;
 using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
 using AltV.Net.Data;
-using server.Modules.Items;
+using server.Handlers.Items;
+
 
 namespace server.Core;
 
 public class xStorage : Models.Storage
 {
-  public List<InventoryItem> items = new List<InventoryItem>();
-
-  public List<xPlayer> players = new List<xPlayer>();
-
   public float weight = 0;
+
+  public List<xPlayer> PlayersInside = new List<xPlayer>();
 
   public xStorage(Models.Storage storage)
   {
@@ -28,233 +27,204 @@ public class xStorage : Models.Storage
 
     this._pos = storage._pos;
     this.usePos = storage.usePos;
-
-    this._items = storage._items;
-    this.items = JsonConvert.DeserializeObject<List<InventoryItem>>(this._items)!;
+    this.Items = storage.Items;
     this.CalculateWeight();
   }
+
+  #region Methods
 
   public void CalculateWeight()
   {
     this.weight = 0;
-    foreach (var item in this.items)
+    foreach (Storage_Item item in this.Items)
     {
-      this.weight += item.weight * item.count;
+      this.weight += item.Item_Data.weight * item.count;
     }
   }
 
-  public Dictionary<int, int> GetIncompleteStacks(string itemname)
+  public async Task<List<Storage_Item>> GetStacks(string name)
   {
-    Dictionary<int, int> stacks = new Dictionary<int, int>();
-    foreach (var item in this.items)
+    List<Storage_Item> stacks = new List<Storage_Item>();
+    foreach (Storage_Item item in this.Items.OrderByDescending(x => x.slot))
     {
-      if (item.name == itemname)
+      if (item.Item_Data.name == name && item.count < item.Item_Data.stackSize)
       {
-        if (item.count < item.stackSize)
-        {
-          stacks.Add(item.slot, item.stackSize - item.count);
-        }
+        stacks.Add(item);
       }
     }
     return stacks;
   }
 
-  public int GetItemAmount(string itemname)
+  public async Task<int> GetAmount(string name)
   {
-    int count = 0;
-    foreach (var item in this.items)
+    int amount = 0;
+    foreach (Storage_Item item in this.Items)
     {
-      if (item.name == itemname)
+      if (item.Item_Data.name == name)
       {
-        count += item.count;
+        amount += item.count;
+      }
+    }
+    return amount;
+  }
+
+  public async Task<bool> ContainsItem(string name, int count = 1)
+  {
+    int amount = await this.GetAmount(name);
+    if (amount >= count)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  public async Task<Storage_Item?> GetItem(int slot)
+  {
+    Storage_Item? item = this.Items.Find(x => x.slot == slot);
+    return item;
+  }
+
+  public async Task<Storage_Item?> GetItem(string name)
+  {
+    Storage_Item? item = this.Items.OrderByDescending(x => x.slot).LastOrDefault(x => x.Item_Data.name == name);
+    return item;
+  }
+
+  private async Task<List<int>> GetFreeSlots()
+  {
+    List<int> slots = new List<int>();
+    for (int i = 1; i <= this.slots; i++)
+    {
+      if (this.Items.Find(x => x.slot == i) == null)
+      {
+        slots.Add(i);
+      }
+    }
+    return slots;
+  }
+
+  private async Task<int> GetFreeSlot()
+  {
+    int slot = -1;
+    for (int i = 1; i <= this.slots; i++)
+    {
+      if (this.Items.Find(x => x.slot == i) == null)
+      {
+        slot = i;
+        break;
+      }
+    }
+    return slot;
+  }
+
+  private async Task<int> FillStacks(string name, int count)
+  {
+    foreach (Storage_Item item in await this.GetStacks(name))
+    {
+      if (item.count < item.Item_Data.stackSize)
+      {
+        int free = item.Item_Data.stackSize - item.count;
+        if (free >= count)
+        {
+          item.count += count;
+          return 0;
+        }
+        else
+        {
+          item.count += free;
+          count -= free;
+        }
       }
     }
     return count;
   }
 
-  public int GetFreeSlot()
+  public async Task<bool> CanFitItem(Storage_Item item)
   {
-    for (int i = 1; i <= this.slots; i++)
-    {
-      if (!this.items.Any(x => x.slot == i))
-      {
-        return i;
-      }
-    }
-    return -1;
+    if ((item.Item_Data.weight * item.count) + this.weight > this.maxWeight) return false;
+    if (await this.GetFreeSlot() == -1) return false;
+    return true;
   }
 
-  public bool AddItem(string itemname, int count = 1, Dictionary<string, object> data = null!)
+  public async Task<bool> CanFitItems(List<Storage_Item> items)
   {
-    xItem? item = Items.GetItem(itemname);
+    float weight = 0;
+    List<int> freeSlots = await this.GetFreeSlots();
+    foreach (Storage_Item item in items)
+    {
+      weight += item.Item_Data.weight * item.count;
+    }
+    if (weight + this.weight > this.maxWeight) return false;
+    if (freeSlots.Count < items.Count) return false;
+    return true;
+  }
+
+  #endregion
+
+  public async Task<bool> AddItem(Storage_Item item)
+  {
+    // Defining needed variables
+    int slot = await this.GetFreeSlot();
+
+    // Checks for space and item
     if (item == null) return false;
+    if (item.count <= 0) return false;
+    if (!await this.CanFitItem(item)) return false;
+    if (slot == -1) return false;
 
-    if (this.items.Count > this.slots)
-    {
-      _logger.Error($"Storage {this.name} is full");
-      return false;
-    }
-    if (this.weight + (item.weight * count) > this.maxWeight)
-    {
-      _logger.Error($"Storage {this.name} is full");
-      return false;
-    }
-    Dictionary<int, int> stacks = this.GetIncompleteStacks(itemname);
-    int toAdd = count;
-    foreach (KeyValuePair<int, int> stack in stacks)
-    {
-      toAdd -= stack.Value;
-    }
-    if (toAdd > 0)
-    {
-      int slotsNeeded = (int)Math.Ceiling((double)toAdd / item.stackSize);
-      if (this.items.Count + slotsNeeded > this.slots)
-      {
-        _logger.Error($"Storage {this.name} is full");
-        return false;
-      }
-    }
-
-    // Add items to existing stacks
-    foreach (KeyValuePair<int, int> stack in stacks)
-    {
-      InventoryItem alrItem = this.items.FirstOrDefault(x => x.slot == stack.Key)!;
-      if (count <= stack.Value)
-      {
-        alrItem.count += count;
-        goto itemFinish;
-      }
-      else
-      {
-        alrItem.count += stack.Value;
-        count -= stack.Value;
-      }
-    }
-    if (count == 0) goto itemFinish;
-    // Add items to new stacks
-    while (count > item.stackSize)
-    {
-      InventoryItem iitem = new InventoryItem(item, this.GetFreeSlot(), item.stackSize);
-      this.items.Add(iitem);
-      count -= item.stackSize;
-    }
-    if (count > 0)
-    {
-      InventoryItem iitem = new InventoryItem(item, this.GetFreeSlot(), count);
-      this.items.Add(iitem);
-    }
-
-  itemFinish:
+    // Adding item
+    item.slot = slot;
+    item.Storage = this;
+    this.Items.Add(item);
     this.CalculateWeight();
     return true;
   }
 
-  public bool RemoveItem(int slot, int count = 1)
+  public async Task<bool> AddItem(string name, int count)
   {
-    List<InventoryItem> items = this.items.Where(x => x.slot == slot).ToList();
-    if (items.Count == 0) return false;
-    foreach (var item in items)
-    {
+    // Defining needed variables
+    IItemHandler itemHandler = ItemHandler.Instance;
+    Item item = await itemHandler.GetItem(name);
+    if (item == null) return false;
+    List<Storage_Item> items = await itemHandler.CreateItemStacks(item, count);
 
-      if (item.count == count)
-      {
-        this.items.Remove(item);
-        return true;
-      }
-      else if (item.count > count)
-      {
-        item.count -= count;
-        return true;
-      }
-      else
-      {
-        count -= item.count;
-        this.items.Remove(item);
-      }
-      item.count -= count;
+    // Checks for space and item
+    if (items == null) return false;
+    if (!await this.CanFitItems(items)) return false;
+
+    // Adding items
+    foreach (Storage_Item item_ in items)
+    {
+      await this.AddItem(item_);
     }
+    return false;
+  }
+
+  public async Task<bool> RemoveItem(Storage_Item item)
+  {
+    if (item == null) return false;
+    this.Items.Remove(item);
+    this.CalculateWeight();
     return true;
   }
 
-  public bool RemoveItem(string itemname, int count = 1)
+  public async Task<bool> RemoveItem(string name, int count)
   {
-    while (count > 0)
+    // Defining needed variables
+    IItemHandler itemHandler = ItemHandler.Instance;
+    Item item = await itemHandler.GetItem(name);
+    if (item == null) return false;
+    List<Storage_Item> items = await itemHandler.CreateItemStacks(item, count);
+
+    // Checks for space and item
+    if (items == null) return false;
+    if (!await this.ContainsItem(name, count)) return false;
+
+    // Removing items
+    foreach (Storage_Item item_ in items)
     {
-      InventoryItem item = this.items.FirstOrDefault(x => x.name.ToLower() == itemname.ToLower())!;
-      if (item == null) return false;
-      if (item.count == count)
-      {
-        this.items.Remove(item);
-        return true;
-      }
-      else if (item.count > count)
-      {
-        item.count -= count;
-        return true;
-      }
-      else
-      {
-        count -= item.count;
-        this.items.Remove(item);
-      }
+      await this.RemoveItem(item_);
     }
-    return true;
-  }
-
-  public InventoryItem GetItemFromSlot(int slot)
-  {
-    return this.items.FirstOrDefault(x => x.slot == slot)!;
-  }
-
-  public void DragAddItem(InventoryItem item)
-  {
-    this.items.Add(item);
-  }
-
-  public void DragRemoveItem(int slot)
-  {
-    InventoryItem item = this.items.FirstOrDefault(x => x.slot == slot)!;
-    if (item == null) return;
-    this.items.Remove(item);
-  }
-
-  public bool HasItem(string name, int count = 1)
-  {
-    List<InventoryItem> items = this.items.Where(x => x.name == name).ToList();
-    if (items.Count == 0) return false;
-    int itemCount = 0;
-    foreach (var item in items)
-    {
-      itemCount += item.count;
-    }
-    if (itemCount < count) return false;
-    return true;
-  }
-
-  public object GetData()
-  {
-    object data = new
-    {
-      id = this.id,
-      name = this.name,
-      weight = this.weight,
-      maxWeight = this.maxWeight,
-      currentWeight = this.currentWeight,
-      slots = this.slots,
-      items = this.items
-    };
-    return data;
-  }
-
-  public Position Position
-  {
-    get
-    {
-      return JsonConvert.DeserializeObject<Position>(_pos);
-    }
-    set
-    {
-      _pos = JsonConvert.SerializeObject(value);
-    }
+    return false;
   }
 }

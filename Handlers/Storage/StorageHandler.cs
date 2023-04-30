@@ -6,66 +6,78 @@ using Newtonsoft.Json;
 using server.Config;
 using _logger = server.Logger.Logger;
 using server.Modules.Items;
+using Microsoft.EntityFrameworkCore;
+using server.Events;
 
 namespace server.Handlers.Storage;
 
-public class StorageHandler : IStorageHandler
+public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
 {
   ServerContext _storageCtx = new ServerContext();
-  public static readonly Dictionary<int, xStorage> Storages = new Dictionary<int, xStorage>();
+  public static readonly List<xStorage> Storages = new List<xStorage>();
 
   public StorageHandler()
   {
   }
 
-  public async Task<xStorage> GetStorage(int storageId)
+  public async void OnOneMinuteUpdate()
   {
-    if (Storages.TryGetValue(storageId, out var storage))
-      return storage;
-
-    if (await LoadStorage(storageId))
-      return Storages[storageId];
-
-    return null!;
+    await SaveAllStorages();
   }
 
-  public async Task<bool> LoadStorage(int storageId)
+  public async Task<xStorage?> GetStorage(int id)
   {
+    xStorage? storage = Storages.Where(s => s.id == id).FirstOrDefault();
+    if (storage != null)
+      return storage;
 
-    var storage = await _storageCtx.Storages.FindAsync(storageId);
+    if (await LoadStorage(id))
+      return Storages[id];
+
+    return null;
+  }
+
+  public async Task<bool> LoadStorage(int id)
+  {
+    Models.Storage? storage = await _storageCtx.Storages
+      .Include(s => s.Items)
+      .ThenInclude(i => i.Item_Data)
+      .Where(s => s.id == id)
+      .FirstOrDefaultAsync();
+
     if (storage == null)
       return false;
 
-    Storages.Add(storage.id, new xStorage(storage));
-    _logger.Debug($"Storage {storageId} loaded into memory.");
+    Storages.Add(new xStorage(storage));
+    _logger.Debug($"Storage {id} loaded into memory.");
     return true;
   }
 
-  public async Task UnloadStorage(int storageId)
+  public async Task UnloadStorage(int id)
   {
-    if (!Storages.TryGetValue(storageId, out var storage))
+    xStorage? storage = Storages.Where(s => s.id == id).FirstOrDefault();
+    if (storage == null)
       return;
-    Storages.Remove(storageId);
-    _logger.Debug($"Storage {storageId} unloaded from memory.");
 
-    Models.Storage? dbStorage = await _storageCtx.Storages.FindAsync(storageId);
-    if (dbStorage == null)
-      return;
-    dbStorage._items = JsonConvert.SerializeObject(storage.items);
-    await _storageCtx.SaveChangesAsync();
-    _logger.Debug($"Storage {storageId} saved to database.");
+    Storages.Remove(storage);
+    var storageMdl = await _storageCtx.Storages.FindAsync(id);
+    if (storageMdl == null) return;
+    storageMdl.maxWeight = storage.maxWeight;
+    storageMdl.slots = storage.slots;
+    storageMdl.Items = storage.Items;
+    _logger.Debug($"Storage {id} unloaded from memory.");
   }
 
-  public async Task UnloadStorage(xStorage? storage)
+  public async Task UnloadStorage(xStorage storage)
   {
-    if(storage != null)
+    if (storage != null)
       await UnloadStorage(storage.id);
   }
 
   public async Task<int> CreateStorage(string name, int slots, float maxWeight, Position? position, int ownerId = -1)
   {
     bool usePos = position == null ? false : true;
-    if (position == null) position = new Position(0, 0, 0);
+    Position _position = position ?? new Position(0, 0, 0);
 
     var storage = new Models.Storage
     {
@@ -73,45 +85,93 @@ public class StorageHandler : IStorageHandler
       slots = slots,
       maxWeight = maxWeight,
       ownerId = ownerId,
-      Position = position,
+      Position = _position,
       usePos = usePos,
-      _items = JsonConvert.SerializeObject(new List<InventoryItem>())
+      Items = new List<Storage_Item>()
     };
-
     await _storageCtx.Storages.AddAsync(storage);
-    await _storageCtx.SaveChangesAsync();
     return storage.id;
   }
 
   public async Task SaveAllStorages()
   {
-    foreach (var storage in Storages.Values)
+    foreach (var storage in Storages)
     {
-      var dbStorage = await _storageCtx.Storages.FindAsync(storage.id);
+      var storageMdl = await _storageCtx.Storages.FindAsync(storage.id);
 
-      dbStorage!.name = storage.name;
-      dbStorage.slots = storage.slots;
-      dbStorage.maxWeight = storage.maxWeight;
-      dbStorage._items = JsonConvert.SerializeObject(storage.items);
+      storageMdl.slots = storage.slots;
+      storageMdl.maxWeight = storage.maxWeight;
+      storageMdl.Items = storage.Items;
     }
     await _storageCtx.SaveChangesAsync();
+    _logger.Debug($"All storages saved to the Database.");
   }
 
   public async Task CreateAllStorages(xPlayer player)
   {
     foreach (StorageConfig.StorageData storageData in StorageConfig.StoragesDieJederHabenSollte)
     {
-      if (player.boundStorages.ContainsKey(storageData.name)) continue;
-      _logger.Debug($"Creating storage {storageData.name} for player {player.name}.");
-
+      if (player.boundStorages.ContainsKey(storageData.local_id)) continue;
       int storageId = await CreateStorage(storageData.name, storageData.slots, storageData.maxWeight, storageData.position, player.id);
-      player.boundStorages.Add(storageData.name, storageId);
-      await _storageCtx.SaveChangesAsync();
+      player.boundStorages.Add(storageData.local_id, storageId);
+      _logger.Debug($"Created storage {storageData.name} for player {player.name}.");
     }
   }
 
-  public xStorage GetClosestxStorage(xPlayer player, int range = 2)
+  public async Task<xStorage?> GetClosestStorage(xPlayer player, int range = 2)
   {
-    return Storages.Values.FirstOrDefault(v => player.Position.Distance(v.Position) < range && v.ownerId == player.id);
+    xStorage? storage = Storages
+      .Where(v => v.usePos)
+      .Where(v => player.Position.Distance(v.Position) < range)
+      .OrderBy(v => player.Position.Distance(v.Position))
+      .FirstOrDefault();
+
+    return storage;
+  }
+
+  public async Task<List<xStorage>> GetViewableStorages(xPlayer player)
+  {
+    List<xStorage> storages = new List<xStorage>();
+
+    storages.Add((await this.GetStorage(player.boundStorages[(int)STORAGES.INVENTORY]))!);
+
+    if (player.IsInVehicle)
+    {
+      xVehicle vehicle = (xVehicle)player.Vehicle;
+      if (vehicle.storage_glovebox == null) goto load;
+      storages.Add((await this.GetStorage(vehicle.storage_glovebox.id))!);
+      goto load;
+    }
+
+    xVehicle closestVehicle = await vehicleHandler.GetClosestVehicle(player.Position);
+    
+    if (closestVehicle != null)
+    {
+      if (closestVehicle.canTrunkBeOpened() == false) goto load;
+      openInventorys.Add(closestVehicle.storage_trunk.id);
+      uiStorages.Add(closestVehicle.storage_trunk);
+      goto load;
+    }
+
+
+    if (player.player_society.Faction.name != "Zivilist" && player.player_society.Faction.StoragePosition.Distance(player.Position) < 2)
+    {
+      xStorage? factionStorage = await _storageHandler.GetStorage(player.boundStorages[(int)STORAGES.FACTION]);
+      openInventorys.Add(factionStorage.id);
+      uiStorages.Add(factionStorage!);
+      goto load;
+    }
+
+    xStorage? closestStorage = await _storageHandler.GetClosestStorage(player, 2);
+    if (closestStorage != null)
+    {
+      openInventorys.Add(closestStorage.id);
+      uiStorages.Add(closestStorage);
+    }
+
+  load:
+    userOpenInventorys[player] = openInventorys;
+    player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
+    return true;
   }
 }

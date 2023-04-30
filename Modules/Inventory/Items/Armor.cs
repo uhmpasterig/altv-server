@@ -1,11 +1,14 @@
 using server.Core;
 using server.Events;
 using _logger = server.Logger.Logger;
+using server.Handlers.Items;
 
 namespace server.Modules.Items;
 
 class Westen : IItemsLoaded
 {
+  IItemHandler itemHandler = ItemHandler.Instance;
+
   static int time = 5000;
   public static async void PackWeste(xPlayer player)
   {
@@ -23,40 +26,19 @@ class Westen : IItemsLoaded
       player.dataCache.Remove("weste");
     }
   }
-
+  
   public void ItemsLoaded()
   {
-    Items.RegisterUsableItem("underarmor", async (xPlayer player) =>
+    itemHandler.RegisterUseableItem("underarmor", async (xPlayer player, Dictionary<string, object> data, Action RemoveItem) =>
     {
       player.Emit("playAnim", "items_weste");
       player.Emit("clientProgressbarStart", time);
       await Task.Delay(time);
       player.Emit("stopAnim");
+      RemoveItem();
       player.maxArmor = 75;
       player.Armor = 75;
       player.dataCache.Add("weste", "underarmor");
-    });
-
-    Items.RegisterUsableItem("halfplate", async (xPlayer player) =>
-    {
-      player.Emit("playAnim", "items_weste");
-      player.Emit("clientProgressbarStart", time);
-      await Task.Delay(time);
-      player.Emit("stopAnim");
-      player.maxArmor = 100;
-      player.Armor = 100;
-      player.dataCache.Add("weste", "halfplate");
-    });
-
-    Items.RegisterUsableItem("fullplate", async (xPlayer player) =>
-    {
-      player.Emit("playAnim", "items_weste");
-      player.Emit("clientProgressbarStart", time);
-      await Task.Delay(time);
-      player.Emit("stopAnim");
-      player.maxArmor = 125;
-      player.Armor = 125;
-      player.dataCache.Add("weste", "fullplate");
     });
   }
 }

@@ -10,6 +10,7 @@ using AltV.Net.Data;
 using server.Handlers.Storage;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using server.Handlers.Items;
 
 namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
@@ -17,7 +18,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
   public SammlerMain()
   {
   }
-
+  IItemHandler _itemHandler = ItemHandler.Instance;
   public static List<Farming_Collector> _sammler = new List<Farming_Collector>();
   private Dictionary<xPlayer, int> _farmingPlayers;
 
@@ -90,7 +91,8 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 
     if (await player.HasItem(_currentSammler.tool) == false)
     {
-      player.SendMessage("Du benötigst ein/eine " + Items.Items.GetItemLabel(_currentSammler.tool), NOTIFYS.ERROR);
+      Item item = await _itemHandler.GetItem(_currentSammler.tool);
+      player.SendMessage("Du benötigst ein/eine " + item.label, NOTIFYS.ERROR);
       return false;
     };
     #endregion
@@ -116,11 +118,10 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
   {
     if (player == null) return false;
     if (feld == null) return false;
-    IStorageHandler _storageHandler = new StorageHandler();
-    xStorage inv = await _storageHandler.GetStorage(player.boundStorages["Inventar"]!);
     int random = new Random().Next(feld.amountmin, feld.amountmax);
-    inv.AddItem(feld.item, random);
-    player.SendMessage("Du hast " + random + " " + Items.Items.GetItem(feld.item).name + " gesammelt", NOTIFYS.INFO);
+    await player.GiveItem(feld.item, random);
+    Item item = await _itemHandler.GetItem(feld.item);
+    player.SendMessage("Du hast " + random + " " + item.label + " gesammelt", NOTIFYS.INFO);
 
     return true;
   }

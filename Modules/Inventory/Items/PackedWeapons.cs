@@ -1,4 +1,4 @@
-using server.Core;
+/* using server.Core;
 using server.Events;
 using _logger = server.Logger.Logger;
 using server.Handlers.Storage;
@@ -61,4 +61,4 @@ class PackedWeapons : IItemsLoaded
       UnpackFunc(player, "weapon_battleaxe");
     });
   }
-}
+} */

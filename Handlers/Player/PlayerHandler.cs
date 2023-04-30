@@ -18,6 +18,8 @@ namespace server.Handlers.Player;
 
 public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconnectEvent, IOneMinuteUpdateEvent, ITwoMinuteUpdateEvent, IFiveSecondsUpdateEvent
 {
+  public static IPlayerHandler Instance => new PlayerHandler();
+
   public static Dictionary<int, xPlayer> Players = new Dictionary<int, xPlayer>();
   StorageHandler _storageHandler = new StorageHandler();
   
@@ -46,8 +48,8 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       // STORAGES
       await _storageHandler.CreateAllStorages(player);
       if (player.boundStorages.Count != dbPlayer.boundStorages.Count) dbPlayer.boundStorages = player.boundStorages;
-      foreach (KeyValuePair<string, int> storage in player.boundStorages)
-        if (StorageConfig.StoragesDieJederHabenSollte.Where(s => s.name == storage.Key).FirstOrDefault().loadOnConnect) await _storageHandler.LoadStorage(storage.Value);
+      foreach (KeyValuePair<int, int> storage in player.boundStorages)
+        if (StorageConfig.StoragesDieJederHabenSollte.Where(s => s.local_id == storage.Key).FirstOrDefault().loadOnConnect) await _storageHandler.LoadStorage(storage.Value);
 
       // SPAWN AND SET PED VALUES
       player.Model = (uint)Alt.Hash(player.ped);
