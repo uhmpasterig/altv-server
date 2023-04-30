@@ -1,4 +1,4 @@
-using server.Models;
+/* using server.Models;
 using server.Handlers.Storage;
 using server.Core;
 using server.Events;
@@ -16,13 +16,18 @@ namespace server.Modules.Inventory;
 
 public class InventoryModule : IPressedIEvent, ILoadEvent
 {
-  internal static IPlayerHandler playerHandler = new PlayerHandler();
+  IStorageHandler _storageHandler;
+  IPlayerHandler _playerHandler;
+  IVehicleHandler _vehicleHandler;
+
+  public InventoryModule(IStorageHandler storageHandler, IPlayerHandler playerHandler, IVehicleHandler vehicleHandler)
+  {
+    _storageHandler = storageHandler;
+    _playerHandler = playerHandler;
+    _vehicleHandler = vehicleHandler;
+  }
 
   internal static Dictionary<int, List<xPlayer>> storagePlayers = new Dictionary<int, List<xPlayer>>();
-
-  static IStorageHandler _storageHandler = new StorageHandler();
-  IVehicleHandler vehicleHandler = new VehicleHandler();
-
   public static async void OpenStorage(xPlayer player, int storage_id)
   {
     List<xStorage> uiStorages = new List<xStorage>();
@@ -59,7 +64,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       goto load;
     }
 
-    xVehicle closestVehicle = await vehicleHandler.GetClosestVehicle(player.Position);
+    xVehicle closestVehicle = await _vehicleHandler.GetClosestVehicle(player.Position);
     if (closestVehicle != null)
     {
       if (closestVehicle.canTrunkBeOpened() == false) goto load;
@@ -69,7 +74,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     }
 
 
-    if(player.player_society.Faction.name != "Zivilist" && player.player_society.Faction.StoragePosition.Distance(player.Position) < 2)
+    if (player.player_society.Faction.name != "Zivilist" && player.player_society.Faction.StoragePosition.Distance(player.Position) < 2)
     {
       xStorage? factionStorage = await _storageHandler.GetStorage(player.boundStorages[(int)STORAGES.FACTION]);
       openInventorys.Add(factionStorage.id);
@@ -85,7 +90,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     }
 
   load:
-    userOpenInventorys[player] = openInventorys;
     player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
     return true;
   }
@@ -126,8 +130,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
         xStorage? storage = await storageHandler.GetStorage(storageId);
         uiStorages.Add(storage!);
       }
-      
-      if(fromStorage != toStorage)
+
+      if (fromStorage != toStorage)
       {
         player.Emit("playAnim", "storage_pickup");
       }
@@ -226,4 +230,4 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     return true;
   }
   #endregion
-}
+} */

@@ -5,6 +5,7 @@ using server.Handlers.Timer;
 using server.Handlers.Vehicle;
 using server.Handlers.Player;
 using server.Handlers.Storage;
+using server.Handlers.Items;
 using AltV.Net.Elements.Entities;
 using AltV.Net.EntitySync;
 using AltV.Net.EntitySync.SpatialPartitions;
@@ -16,14 +17,15 @@ namespace server.Core;
 
 public class Server : IServer
 {
-  private readonly ServerContext _serverContext;
-  private readonly IEventHandler _eventHandler;
-  private readonly ITimerHandler _timerHandler;
-  private readonly IVehicleHandler _vehicleHandler;
-  private readonly IPlayerHandler _playerHandler;
-  private readonly IStorageHandler _storageHandler;
+  ServerContext _serverContext;
+  IEventHandler _eventHandler;
+  ITimerHandler _timerHandler;
+  IVehicleHandler _vehicleHandler;
+  IPlayerHandler _playerHandler;
+  IStorageHandler _storageHandler;
+  IItemHandler _itemHandler;
 
-  public Server(ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler)
+  public Server(ServerContext serverContext,  IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler, IItemHandler itemHandler)
   {
     _serverContext = serverContext;
     _vehicleHandler = vehicleHandler;
@@ -31,6 +33,7 @@ public class Server : IServer
     _eventHandler = eventHandler;
     _timerHandler = timerHandler;
     _storageHandler = storageHandler;
+    _itemHandler = itemHandler;
   }
 
   public void Start()

@@ -6,7 +6,6 @@ using server.Handlers.Event;
 using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Factions;
-using server.Modules.Inventory;
 using Newtonsoft.Json;
 using server.Handlers.Player;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-using server.Core;
+/* using server.Core;
 using server.Events;
 using server.Models;
 using _logger = server.Logger.Logger;
@@ -128,3 +128,4 @@ class ShopModule : IItemsLoaded, IPressedEEvent
     return false;
   }
 }
+ */

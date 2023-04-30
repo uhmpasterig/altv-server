@@ -4,35 +4,29 @@ using _logger = server.Logger.Logger;
 using Autofac;
 using server.Core;
 using System.Reflection;
-
-
 namespace server.Helpers;
-internal class Startup : IDisposable
-{
-  private IContainer _container;
-  private ILifetimeScope _scope;
 
-  public void Register()
+public static class Startup
+{
+  public static IContainer Configure()
   {
     var builder = new ContainerBuilder();
-    var dataAccess = Assembly.GetExecutingAssembly();
 
-    _logger.Startup("Registering Server...");
     builder.RegisterType<Server>()
       .As<IServer>()
       .SingleInstance();
 
-    builder.RegisterAssemblyTypes(dataAccess)
-      .Where(t => t.Namespace != null)
-      .Where(t => t.Namespace.StartsWith("server.Handlers"))
-      .AsImplementedInterfaces();
+    builder.RegisterAssemblyTypes(Assembly.Load(nameof(server)))
+      .Where(t => t.Namespace.Contains("Handlers"))
+      .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name))
+      .SingleInstance();
 
-    builder.RegisterAssemblyTypes(dataAccess)
-     .Where(t => t.Namespace != null)
-     .Where(t => t.Namespace.StartsWith("server.Modules"))
-     .AsSelf()
-     .SingleInstance()
-     .AsImplementedInterfaces();
+    builder.RegisterAssemblyTypes(Assembly.Load(nameof(server)))
+      .Where(t => t.Namespace.Contains("Modules"))
+      .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name))
+      .AsSelf()
+      .AsImplementedInterfaces()
+      .SingleInstance();
 
     _logger.Startup("Registering Database Context...");
     var optionsBuilder = new DbContextOptionsBuilder<ServerContext>()
@@ -44,22 +38,6 @@ internal class Startup : IDisposable
       .AsSelf()
       .InstancePerLifetimeScope();
 
-    _container = builder.Build();
-  }
-
-  public T Resolve<T>()
-  {
-    return _scope.Resolve<T>();
-  }
-
-  public IContainer GetContainer()
-  {
-    return _container;
-  }
-
-  public void Dispose()
-  {
-    _scope?.Dispose();
-    _container?.Dispose();
+    return builder.Build();
   }
 }

@@ -30,22 +30,13 @@ namespace server
     public override async void OnStart()
     {
       _logger.EnableClientLogging();
+      var container = Startup.Configure();
 
-      using var startup = new Startup();
-      
-      startup.Register();
-      var playerHandler = startup.GetContainer().Resolve<IPlayerHandler>();
-      var vehicleHandler = startup.GetContainer().Resolve<IVehicleHandler>();
-      var eventHandler = startup.GetContainer().Resolve<IEventHandler>();
-      var timerHandler = startup.GetContainer().Resolve<ITimerHandler>();
-      var storageHandler = startup.GetContainer().Resolve<IStorageHandler>();
-
-      // context cannot be null
-      await using var serverContext = new ServerContext();
-          
-      _server = new Server(serverContext, vehicleHandler, playerHandler, eventHandler, timerHandler, storageHandler);
-      _server.Start();
-
+      using (var scope = container.BeginLifetimeScope())
+      {
+        var server = scope.Resolve<IServer>();
+        server.Start();
+      }
     }
     public override async void OnStop()
     {

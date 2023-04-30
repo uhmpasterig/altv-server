@@ -44,7 +44,9 @@ public class WorkStationWriter : IWritable
         writer.Name("amount");
         writer.Value(item.amount);
         writer.Name("label");
-        writer.Value(Items.GetItemLabel(item.item));
+        // TODO add label
+        // writer.Value(Items.GetItemLabel(item.item));
+        writer.Value("");
         writer.EndObject();
       });
       writer.EndArray();
@@ -59,7 +61,11 @@ public class WorkStationWriter : IWritable
         writer.Name("amount");
         writer.Value(item.amount);
         writer.Name("label");
-        writer.Value(Items.GetItemLabel(item.item));
+
+        // TODO add label
+        // writer.Value(Items.GetItemLabel(item.item));
+        writer.Value("");
+        
         writer.EndObject();
       });
       writer.EndArray();

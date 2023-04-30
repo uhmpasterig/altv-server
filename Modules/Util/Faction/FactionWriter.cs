@@ -66,11 +66,14 @@ public class FactionWriter : IWritable
       writer.Value(3000);
       writer.EndObject();
 
+
+      //TODO WIEDER NAMEN ADDEN
       writer.BeginObject();
       writer.Name("name");
       writer.Value(faction.weapon);
       writer.Name("label");
-      writer.Value(Items.GetItemLabel(faction.weapon));
+      // writer.Value(Items.GetItemLabel(faction.weapon));
+      writer.Value("");
       writer.Name("price");
       writer.Value(1000);
       writer.EndObject();
@@ -160,7 +163,7 @@ public class FactionWriter : IWritable
         writer.Name("slots");
         writer.Value(storage.slots);
         writer.Name("slots_used");
-        writer.Value(storage.items.Count);
+        writer.Value(storage.Items.Count);
         writer.Name("kilos");
         writer.Value(storage.maxWeight);
         writer.Name("kilos_used");

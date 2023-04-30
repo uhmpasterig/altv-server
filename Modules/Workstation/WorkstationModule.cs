@@ -1,4 +1,4 @@
-using server.Core;
+/* using server.Core;
 using server.Events;
 using server.Handlers.Entities;
 using server.Models;
@@ -8,7 +8,6 @@ using server.Util.Workstation;
 using server.Handlers.Player;
 using Microsoft.EntityFrameworkCore;
 using AltV.Net.Data;
-using server.Modules.Inventory;
 using AltV.Net.Async;
 
 namespace server.Modules.Workstation;
@@ -131,4 +130,4 @@ public class WorkstationModule : ILoadEvent, IOneMinuteUpdateEvent, IPressedEEve
     player.Emit("frontend:open", "workstation", new WorkStationWriter(factoryProcesses, player.player_factory.selected_process));
     return true;
   }
-}
+} */

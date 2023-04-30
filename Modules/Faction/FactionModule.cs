@@ -6,7 +6,6 @@ using server.Models;
 using _logger = server.Logger.Logger;
 using server.Util.Factions;
 using server.Handlers.Storage;
-using server.Modules.Inventory;
 using Microsoft.EntityFrameworkCore;
 
 namespace server.Modules.Factions;

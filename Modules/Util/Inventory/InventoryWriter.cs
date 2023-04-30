@@ -36,17 +36,18 @@ public class inventoryWriter : IWritable
       writer.Value(store.slots);
       writer.Name("items");
       writer.BeginArray();
-      foreach (InventoryItem item in store.items)
+      foreach (Storage_Item item in store.Items)
       {
         writer.BeginObject();
         writer.Name("id");
         writer.Value(item.id);
         writer.Name("name");
-        writer.Value(item.name);
+        writer.Value(item.Item_Data.name);
         writer.Name("weight");
-        writer.Value(item.weight);
+        writer.Value(item.Item_Data.weight);
+        // TODO add data
         writer.Name("data");
-        writer.Value($"{item.label} {item.count * item.weight}KG");
+        // writer.Value($"{item.label} {item.count * item.weight}KG");
         writer.Name("count");
         writer.Value(item.count);
         writer.Name("slot");

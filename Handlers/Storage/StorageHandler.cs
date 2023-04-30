@@ -138,40 +138,10 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
     if (player.IsInVehicle)
     {
       xVehicle vehicle = (xVehicle)player.Vehicle;
-      if (vehicle.storage_glovebox == null) goto load;
+      if (vehicle.storage_glovebox == null) goto end;
       storages.Add((await this.GetStorage(vehicle.storage_glovebox.id))!);
-      goto load;
     }
-
-    xVehicle closestVehicle = await vehicleHandler.GetClosestVehicle(player.Position);
-    
-    if (closestVehicle != null)
-    {
-      if (closestVehicle.canTrunkBeOpened() == false) goto load;
-      openInventorys.Add(closestVehicle.storage_trunk.id);
-      uiStorages.Add(closestVehicle.storage_trunk);
-      goto load;
-    }
-
-
-    if (player.player_society.Faction.name != "Zivilist" && player.player_society.Faction.StoragePosition.Distance(player.Position) < 2)
-    {
-      xStorage? factionStorage = await _storageHandler.GetStorage(player.boundStorages[(int)STORAGES.FACTION]);
-      openInventorys.Add(factionStorage.id);
-      uiStorages.Add(factionStorage!);
-      goto load;
-    }
-
-    xStorage? closestStorage = await _storageHandler.GetClosestStorage(player, 2);
-    if (closestStorage != null)
-    {
-      openInventorys.Add(closestStorage.id);
-      uiStorages.Add(closestStorage);
-    }
-
-  load:
-    userOpenInventorys[player] = openInventorys;
-    player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
-    return true;
+  end:
+    return storages;
   }
 }

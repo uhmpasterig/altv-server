@@ -46,7 +46,7 @@ internal class WeaponCommands : IScript
   [Command("useitem")]
   public static void UseItem(xPlayer player, string name)
   {
-    Items.UseItem(player, name);
+    // Items.UseItem(player, name);
   }
 
   [Command("giveitem")]
@@ -116,7 +116,7 @@ internal class WeaponCommands : IScript
   [Command("packbackpack")]
   public static async void PackBackpack(xPlayer player)
   {
-    await BackPacks.PackBackPack(player);
+    // await BackPacks.PackBackPack(player);
   }
 
   [Command("buyvehicle")]
