@@ -4,37 +4,27 @@ using AltV.Net.Data;
 using AltV.Net.Enums;
 using server.Events;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
+using server.Enums;
 using server.Handlers.Storage;
-
+using server.Handlers.Logger;
 namespace server.Handlers.Vehicle;
-
-public enum OWNER_TYPES : int
-{
-  PLAYER,
-  FACTION,
-  BUSINESS
-}
-
-public enum VEHICLE_TYPES : int
-{
-  PKW,
-  LKW,
-  PLANE,
-  BOAT
-}
 
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
-  public static IVehicleHandler Instance = new VehicleHandler();
-  
   public static ServerContext _vehicleCtx = new ServerContext();
-  IStorageHandler _storageHandler = new StorageHandler();
-  public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
-  public VehicleHandler() { }
+  ILogger _logger;
+  IStorageHandler _storageHandler;
+  public VehicleHandler(ILogger logger, IStorageHandler storageHandler)
+  {
+    _logger = logger;
+    _storageHandler = storageHandler;
+  }
+
+  public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
   public async Task AddVehicleShopVehicle(xPlayer player, Vehicle_Shop_Vehicle _veh, Position position, Rotation rotation, int garageId = -1)
   {

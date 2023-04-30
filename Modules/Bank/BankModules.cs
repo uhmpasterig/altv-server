@@ -1,15 +1,19 @@
 using server.Core;
 using server.Events;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Entities;
 
+using server.Enums;
+using server.Handlers.Logger;
 namespace server.Modules.Banking;
 
 class BankModuleMain : ILoadEvent
 {
-  public BankModuleMain()
+  ILogger _logger;
+  public BankModuleMain(ILogger logger)
   {
+    _logger = logger;
   }
 
   ServerContext _serverContext = new ServerContext();

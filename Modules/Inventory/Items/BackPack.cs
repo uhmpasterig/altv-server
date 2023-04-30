@@ -1,6 +1,6 @@
 /* using server.Core;
 using server.Events;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Storage;
 using server.Config;
 using Newtonsoft.Json;

@@ -4,10 +4,11 @@ using server.Models;
 using AltV.Net.Data;
 using Newtonsoft.Json;
 using server.Config;
-using _logger = server.Logger.Logger;
+
 using server.Modules.Items;
 using Microsoft.EntityFrameworkCore;
 using server.Events;
+using server.Handlers.Logger;
 
 namespace server.Handlers.Storage;
 
@@ -16,8 +17,10 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
   ServerContext _storageCtx = new ServerContext();
   public static readonly List<xStorage> Storages = new List<xStorage>();
 
-  public StorageHandler()
+  ILogger _logger;
+  public StorageHandler(ILogger logger)
   {
+    _logger = logger;
   }
 
   public async void OnOneMinuteUpdate()

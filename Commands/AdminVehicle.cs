@@ -1,4 +1,4 @@
-using System;
+/* using System;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using server.Core;
@@ -7,7 +7,7 @@ using server.Handlers.Vehicle;
 using AltV.Net.Data;
 using AltV.Net;
 using Newtonsoft.Json;
-using _logger = server.Logger.Logger;
+
 using server.Models;
 
 namespace server.Commands;
@@ -178,3 +178,4 @@ internal class AdminVehicle : IScript
     player.HairHighlightColor = (byte)highlightColorId;
   }
 }
+ */

@@ -8,13 +8,15 @@ using Autofac;
 using Microsoft.Extensions.Logging;
 using server.Models;
 using AltV.Net.Async.Elements.Entities;
-using _logger = server.Logger.Logger;
 
+using server.Handlers.Entities;
+using server.Handlers.Event;
 using server.Handlers.Storage;
 using server.Handlers.Player;
 using server.Handlers.Vehicle;
-using server.Handlers.Event;
+
 using server.Handlers.Timer;
+using server.Handlers.Items;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -29,7 +31,6 @@ namespace server
 
     public override async void OnStart()
     {
-      _logger.EnableClientLogging();
       var container = Startup.Configure();
 
       using (var scope = container.BeginLifetimeScope())

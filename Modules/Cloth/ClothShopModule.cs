@@ -1,19 +1,22 @@
 using server.Core;
 using server.Events;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Entities;
 using server.Util.ClothShop;
 using Microsoft.EntityFrameworkCore;
 using AltV.Net.Async;
+using server.Handlers.Logger;
 
 namespace server.Modules.Clothing;
 
 class ClothShopModule : ILoadEvent, IPressedEEvent
 {
   ServerContext _serverContext = new ServerContext();
-  public ClothShopModule()
+  ILogger _logger;
+  public ClothShopModule(ILogger logger)
   {
+    _logger = logger;
   }
 
   public static List<Cloth_Shop> allShops = new List<Cloth_Shop>();

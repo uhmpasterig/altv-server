@@ -1,4 +1,4 @@
-using System;
+/* using System;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using server.Core;
@@ -6,7 +6,7 @@ using AltV.Net.Resources.Chat.Api;
 using server.Handlers.Vehicle;
 using AltV.Net.Data;
 using AltV.Net;
-using _logger = server.Logger.Logger;
+
 using server.Modules.Factions;
 using server.Handlers.Storage;
 using server.Modules.Items;
@@ -31,7 +31,7 @@ internal class WeaponCommands : IScript
     player.Revive();
   }
 
-  /* [Command("frakweap")]
+  [Command("frakweap")]
   public async static void FrakWeap(xPlayer player)
   {
     StorageHandler _storageHandler = new StorageHandler();
@@ -41,7 +41,7 @@ internal class WeaponCommands : IScript
     if(frak == null) return;
     inventory.AddItem(frak.weapon, 1);
     inventory.AddItem("packed_specialcarbine", 1);
-  } */
+  }
 
   [Command("useitem")]
   public static void UseItem(xPlayer player, string name)
@@ -140,4 +140,4 @@ internal class WeaponCommands : IScript
   {
     server.Modules.Items.Westen.PackWeste(player);
   }
-}
+} */

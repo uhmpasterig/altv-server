@@ -1,14 +1,15 @@
 using server.Core;
 using AltV.Net;
 using server.Events;
-using server.Handlers.Event;
+
 using server.Models;
-using _logger = server.Logger.Logger;
 using AltV.Net.Async;
-using server.Handlers.Entities;
-using server.Handlers.Vehicle;
 using server.Util.Garage;
 using Microsoft.EntityFrameworkCore;
+using server.Enums;
+
+using server.Handlers.Vehicle;
+using server.Handlers.Logger;
 
 namespace server.Modules.Garage;
 
@@ -44,12 +45,16 @@ class GARAGE_NAMES
   }
 }
 
-class GaragenModule : ILoadEvent, IPressedEEvent
+public class GaragenModule : ILoadEvent, IPressedEEvent
 {
-  public GaragenModule()
+  ILogger _logger;
+  IVehicleHandler _vehicleHandler;
+  public GaragenModule(ILogger logger, IVehicleHandler vehicleHandler)
   {
+    _logger = logger;
+    _vehicleHandler = vehicleHandler;
   }
-  VehicleHandler _vehicleHandler = new VehicleHandler();
+
   public static List<Models.Garage> garageList = new List<Models.Garage>();
 
   public static Dictionary<string, int> GetGarageBlipByType(int type)

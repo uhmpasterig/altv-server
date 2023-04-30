@@ -1,6 +1,6 @@
 using server.Core;
 using server.Events;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Items;
 
 namespace server.Modules.Items;
@@ -22,7 +22,8 @@ class Westen : IItemsLoaded
       int armor = player.Armor;
       player.maxArmor = 100;
       player.Armor = 0;
-      await player.GiveItem(player.dataCache["weste"].ToString()!, 1, new Dictionary<string, object> { { "value", armor } });
+      // TODO: Fix this
+      // await player.GiveItem(player.dataCache["weste"].ToString()!, 1, new Dictionary<string, object> { { "value", armor } });
       player.dataCache.Remove("weste");
     }
   }

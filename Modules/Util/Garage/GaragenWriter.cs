@@ -6,7 +6,7 @@ using server.Core;
 using server.Models;
 using server.Handlers.Storage;
 using server.Modules.Items;
-using _logger = server.Logger.Logger;
+
 
 namespace server.Util.Garage;
 public class garagenWriter : IWritable

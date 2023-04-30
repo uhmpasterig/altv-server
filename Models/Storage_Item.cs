@@ -14,8 +14,11 @@ public partial class Storage_Item
   {
     this.Item_Data = item;
   }
+
+  public Storage_Item() { }
+
   public int id { get; set; }
-  
+
   [ForeignKey("storage_id")]
   public int storage_id { get; set; }
   public Storage Storage { get; set; }
@@ -28,4 +31,11 @@ public partial class Storage_Item
   public int count { get; set; }
   public string _data { get; set; }
   public DateTime created_at { get; set; }
+
+  [NotMapped]
+  public Dictionary<string, object> data
+  {
+    get { return JsonConvert.DeserializeObject<Dictionary<string, object>>(this._data); }
+    set { this._data = JsonConvert.SerializeObject(value); }
+  }
 }

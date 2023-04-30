@@ -4,7 +4,7 @@ using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Async;
 using server.Modules.Weapons;
 using Newtonsoft.Json;
-using _logger = server.Logger.Logger;
+
 using AltV.Net.Resources.Chat.Api;
 using AltV.Net.Data;
 using server.Modules.Clothing;
@@ -12,7 +12,7 @@ using server.Handlers.Storage;
 using server.Models;
 using server.Handlers.Vehicle;
 using server.Config.Weapons;
-
+using server.Enums;
 namespace server.Core;
 
 #region enums
@@ -36,7 +36,6 @@ public enum NOTIFYS
 
 public partial class xPlayer : AsyncPlayer
 {
-  ServerContext _serverContext = new ServerContext();
   private string[] _notifys = new string[] { "default", "error", "success", "warning" };
   public int id { get; set; }
   public string name { get; set; }
@@ -131,22 +130,6 @@ public partial class xPlayer : AsyncPlayer
   #endregion
 
   #region Inventory and Weapon Stuff
-  public async Task<bool> GiveItem(string name, int count, Dictionary<string, object> data = null!)
-  {
-    IStorageHandler _storageHandler = new StorageHandler();
-    xStorage? inv = await _storageHandler.GetStorage(this.boundStorages[1]);
-    if (inv == null) return false;
-    return await inv.AddItem(name, count);
-  }
-
-  public async Task<bool> HasItem(string name, int count = 1)
-  {
-    IStorageHandler _storageHandler = new StorageHandler();
-    xStorage? inv = await _storageHandler.GetStorage(this.boundStorages[1]);
-    if (inv == null) return false;
-    return await inv.ContainsItem(name, count);
-  }
-
   public void SetPlayerInventoryId(int key, int value)
   {
     if (boundStorages.ContainsKey(key))
@@ -230,6 +213,7 @@ public partial class xPlayer : AsyncPlayer
 
   public async void SaveMoney()
   {
+    ServerContext _serverContext = new ServerContext();
     Models.Player? player = await _serverContext.Players.FindAsync(this.id);
     player.cash = this.cash;
     player.bank = this.bank;
@@ -256,33 +240,23 @@ public partial class xPlayer : AsyncPlayer
     this.HairColor = skin.hairColor;
     this.HairHighlightColor = skin.hairColor2;
     this.SetClothes(2, skin.hair, skin.hair2, 0);
-
-    _logger.Info($"Loaded skin for {this.name}");
   }
 
   public async Task SetClothPiece(int id)
   {
-    _logger.Info($"Setting cloth with id {id} for {this.name}");
     Models.Cloth? cloth = ClothModule.GetCloth(id);
-    if (cloth == null)
-    {
-      _logger.Error($"Cloth with id {id} not found!");
-      return;
-    }
+    if (cloth == null) return;
     this.SetDlcClothes(cloth.component, cloth.drawable, cloth.texture, cloth.palette, cloth.dlc);
-    _logger.Info($"Set cloth with id {id} for {this.name}");
   }
 
   public async Task LoadClothes(Player_Cloth? cloth = null)
   {
-    _logger.Info($"Loading clothes for {this.name}");
     if (cloth == null) cloth = this.player_cloth;
     foreach (int id in cloth.ToList())
     {
       if (id == -1) continue;
       await this.SetClothPiece(id);
     }
-    _logger.Info($"Loaded clothes for {this.name}");
   }
   #endregion
 

@@ -1,22 +1,27 @@
 using AltV.Net;
 using server.Models;
+
+using server.Handlers.Logger;
 using server.Handlers.Event;
 using server.Handlers.Timer;
 using server.Handlers.Vehicle;
 using server.Handlers.Player;
 using server.Handlers.Storage;
 using server.Handlers.Items;
+
+
 using AltV.Net.Elements.Entities;
 using AltV.Net.EntitySync;
 using AltV.Net.EntitySync.SpatialPartitions;
 using AltV.Net.EntitySync.ServerEvent;
-using _logger = server.Logger.Logger;
+
 
 
 namespace server.Core;
 
 public class Server : IServer
 {
+  ILogger _logger = new Logger();
   ServerContext _serverContext;
   IEventHandler _eventHandler;
   ITimerHandler _timerHandler;
@@ -25,8 +30,9 @@ public class Server : IServer
   IStorageHandler _storageHandler;
   IItemHandler _itemHandler;
 
-  public Server(ServerContext serverContext,  IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler, IItemHandler itemHandler)
+  public Server(ILogger logger, ServerContext serverContext, IVehicleHandler vehicleHandler, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler, IStorageHandler storageHandler, IItemHandler itemHandler)
   {
+    _logger = logger;
     _serverContext = serverContext;
     _vehicleHandler = vehicleHandler;
     _playerHandler = playerHandler;
@@ -55,7 +61,7 @@ public class Server : IServer
 
     _logger.Startup("Lade Timer...");
     _logger.Startup("Timer Geladen!");
-    foreach(Models.Player _player in _serverContext.Players.ToList())
+    foreach (Models.Player _player in _serverContext.Players.ToList())
     {
       _player.isOnline = false;
     }

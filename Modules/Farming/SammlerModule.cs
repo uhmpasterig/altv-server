@@ -1,24 +1,23 @@
 using server.Core;
 using server.Events;
-using server.Handlers.Event;
-using server.Handlers.Entities;
 using server.Models;
-using _logger = server.Logger.Logger;
-using AltV.Net.Async;
-using AltV.Net.Elements.Entities;
-using AltV.Net.Data;
-using server.Handlers.Storage;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using server.Enums;
 using server.Handlers.Items;
+using server.Handlers.Logger;
 
 namespace server.Modules.Farming.Sammler;
 public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
 {
-  public SammlerMain()
+  ILogger _logger;
+  IItemHandler _itemHandler;
+
+  public SammlerMain(ILogger logger, IItemHandler itemHandler)
   {
+    _logger = logger;
+    _itemHandler = itemHandler;
   }
-  IItemHandler _itemHandler = ItemHandler.Instance;
   public static List<Farming_Collector> _sammler = new List<Farming_Collector>();
   private Dictionary<xPlayer, int> _farmingPlayers;
 
@@ -89,12 +88,13 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     });
     if (_currentEntity == null) return false;
 
-    if (await player.HasItem(_currentSammler.tool) == false)
+    //TODO Check if he has the tool
+    /* if (await player.HasItem(_currentSammler.tool) == false)
     {
       Item item = await _itemHandler.GetItem(_currentSammler.tool);
       player.SendMessage("Du benötigst ein/eine " + item.label, NOTIFYS.ERROR);
       return false;
-    };
+    }; */
     #endregion
     _logger.Debug("Entity found");
     player.Emit("pointAtCoords", _currentEntity.position.X, _currentEntity.position.Y, _currentEntity.position.Z);
@@ -119,7 +119,9 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     if (player == null) return false;
     if (feld == null) return false;
     int random = new Random().Next(feld.amountmin, feld.amountmax);
-    await player.GiveItem(feld.item, random);
+    
+    //TODO Check if he has the tool
+    // await player.GiveItem(feld.item, random);
     Item item = await _itemHandler.GetItem(feld.item);
     player.SendMessage("Du hast " + random + " " + item.label + " gesammelt", NOTIFYS.INFO);
 

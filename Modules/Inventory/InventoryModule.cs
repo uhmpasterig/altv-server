@@ -10,7 +10,7 @@ using server.Modules.Items;
 using server.Handlers.Player;
 using server.Config;
 using server.Util.Inventory;
-using _logger = server.Logger.Logger;
+
 
 namespace server.Modules.Inventory;
 

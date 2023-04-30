@@ -1,11 +1,17 @@
 using System.Data;
-using _logger = server.Logger.Logger;
+using server.Handlers.Logger;
 
 namespace server.Handlers.Dimension;
 
 public class DimensionHandler : IDimensionHandler
 {
   public static List<int> Dimensions = new List<int>();
+
+  ILogger _logger;
+  public DimensionHandler(ILogger logger)
+  {
+    _logger = logger;
+  }
 
   public async Task<string> GetFreeDimension()
   {
@@ -32,7 +38,7 @@ public class DimensionHandler : IDimensionHandler
       _logger.Error($"Dimension {dimension} not found!");
     }
   }
-  
+
   public bool IsValidDimension(int dimension)
   {
     if (!Dimensions.Contains(dimension))

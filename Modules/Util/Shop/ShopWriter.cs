@@ -1,5 +1,5 @@
 using AltV.Net;
-using _logger = server.Logger.Logger;
+
 
 namespace server.Util.Shop;
 public class shopWriter : IWritable

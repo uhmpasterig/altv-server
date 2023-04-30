@@ -4,7 +4,8 @@ using server.Handlers.Timer;
 using server.Core;
 using server.Events;
 using server.Extensions;
-using _logger = server.Logger.Logger;
+using server.Handlers.Logger;
+
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -31,14 +32,15 @@ public class EventHandler : IEventHandler
 
   // timer event
 
-
-  public EventHandler(ITimerHandler timerHandler,
+  ILogger _logger;
+  public EventHandler(ILogger logger,
+                      ITimerHandler timerHandler,
                       IEnumerable<IPlayerConnectEvent> playerConnectedEvents,
                       IEnumerable<IPlayerDisconnectEvent> playerDisconnectEvents,
                       IEnumerable<IPlayerDeadEvent> playerDeadEvents,
                       IEnumerable<ILoadEvent> loadEvents,
                       IEnumerable<IItemsLoaded> itemsLoadedEvent,
-                      
+
                       IEnumerable<IFiveSecondsUpdateEvent> fiveSecondsUpdateEvents,
                       IEnumerable<IOneMinuteUpdateEvent> oneMinuteUpdateEvents,
                       IEnumerable<ITwoMinuteUpdateEvent> twoMinuteUpdateEvents,
@@ -47,6 +49,7 @@ public class EventHandler : IEventHandler
                       IEnumerable<IPressedIEvent> pressedIEvents
                       )
   {
+    _logger = logger;
     AltAsync.OnClient<IPlayer>("PressE", OnKeyPressE);
     AltAsync.OnClient<IPlayer>("PressI", OnKeyPressI);
     AltAsync.OnServer("items:loaded", ItemsLoaded);
@@ -85,13 +88,13 @@ public class EventHandler : IEventHandler
 
     _timerHandler.AddInterval(1000 * 5, async (s, e) =>
       _fiveSecondsUpdateEvents?.ForEach(fiveSecondsUpdateEvent => fiveSecondsUpdateEvent.OnFiveSecondsUpdate()));
-    
+
     _timerHandler.AddInterval(1000 * 60, async (s, e) =>
       _oneMinuteUpdateEvents?.ForEach(oneMinuteUpdateEvent => oneMinuteUpdateEvent.OnOneMinuteUpdate()));
 
     _timerHandler.AddInterval(1000 * 60 * 2, async (s, e) =>
       _twoMinuteUpdateEvents?.ForEach(twoMinuteUpdateEvent => twoMinuteUpdateEvent.OnTwoMinuteUpdate()));
-      
+
     return Task.CompletedTask;
   }
 
@@ -109,7 +112,8 @@ public class EventHandler : IEventHandler
     if (!player.CanInteract()) return;
     foreach (var pressedEEvent in _pressedEEvents)
     {
-      if (await pressedEEvent.OnKeyPressE((xPlayer)player)) {
+      if (await pressedEEvent.OnKeyPressE((xPlayer)player))
+      {
         stopwatch.Stop();
         _logger.Debug($"OnKeyPressE took {stopwatch.ElapsedMilliseconds}ms | {stopwatch.ElapsedTicks} ticks");
         return;

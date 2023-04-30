@@ -1,7 +1,7 @@
 using server.Core;
 using server.Events;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Entities;
 
 namespace server.Modules.Clothing;

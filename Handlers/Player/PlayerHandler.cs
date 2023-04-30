@@ -5,25 +5,30 @@ using AltV.Net.Elements.Entities;
 using server.Core;
 using server.Models;
 using Microsoft.EntityFrameworkCore;
-using _logger = server.Logger.Logger;
 using server.Events;
-using server.Handlers.Storage;
 using Newtonsoft.Json;
 using server.Util.Player;
 using System.Diagnostics;
 using server.Config;
 using server.Modules.Factions;
 
+using server.Handlers.Storage;
+using server.Handlers.Logger;
+
 namespace server.Handlers.Player;
 
 public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconnectEvent, IOneMinuteUpdateEvent, ITwoMinuteUpdateEvent, IFiveSecondsUpdateEvent
 {
-  public static IPlayerHandler Instance => new PlayerHandler();
-
   public static Dictionary<int, xPlayer> Players = new Dictionary<int, xPlayer>();
-  StorageHandler _storageHandler = new StorageHandler();
-  
   public static ServerContext _playerCtx = new ServerContext();
+
+  ILogger _logger;
+  IStorageHandler _storageHandler;
+  public PlayerHandler(ILogger logger, IStorageHandler storageHandler)
+  {
+    _logger = logger;
+    _storageHandler = storageHandler;
+  }
 
   #region Player Functions
   public async Task<xPlayer?> LoadPlayerFromDatabase(xPlayer player)
@@ -124,7 +129,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async Task<xPlayer?> GetPlayer(int id)
   {
-    if(!Players.ContainsKey(id)) return null;
+    if (!Players.ContainsKey(id)) return null;
     xPlayer? player = Players[id];
     return player;
   }
@@ -159,7 +164,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
   public async void OnPlayerDisconnect(IPlayer player, string reason)
   {
     xPlayer xplayer = (xPlayer)player;
-    if(!Players.ContainsKey(xplayer.id)) return;
+    if (!Players.ContainsKey(xplayer.id)) return;
     _logger.Info($"{player.Name} disconnected from the server!");
     await SavePlayerToDatabase((xPlayer)player, true);
     Players.Remove(xplayer.id);

@@ -2,7 +2,7 @@
 using server.Events;
 using server.Handlers.Entities;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Storage;
 using server.Util.Workstation;
 using server.Handlers.Player;

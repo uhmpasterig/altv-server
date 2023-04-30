@@ -6,15 +6,13 @@ using AltV.Net.Data;
 using AltV.Net.Enums;
 using server.Models;
 using server.Handlers.Vehicle;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Storage;
 
 namespace server.Core;
 
 public class xVehicle : AsyncVehicle
 {
-  public static ServerContext _serverContext = new ServerContext();
-  public static IStorageHandler _storageHandler = new StorageHandler();
   public xVehicle(ICore core, IntPtr nativePointer, ushort id) : base(core, nativePointer, id)
   {
   }
@@ -103,7 +101,6 @@ public class xVehicle : AsyncVehicle
 
   public bool hasControl(xPlayer player)
   {
-    _logger.Log("Vehicle OwnerId: " + this.owner_id + " | PlayerId: " + player.id);
     return player.id == this.owner_id;
   }
 }

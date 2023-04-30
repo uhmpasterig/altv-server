@@ -2,17 +2,24 @@ using server.Core;
 using server.Models;
 using server.Events;
 using AltV.Net.Async;
-using _logger = server.Logger.Logger;
+
+using server.Handlers.Logger;
 using server.Handlers.Storage;
 
 namespace server.Handlers.Items;
 public class ItemHandler : IItemHandler, ILoadEvent
 {
   public static IItemHandler Instance => new ItemHandler();
-  
-  ServerContext _itemCtx = new ServerContext();
-  IStorageHandler _storageHandler = new StorageHandler();
 
+  ServerContext _itemCtx = new ServerContext();
+
+  ILogger _logger;
+  IStorageHandler _storageHandler;
+  public ItemHandler(ILogger logger, IStorageHandler storageHandler)
+  {
+    _logger = logger;
+    _storageHandler = storageHandler;
+  }
 
   public static List<Item> Items = new List<Item>();
   public static Dictionary<int, Action<xPlayer, Dictionary<string, object>, Action>> ItemActions = new Dictionary<int, Action<xPlayer, Dictionary<string, object>, Action>>();
@@ -31,7 +38,8 @@ public class ItemHandler : IItemHandler, ILoadEvent
   public async Task RegisterUseableItem(string itemname, Action<xPlayer, Dictionary<string, object>, Action> action)
   {
     Item? item = await GetItem(itemname);
-    if (item == null) {
+    if (item == null)
+    {
       _logger.Exception($"Cannot register useable item {itemname} because it does not exist. Trace: {Environment.StackTrace}");
     };
     ItemActions.Add(item.id, action);
@@ -75,7 +83,7 @@ public class ItemHandler : IItemHandler, ILoadEvent
 
     if (ItemActions.ContainsKey(item.id))
     {
-      ItemActions[item.id](player, storageItem.Item_Data.data, RemoveItem);
+      ItemActions[item.id](player, storageItem.data, RemoveItem);
       return;
     }
 
@@ -85,7 +93,8 @@ public class ItemHandler : IItemHandler, ILoadEvent
   public async Task<List<Storage_Item>> CreateItemStacks(Item _item, int count)
   {
     List<Storage_Item> stacks = new List<Storage_Item>();
-    while(count > 0){
+    while (count > 0)
+    {
       int stackCount = count > _item.stackSize ? _item.stackSize : count;
       count -= stackCount;
       stacks.Add(new Storage_Item(_item, stackCount));

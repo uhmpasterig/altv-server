@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using Autofac;
 using server.Core;
 using System.Reflection;
@@ -8,27 +8,34 @@ namespace server.Helpers;
 
 public static class Startup
 {
+  static Type[] loadedTypes = Assembly.GetExecutingAssembly().GetTypes();
+  static List<Type> handlers = new List<Type>();
+  static List<Type> modules = new List<Type>();
+
   public static IContainer Configure()
   {
+    LoadTypes();
+
     var builder = new ContainerBuilder();
 
     builder.RegisterType<Server>()
       .As<IServer>()
       .SingleInstance();
 
-    builder.RegisterAssemblyTypes(Assembly.Load(nameof(server)))
-      .Where(t => t.Namespace.Contains("Handlers"))
-      .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name))
-      .SingleInstance();
+    foreach (Type handler in handlers)
+    {
+      builder.RegisterType(handler)
+        .AsImplementedInterfaces()
+        .SingleInstance();
+    }
 
-    builder.RegisterAssemblyTypes(Assembly.Load(nameof(server)))
-      .Where(t => t.Namespace.Contains("Modules"))
-      .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name))
-      .AsSelf()
-      .AsImplementedInterfaces()
-      .SingleInstance();
+    foreach (Type module in modules)
+    {
+      builder.RegisterType(module)
+        .AsSelf()
+        .SingleInstance();
+    }
 
-    _logger.Startup("Registering Database Context...");
     var optionsBuilder = new DbContextOptionsBuilder<ServerContext>()
         .UseMySql("server=45.157.233.24;database=server;user=root;password=KrjganovOnTop1!23;treattinyasboolean=true",
             new MySqlServerVersion(new Version(8, 0, 25)));
@@ -39,5 +46,34 @@ public static class Startup
       .InstancePerLifetimeScope();
 
     return builder.Build();
+  }
+
+  private static void LoadTypes()
+  {
+    foreach (Type type in loadedTypes)
+    {
+      if (IsHandler(type))
+        handlers.Add(type);
+    }
+  }
+
+  private static bool IsHandler(Type type)
+  {
+    if (type.Namespace == null) return false;
+
+    return type.Namespace.StartsWith("server.Handlers")
+    &&
+    (
+      type.Name == "ItemHandler" ||
+      !type.Name.StartsWith("I")
+    )
+    && !type.Name.StartsWith("<");
+  }
+
+  private static bool IsModule(Type type)
+  {
+    if (type.Namespace == null) return false;
+
+    return type.Namespace.StartsWith("server.Modules") && !type.Name.StartsWith("<"); ;
   }
 }

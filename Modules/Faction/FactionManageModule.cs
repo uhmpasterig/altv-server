@@ -1,22 +1,22 @@
 using server.Core;
-using AltV.Net;
 using AltV.Net.Async;
 using server.Events;
-using server.Handlers.Event;
 using server.Models;
-using _logger = server.Logger.Logger;
-using server.Util.Factions;
 using Newtonsoft.Json;
-using server.Handlers.Player;
 using Microsoft.EntityFrameworkCore;
+using server.Handlers.Player;
+using server.Handlers.Logger;
 
 namespace server.Modules.Factions;
 
 class FactionManageModule : ILoadEvent
 {
-  static IPlayerHandler playerHandler = new PlayerHandler();
-  public FactionManageModule()
+  ILogger _logger;
+  IPlayerHandler _playerHandler;
+  public FactionManageModule(ILogger logger, IPlayerHandler playerHandler)
   {
+    _logger = logger;
+    _playerHandler = playerHandler;
   }
 
   async void SetPlayerFactionDatabase(xPlayer player, int target, List<string> perms, int rank)
@@ -24,13 +24,15 @@ class FactionManageModule : ILoadEvent
     ServerContext _serverContext = new ServerContext();
     Models.Player? offlinePlayer = await _serverContext.Players.Include(p => p.player_society).FirstOrDefaultAsync(p => p.id == target);
     if (offlinePlayer == null) return;
-    if(offlinePlayer.player_society.faction_rank_id == 12) {
+    if (offlinePlayer.player_society.faction_rank_id == 12)
+    {
       perms.Add("faction.leader");
     };
 
     offlinePlayer.player_society.FactionPerms = perms;
 
-    if((offlinePlayer.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
+    if ((offlinePlayer.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id))
+    {
       offlinePlayer.player_society.faction_rank_id = rank;
     };
 
@@ -40,22 +42,26 @@ class FactionManageModule : ILoadEvent
 
   public async void OnLoad()
   {
-    AltAsync.OnClient<xPlayer, int, string, int>("faction:leader:setMember", async (player, targetId, _perms, rank) => {
+    AltAsync.OnClient<xPlayer, int, string, int>("faction:leader:setMember", async (player, targetId, _perms, rank) =>
+    {
       _logger.Log($"{player.player_society.ToString()}");
-      if(!(player.player_society.FactionPerms.Contains("faction.leader") || player.player_society.FactionPerms.Contains("faction.management"))) return;
+      if (!(player.player_society.FactionPerms.Contains("faction.leader") || player.player_society.FactionPerms.Contains("faction.management"))) return;
       List<string> perms = JsonConvert.DeserializeObject<List<string>>(_perms)!;
-      if(!player.player_society.FactionPerms.Contains("faction.leader") && perms.Contains("faction.management")) return;
+      if (!player.player_society.FactionPerms.Contains("faction.leader") && perms.Contains("faction.management")) return;
       _logger.Info($"SetMember: {targetId} {perms.ToString()} {rank}");
 
-      xPlayer? target = await playerHandler.GetPlayer(targetId);  
+      xPlayer? target = await _playerHandler.GetPlayer(targetId);
 
-      if(target != null) {
-        if(target.player_society.faction_rank_id == 12) {
+      if (target != null)
+      {
+        if (target.player_society.faction_rank_id == 12)
+        {
           perms.Add("faction.leader");
         };
 
         target.player_society.FactionPerms = perms;
-        if((target.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id)) {
+        if ((target.player_society.faction_rank_id < player.player_society.faction_rank_id) || (rank < player.player_society.faction_rank_id))
+        {
           target.player_society.faction_rank_id = rank;
         };
       };

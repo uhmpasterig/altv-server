@@ -5,14 +5,19 @@ using server.Handlers.Entities;
 using AltV.Net.Data;
 using AltV.Net.Async;
 using Newtonsoft.Json;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Vehicle;
 
 namespace server.Modules.xMenu;
 
 public class xMenu : ILoadEvent
 {
-  IVehicleHandler _vehicleHandler = new VehicleHandler();
+  IVehicleHandler _vehicleHandler;
+  public xMenu(IVehicleHandler vehicleHandler)
+  {
+    _vehicleHandler = vehicleHandler;
+  }
+
   private async void ToggleLock(xPlayer player)
   {
     xVehicle veh = await _vehicleHandler.GetClosestVehicle(player.Position, 5);

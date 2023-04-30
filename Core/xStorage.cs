@@ -1,7 +1,7 @@
 using AltV.Net;
 using server.Core;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using AltV.Net.Elements.Entities;
 using Newtonsoft.Json;
 using AltV.Net.Data;

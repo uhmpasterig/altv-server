@@ -1,6 +1,6 @@
 using server.Core;
 using server.Events;
-using server.Handlers.Event;
+
 using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;

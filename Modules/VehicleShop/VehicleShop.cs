@@ -1,28 +1,37 @@
 using server.Core;
 using server.Events;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Entities;
 using server.Util.Shop;
 using AltV.Net.Async;
 using Newtonsoft.Json;
 using server.Modules.Items;
 using Microsoft.EntityFrameworkCore;
-using server.Handlers.Vehicle;
 using AltV.Net.Data;
+using server.Enums;
+using server.Handlers.Logger;
+using server.Handlers.Vehicle;
 
 namespace server.Modules.VehicleShop;
 
-public enum VEHICLE_SHOP_TYPE : int
+enum VEHICLE_SHOP_TYPE : int
 {
   LIMOUSINE = 0,
   SPORTWAGEN = 1,
   LKW = 2,
 }
 
-class ShopModule : ILoadEvent, IPressedEEvent
+public class ShopModule : ILoadEvent, IPressedEEvent
 {
-  static IVehicleHandler _vehicleHandler = new VehicleHandler();
+  ILogger _logger;
+  IVehicleHandler _vehicleHandler;
+  public ShopModule(ILogger logger, IVehicleHandler vehicleHandler)
+  {
+    _logger = logger;
+    _vehicleHandler = vehicleHandler;
+  }
+
   ServerContext _serverContext = new ServerContext();
   public static List<Models.Vehicle_Shop> vehicleShopList = new List<Models.Vehicle_Shop>();
 
@@ -71,7 +80,7 @@ class ShopModule : ILoadEvent, IPressedEEvent
     CreateText($"Kilogramm: {vehicle.maxWeight}", position - new Position(0, 0, .6f));
   }
 
-  public static async Task BuyVehicle(xPlayer player, Vehicle_Shop_Vehicle vehicle, int price, int garage_id = -1)
+  public async Task BuyVehicle(xPlayer player, Vehicle_Shop_Vehicle vehicle, int price, int garage_id = -1)
   {
     if (!await player.HasMoney(price))
     {

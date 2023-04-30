@@ -1,13 +1,15 @@
 using server.Core;
 using server.Events;
-using server.Handlers.Entities;
 using server.Models;
-using _logger = server.Logger.Logger;
+
 using server.Handlers.Storage;
-using server.Util.Farming;
 using server.Handlers.Vehicle;
+using server.Handlers.Logger;
+
+using server.Util.Farming;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using server.Enums;
 
 namespace server.Modules.Farming.Verarbeiter;
 
@@ -44,12 +46,15 @@ internal class ProcessData
 
 public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
 {
-  public VerarbeiterModule()
+  ILogger _logger;
+  IStorageHandler _storageHandler;
+  IVehicleHandler _vehicleHandler;
+  public VerarbeiterModule(ILogger logger, IStorageHandler storageHandler, IVehicleHandler vehicleHandler)
   {
+    _logger = logger;
+    _storageHandler = storageHandler;
+    _vehicleHandler = vehicleHandler;
   }
-
-  internal static IVehicleHandler _vehicleHandler = new VehicleHandler();
-  internal static IStorageHandler _storageHandler = new StorageHandler();
 
   private List<Farming_Processor> _verarbeiter = new List<Farming_Processor>();
   private List<ProcessData> _processes = new List<ProcessData>();

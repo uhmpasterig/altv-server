@@ -20,4 +20,6 @@ public interface IVehicleHandler
   Task<xVehicle> GetVehicle(int id);
   Task<List<Models.Vehicle>> GetVehiclesInGarage(xPlayer player, int garageId);
   Task SaveDbVehicleInGarage(xVehicle vehicle, int garage_id);
+  Task<Models.Vehicle> GetDbVehicle(int id);
+  Task SaveDbVehicle();
 }
