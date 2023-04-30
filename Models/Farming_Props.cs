@@ -9,9 +9,9 @@ namespace server.Models;
 
 [Table("farming_props")]
 [PrimaryKey("id")]
-public partial class Farming_Props
+public partial class Farming_Prop
 {
-  public Farming_Props()
+  public Farming_Prop()
   {
   }
   public int id { get; set; }

@@ -25,7 +25,7 @@ public partial class Farming_Collector
   public string _pos { get; set; }
   public string sideProducts { get; set; }
 
-  public List<Farming_Props> Props { get; set; } = new List<Farming_Props>();
+  public List<Farming_Prop> Props { get; set; } = new List<Farming_Prop>();
 
   [NotMapped]
   public Position Position

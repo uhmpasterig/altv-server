@@ -23,6 +23,7 @@ public partial class ServerContext : DbContext
 
   public virtual DbSet<Farming_Collector> Farming_Collectors { get; set; }
   public virtual DbSet<Farming_Processor> Farming_Processors { get; set; }
+  public virtual DbSet<Farming_Prop> Farming_Props { get; set; }
 
   public virtual DbSet<Garage> Garages { get; set; }
   public virtual DbSet<GarageSpawn> GarageSpawns { get; set; }

@@ -24,7 +24,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
   public async void LoadSammler(Farming_Collector sammlerData)
   {
 
-    foreach (Farming_Props prop in sammlerData.Props)
+    foreach (Farming_Prop prop in sammlerData.Props)
     {
       xEntity _entity = new xEntity();
       _entity.entityType = ENTITY_TYPES.PROP;

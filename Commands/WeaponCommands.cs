@@ -11,6 +11,7 @@ using server.Modules.Factions;
 using server.Handlers.Storage;
 using server.Modules.Items;
 using server.Models;
+using Newtonsoft.Json;
 
 namespace server.Commands;
 
@@ -63,9 +64,21 @@ internal class WeaponCommands : IScript
   }
 
   [Command("createroutenprop")]
-  public static void CreateRouteNProp(xPlayer player, string routenName)
+  public static async void CreateRouteNProp(xPlayer player, string routenName)
   {
-    
+  }
+
+  [ClientEvent("routenprop")]
+  public static void RouteNProp(xPlayer player, string model, string _pos, string _rot)
+  {
+    ServerContext serverContext = new ServerContext();
+    Farming_Prop prop = new Farming_Prop();
+    prop.Position = JsonConvert.DeserializeObject<Position>(_pos);
+    prop.Rotation = JsonConvert.DeserializeObject<Rotation>(_rot);
+    prop.model = model;
+    prop.route_id = 1;
+    serverContext.Farming_Props.Add(prop);
+    serverContext.SaveChanges();
   }
 
   [Command("anziehen")]
