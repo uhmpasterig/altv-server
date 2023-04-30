@@ -12,6 +12,7 @@ class Westen : IItemsLoaded
     if (player.dataCache.ContainsKey("weste"))
     {
       player.Emit("playAnim", "items_weste_pack");
+      player.Emit("clientProgressbarStart", time);
       await Task.Delay(time);
       player.Emit("stopAnim");
 
@@ -28,6 +29,7 @@ class Westen : IItemsLoaded
     Items.RegisterUsableItem("underarmor", async (xPlayer player) =>
     {
       player.Emit("playAnim", "items_weste");
+      player.Emit("clientProgressbarStart", time);
       await Task.Delay(time);
       player.Emit("stopAnim");
       player.maxArmor = 75;
@@ -38,6 +40,7 @@ class Westen : IItemsLoaded
     Items.RegisterUsableItem("halfplate", async (xPlayer player) =>
     {
       player.Emit("playAnim", "items_weste");
+      player.Emit("clientProgressbarStart", time);
       await Task.Delay(time);
       player.Emit("stopAnim");
       player.maxArmor = 100;
@@ -48,6 +51,7 @@ class Westen : IItemsLoaded
     Items.RegisterUsableItem("fullplate", async (xPlayer player) =>
     {
       player.Emit("playAnim", "items_weste");
+      player.Emit("clientProgressbarStart", time);
       await Task.Delay(time);
       player.Emit("stopAnim");
       player.maxArmor = 125;
