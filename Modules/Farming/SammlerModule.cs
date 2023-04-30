@@ -71,7 +71,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     // Get the Closest Sammler
     _sammler.ForEach((sammler) =>
     {
-      if (sammler.Position.Distance(player.Position) < 80)
+      if (sammler.Position.Distance(player.Position) < 200)
       {
         _currentSammler = sammler;
       }
