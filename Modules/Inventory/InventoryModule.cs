@@ -93,6 +93,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       Storage_Item? item = await from.GetItem(fslot);
       Storage_Item? item2 = await to.GetItem(tslot);
       if (item == null) return;
+      if (count == 0 || count > item.count) count = item.count;
 
       await DragItem(from, to, item!, item2, fslot, tslot, count);
 
@@ -122,7 +123,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       await MergeItems(s1, s2, i1, i2, count);
     else if (i1.item_id != i2.item_id)
       await SwapItems(s1, s2, i1, i2);
-    else 
+    else
       _logger.Error("Something went wrong while dragging items!");
   }
 
@@ -163,7 +164,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     // Update the items
     await s1.UpdateItem(i1);
     await s2.UpdateItem(i2);
-    
+
     // Remove the item if the count is 0
     if (i1.count == 0) await s1.RemoveItem(i1);
     return;
@@ -174,13 +175,26 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     _logger.Log($"SetIntoSlot: {s1.name} -> {s2.name} | {i1.item_id} | {_s1} -> {_s2} | {count}");
     // Check if the item is null
     if (i1 == null) return;
-    await s1.RemoveItem(i1);
-    // Set the new values
-    i1.slot = _s2;
-    i1.count = count;
-    i1.storage_id = s2.id;
-    i1.Storage = s2;
-    await s2.AddItem(i1);
+
+    // simplify the code
+    if (s1.id == s2.id)
+    {
+      // Set the new values
+      i1.slot = _s2;
+      i1.count = count;
+      // Update the item
+      await s1.UpdateItem(i1);
+    }
+    else
+    {
+      await s1.RemoveItem(i1);
+      // Set the new values
+      i1.slot = _s2;
+      i1.count = count;
+      i1.storage_id = s2.id;
+      i1.Storage = s2;
+      await s2.AddItem(i1);
+    }
     return;
   }
 }
