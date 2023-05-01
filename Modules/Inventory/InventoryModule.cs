@@ -127,7 +127,59 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
   public async Task DragOutsideStorage(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
   {
+    if (i1 == null) return;
 
+    // Remove the items
+    await s1.RemoveItem(i1);
+    if (i2 != null)
+      await s2.RemoveItem(i2);
+    if (count == 0)
+      count = i1.count;
+    // if its only 1 item
+    if (i2 == null)
+    {
+      if (await s2.CanCarryItem(i1, count))
+      {
+        i1.slot = _s2;
+        await s2.AddItem(i1);
+        return;
+      }
+      else
+      {
+        await s1.AddItem(i1, i1.slot);
+        return;
+      }
+    }
+
+    if (i1.Item_Data.id == i2.Item_Data.id)
+    {
+      if (await s2.CanCarryItem(i1, count))
+      {
+        await this.MergeItems(s1, s2, i1, i2, count);
+        return;
+      }
+      else
+      {
+        await s1.AddItem(i1, i1.slot);
+        await s1.AddItem(i2, i2.slot);
+        return;
+      }
+    }
+
+    if (await s2.CanCarryItem(i1, count) && await s1.CanCarryItem(i2, count))
+    {
+      i1.slot = _s2;
+      i2.slot = _s1;
+      await s2.AddItem(i1);
+      await s1.AddItem(i2);
+      return;
+    }
+    else
+    {
+      await s1.AddItem(i1, i1.slot);
+      await s1.AddItem(i2, i2.slot);
+      return;
+    }
   }
 
   public async Task DragInsideStorage(xStorage storage, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
@@ -148,27 +200,46 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     // If both items are the same sub from the first and fill the second
     if (i1.Item_Data.id == i2.Item_Data.id)
     {
-      int stackSize = i1.Item_Data.stackSize;
-      int amount = i1.count + i2.count;
-
-      i2.count = (amount > stackSize) ? stackSize : amount;
-      if (amount > stackSize)
-      {
-        i1.count = amount - stackSize;
-        await storage.UpdateItem(i1);
-      }
-      else
-        await storage.RemoveItem(i1);
-
-      await storage.UpdateItem(i2);
+      await this.MergeItems(storage, storage, i1, i2, count);
       return;
     }
 
     // if none of the above is right just swap the slots
-    i1.slot = _s2;
-    i2.slot = _s1;
-    await storage.UpdateItem(i1);
-    await storage.UpdateItem(i2);
+    await SwapItems(storage, storage, i1, i2);
+    return;
+  }
+
+  public async Task SwapItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2)
+  {
+    if (i1 == null || i2 == null) return;
+
+    int slot = i1.slot;
+    i1.slot = i2.slot;
+    i2.slot = slot;
+
+    await s1.UpdateItem(i1);
+    await s2.UpdateItem(i2);
+  }
+
+  public async Task MergeItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2, int count)
+  {
+    // Check if the items are the same and not null
+    if (i1 == null || i2 == null && i1.item_id != i2.item_id) return;
+    // Set values needed for math
+    int stackSize = i1.Item_Data.stackSize;
+    int amount = i2.count + count;
+    int newItemCount = (amount > stackSize) ? stackSize : amount;
+    int newCount = (amount > stackSize) ? amount - stackSize : 0;
+
+    // Set the new values
+    i2.count = newItemCount;
+    i1.count = newCount;
+
+    // Update the items
+    await s1.UpdateItem(i1);
+    await s2.UpdateItem(i2);
+    // Remove the item if the count is 0
+    if (i1.count == 0) await s1.RemoveItem(i1);
     return;
   }
 

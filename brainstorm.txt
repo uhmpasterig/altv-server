@@ -9,3 +9,17 @@ MoveItem(slot, storageid = 1, slot2, storageid2 = 1)
 bei storages mit localid 1:
   > pack icons 
   > context menu
+
+
+Wenn Gleiches item: 
+  > den amount der von i2 fehlt berechnen 
+  > schauen ob amount in s2 reicht
+  > wenn ja: 
+    > amount von i2 auf 0 setzen
+    > amount von i1 um amount von i2 erhöhen
+    > i2 löschen
+  > wenn nein:
+    > amount von i2 um amount von s2 verringern
+    > amount von i1 um amount von s2 erhöhen
+    > s2 löschen
+    > rekursiv mit i1 und i2 aufrufen

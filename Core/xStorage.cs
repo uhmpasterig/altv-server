@@ -140,9 +140,17 @@ public class xStorage : Models.Storage
     return count;
   }
 
+  public async Task<bool> CanCarryItem(Storage_Item item, int count = 0)
+  {
+    if(count == 0) count = item.count;
+
+    if ((item.Item_Data.weight * count) + this.weight > this.maxWeight) return false;
+    return true;
+  }
+
   public async Task<bool> CanFitItem(Storage_Item item)
   {
-    if ((item.Item_Data.weight * item.count) + this.weight > this.maxWeight) return false;
+    if (!await this.CanCarryItem(item)) return false;
     if (await this.GetFreeSlot() == -1) return false;
     return true;
   }
