@@ -83,7 +83,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       Storage_Item? item = await from.GetItem(fslot);
       Storage_Item? item2 = await to.GetItem(tslot);
       if (item == null && item2 == null) return;
-      
+
       if (fromStorage == toStorage)
       {
         if (item != null)
@@ -94,13 +94,17 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       else
       {
         if (item != null)
+        {
           item.storage_id = toStorage;
-        item.Storage = to;
-        item.slot = tslot;
+          item.Storage = to;
+          item.slot = tslot;
+        }
         if (item2 != null)
+        {
           item2.storage_id = fromStorage;
-        item2.Storage = from;
-        item2.slot = fslot;
+          item2.Storage = from;
+          item2.slot = fslot;
+        }
       }
 
       from.CalculateWeight();
