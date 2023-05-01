@@ -13,6 +13,14 @@ public partial class Storage_Item
   public Storage_Item(Item item, int count)
   {
     this.Item_Data = item;
+    this.count = count;
+  }
+
+  public Storage_Item(Item item, int count, int slot)
+  {
+    this.Item_Data = item;
+    this.count = count;
+    this.slot = slot;
   }
 
   public Storage_Item() { }

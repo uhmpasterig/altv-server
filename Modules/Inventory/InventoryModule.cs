@@ -180,7 +180,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     if (count < i1.count)
     {
       // Create a new item
-      Storage_Item i2 = new Storage_Item(i1.Item_Data, i1.count - count);
+      Storage_Item i2 = new Storage_Item(i1.Item_Data, i1.count - count, _s2);
       // Add the item
       await s1.AddItem(i2, _s1, true);
     }
