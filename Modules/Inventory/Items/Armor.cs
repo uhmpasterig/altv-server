@@ -30,8 +30,10 @@ class Westen : IItemsLoaded
   
   public void ItemsLoaded()
   {
+    Console.WriteLine("Regwqffwqwfqwffwqqfwqwfwqwqfffffffffffffffffff");
     itemHandler.RegisterUseableItem("underarmor", async (xPlayer player, Dictionary<string, object> data, Action RemoveItem) =>
     {
+      Console.WriteLine("underarmor");
       player.Emit("playAnim", "items_weste");
       player.Emit("clientProgressbarStart", time);
       await Task.Delay(time);

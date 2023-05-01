@@ -15,7 +15,7 @@ using server.Handlers.Items;
 
 namespace server.Modules.Inventory;
 
-public class InventoryModule : IPressedIEvent
+public class InventoryModule : IPressedIEvent, ILoadEvent
 {
   IStorageHandler _storageHandler;
   IPlayerHandler _playerHandler;
