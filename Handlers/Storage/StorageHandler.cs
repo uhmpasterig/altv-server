@@ -98,7 +98,7 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
 
   public async Task SaveAllStorages()
   {
-    foreach (var storage in Storages)
+    /* foreach (var storage in Storages)
     {
       var storageMdl = await _storageCtx.Storages.FindAsync(storage.id);
 
@@ -106,7 +106,7 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
       storageMdl.maxWeight = storage.maxWeight;
       storageMdl.Items = storage.Items;
     }
-    await _storageCtx.SaveChangesAsync();
+    await _storageCtx.SaveChangesAsync(); */
     _logger.Debug($"All storages saved to the Database.");
   }
 
