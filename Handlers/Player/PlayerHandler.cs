@@ -190,6 +190,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         p.Rotation = player.Rotation;
       }
     });
+    _logger.Info("Saved all players!");
     _playerCtx.SaveChanges();
   }
 
