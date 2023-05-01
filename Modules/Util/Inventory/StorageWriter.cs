@@ -36,7 +36,6 @@ public class StorageWriter : IWritable
     writer.BeginArray();
     foreach (Storage_Item item in storage.Items)
     {
-      Console.WriteLine("Writing item");
       writer.BeginObject();
       writer.Name("id");
       writer.Value(item.id);
