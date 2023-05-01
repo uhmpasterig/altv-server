@@ -183,7 +183,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       Storage_Item i2 = new Storage_Item(i1.Item_Data, i1.count - count);
       // Add the item
       await s1.AddItem(i2, _s1, true);
-      return;
     }
 
     // simplify the code
