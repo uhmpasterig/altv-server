@@ -14,7 +14,8 @@ namespace server.Handlers.Vehicle;
 
 public class VehicleHandler : IVehicleHandler, ILoadEvent
 {
-  public static ServerContext _vehicleCtx = new ServerContext();
+  public ServerContext _vehicleCtx = new ServerContext();
+  public readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
   ILogger _logger;
   IStorageHandler _storageHandler;
@@ -24,7 +25,6 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
     _storageHandler = storageHandler;
   }
 
-  public static readonly Dictionary<int, xVehicle> Vehicles = new Dictionary<int, xVehicle>();
 
   public async Task AddVehicleShopVehicle(xPlayer player, Vehicle_Shop_Vehicle _veh, Position position, Rotation rotation, int garageId = -1)
   {
@@ -75,7 +75,7 @@ public class VehicleHandler : IVehicleHandler, ILoadEvent
   {
     try
     {
-      VehicleHandler.Vehicles.Remove(vehicle.id);
+      Vehicles.Remove(vehicle.id);
       var dbVehicle = _vehicleCtx.Vehicles.Find(vehicle.id);
       if (dbVehicle == null) return;
       dbVehicle.garage_id = garage_id;

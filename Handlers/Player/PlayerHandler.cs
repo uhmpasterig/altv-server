@@ -19,8 +19,9 @@ namespace server.Handlers.Player;
 
 public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconnectEvent, IOneMinuteUpdateEvent, ITwoMinuteUpdateEvent, IFiveSecondsUpdateEvent
 {
-  public static Dictionary<int, xPlayer> Players = new Dictionary<int, xPlayer>();
-  public static ServerContext _playerCtx = new ServerContext();
+
+  public ServerContext _playerCtx = new ServerContext();
+  public Dictionary<int, xPlayer> Players = new Dictionary<int, xPlayer>();
 
   ILogger _logger;
   IStorageHandler _storageHandler;
@@ -175,14 +176,12 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
     int hours = playtime / 60;
     int grade = 0;
     // from grade 1 to 2 it takes one hour from 2 - 3 it takes 2 hours and so on the max time per grade is 100 hours
-
     return grade;
   }
 
   public async void OnFiveSecondsUpdate()
   {
-    /* ServerContext __playerCtx = new ServerContext();
-    __playerCtx.Players.Where(p => p.isOnline).ToList().ForEach(async p =>
+    _playerCtx.Players.Where(p => p.isOnline == true).ToList().ForEach(async p =>
     {
       xPlayer? player = await GetPlayer(p.id);
       if (player.Dimension == (int)DIMENSIONEN.WORLD)
@@ -191,7 +190,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
         p.Rotation = player.Rotation;
       }
     });
-    __playerCtx.SaveChanges(); */
+    _playerCtx.SaveChanges();
   }
 
   public async void OnOneMinuteUpdate()

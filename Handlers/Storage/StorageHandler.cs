@@ -15,7 +15,7 @@ namespace server.Handlers.Storage;
 public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
 {
   ServerContext _storageCtx = new ServerContext();
-  public static readonly List<xStorage> Storages = new List<xStorage>();
+  public readonly List<xStorage> Storages = new List<xStorage>();
 
   ILogger _logger;
   public StorageHandler(ILogger logger)

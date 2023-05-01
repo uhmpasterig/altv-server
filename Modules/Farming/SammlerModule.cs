@@ -18,6 +18,7 @@ public class SammlerMain : ILoadEvent, IPressedEEvent, IFiveSecondsUpdateEvent
     _logger = logger;
     _itemHandler = itemHandler;
   }
+
   public static List<Farming_Collector> _sammler = new List<Farming_Collector>();
   private Dictionary<xPlayer, int> _farmingPlayers;
 
