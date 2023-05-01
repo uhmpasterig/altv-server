@@ -74,7 +74,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     {
       _logger.Log("inventory:moveItem");
       _logger.Log($"fslot: {fslot}, tslot: {tslot}, fromStorage: {fromStorage}, toStorage: {toStorage}, count: {count}");
-      var watch = System.Diagnostics.Stopwatch.StartNew();
       xPlayer playerr = (xPlayer)player;
       xStorage? from = await _storageHandler.GetStorage(fromStorage);
       xStorage? to = await _storageHandler.GetStorage(toStorage);
@@ -85,13 +84,15 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       if (item == null) return;
       if (item == null && item2 == null) return;
 
+      var watch = System.Diagnostics.Stopwatch.StartNew();
+
       await DragItem(from, to, item!, item2, fslot, tslot, count);
+
+      watch.Stop();
+      _logger.Log($"Ticks: {watch.ElapsedTicks} | Milliseconds: {watch.ElapsedMilliseconds}");
 
       from.CalculateWeight();
       to.CalculateWeight();
-
-      watch.Stop();
-      var additonalInfo = $"Ticks: {watch.ElapsedTicks} | Milliseconds: {watch.ElapsedMilliseconds}";
     });
 
     AltAsync.OnClient<xPlayer, int>("inventory:useItem", (player, slot) =>
@@ -121,17 +122,19 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     }
   }
 
-  public async Task DragOutsideStorage(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count)
+  public async Task DragOutsideStorage(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
   {
-    _logger.Log("DragOutsideStorage");
+
   }
 
   public async Task DragInsideStorage(xStorage storage, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
   {
     if (i1 == null) return;
 
-    if (count == 0) count = i1.count;
+    // Check for the count and set it to the max if its 0 or higher than the count
+    if (count == 0 || count > i1.count) count = i1.count;
 
+    // If the Second item is Null just set the slot
     if (i2 == null)
     {
       i1.slot = _s2;
@@ -139,17 +142,26 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       return;
     }
 
+    // If both items are the same sub from the first and fill the second
     if (i1.Item_Data.id == i2.Item_Data.id)
     {
       int stackSize = i1.Item_Data.stackSize;
-      int newCount = i1.count + i2.count;
-      i2.count = stackSize;
-      i1.count = newCount - stackSize;
-      await storage.UpdateItem(i1);
+      int amount = i1.count + i2.count;
+
+      i2.count = (amount > stackSize) ? stackSize : amount;
+      if (amount > stackSize)
+      {
+        i1.count = amount - stackSize;
+        await storage.UpdateItem(i1);
+      }
+      else
+        await storage.RemoveItem(i1);
+
       await storage.UpdateItem(i2);
       return;
     }
 
+    // if none of the above is right just swap the slots
     i1.slot = _s2;
     i2.slot = _s1;
     await storage.UpdateItem(i1);
