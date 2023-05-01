@@ -82,30 +82,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
       Storage_Item? item = await from.GetItem(fslot);
       Storage_Item? item2 = await to.GetItem(tslot);
+      if (item == null) return;
       if (item == null && item2 == null) return;
 
-      if (fromStorage == toStorage)
-      {
-        if (item != null)
-          item.slot = tslot;
-        if (item2 != null)
-          item2.slot = fslot;
-      }
-      else
-      {
-        if (item != null)
-        {
-          item.storage_id = toStorage;
-          item.Storage = to;
-          item.slot = tslot;
-        }
-        if (item2 != null)
-        {
-          item2.storage_id = fromStorage;
-          item2.Storage = from;
-          item2.slot = fslot;
-        }
-      }
+      await DragItem(from, to, item!, item2, fslot, tslot, count);
 
       from.CalculateWeight();
       to.CalculateWeight();
@@ -127,79 +107,129 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     });
   }
 
-  /*   // Ich weis das ist scheiße aber ich hab keine Lust mehr
-    public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count)
+  public async Task DragItem(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count)
+  {
+    if (s1.id == s2.id)
     {
-      if (fromi == null && toi == null) return false;
-      if (to.id == from.id) goto move;
+      await DragInsideStorage(s1, i1, i2, _s1, _s2, count);
+      return;
+    }
+    else
+    {
+      await DragOutsideStorage(s1, s2, i1, i2, _s1, _s2, count);
+      return;
+    }
+  }
 
-      if (to.weight + (fromi?.weight * count) > to.maxWeight) return false;
-      if (from.weight + (toi?.weight * toi?.count) > from.maxWeight)
+  public async Task DragOutsideStorage(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count)
+  {
+    _logger.Log("DragOutsideStorage");
+  }
+
+  public async Task DragInsideStorage(xStorage storage, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
+  {
+    if (i1 == null) return;
+
+    if (count == 0) count = i1.count;
+
+    if (i2 == null)
+    {
+      i1.slot = _s2;
+      await storage.UpdateItem(i1);
+      return;
+    }
+
+    if (i1.Item_Data.id == i2.Item_Data.id)
+    {
+      int stackSize = i1.Item_Data.stackSize;
+      int newCount = i1.count + i2.count;
+      i2.count = stackSize;
+      i1.count = newCount - stackSize;
+      await storage.UpdateItem(i1);
+      await storage.UpdateItem(i2);
+      return;
+    }
+
+    i1.slot = _s2;
+    i2.slot = _s1;
+    await storage.UpdateItem(i1);
+    await storage.UpdateItem(i2);
+    return;
+  }
+
+  /* // Ich weis das ist scheiße aber ich hab keine Lust mehr
+  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count)
+  {
+    if (fromi == null && toi == null) return false;
+    if (to.id == from.id) goto move;
+
+    if (to.weight + (fromi?.weight * count) > to.maxWeight) return false;
+    if (from.weight + (toi?.weight * toi?.count) > from.maxWeight)
+    {
+      if (toi == null) return false;
+      if (fromi == null) return false;
+      if (fromi.name == toi.name) goto move;
+    };
+  move:
+    if (count == 0 && fromi != null)
+    {
+      count = fromi!.count;
+    }
+    else if (fromi!.count < count)
+    {
+      return false;
+    }
+    if (fromi != null && toi != null)
+    {
+      if (fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize))
       {
-        if (toi == null) return false;
-        if (fromi == null) return false;
-        if (fromi.name == toi.name) goto move;
-      };
-    move:
-      if (count == 0 && fromi != null)
-      {
-        count = fromi!.count;
-      }
-      else if (fromi!.count < count)
-      {
-        return false;
-      }
-      if (fromi != null && toi != null)
-      {
-        if (fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize))
+        if (fromi.count + toi.count <= toi.stackSize)
         {
-          if (fromi.count + toi.count <= toi.stackSize)
-          {
-            toi.count += count;
-            fromi.count -= count;
-            if (fromi.count <= 0)
-            {
-              from.items.Remove(fromi);
-            }
-          }
-          else
-          {
-            int diff = toi.stackSize - toi.count;
-            toi.count = toi.stackSize;
-            fromi.count -= diff;
-          }
-          return true;
-        }
-      }
-      if (from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
-      if (fromi != null)
-      {
-        if (count != fromi.count)
-        {
-          if (fromi.count - count <= 0) return false;
+          toi.count += count;
           fromi.count -= count;
-          InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.label, fromi.stackSize, fromi.weight, fromi.job, fromi.data, tslot, count);
-          to.items.Add(item);
-          return true;
+          if (fromi.count <= 0)
+          {
+            from.items.Remove(fromi);
+          }
         }
+        else
+        {
+          int diff = toi.stackSize - toi.count;
+          toi.count = toi.stackSize;
+          fromi.count -= diff;
+        }
+        return true;
       }
-      if (toi == null)
+    }
+    if (from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
+    if (fromi != null)
+    {
+      if (count != fromi.count)
       {
-        if (to.items.Count >= to.slots) return false;
+        if (fromi.count - count <= 0) return false;
+        fromi.count -= count;
+        InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.label, fromi.stackSize, fromi.weight, fromi.job, fromi.data, tslot, count);
+        to.items.Add(item);
+        return true;
       }
-      if (fromi != null)
-      {
-        from.items.Remove(fromi);
-        fromi.slot = tslot;
-        to.items.Add(fromi);
-      }
-      if (toi != null)
-      {
-        to.items.Remove(toi);
-        toi.slot = fslot;
-        from.items.Add(toi);
-      }
-      return true;
-    } */
+    }
+    if (toi == null)
+    {
+      if (to.items.Count >= to.slots) return false;
+    }
+    if (fromi != null)
+    {
+      from.items.Remove(fromi);
+      fromi.slot = tslot;
+      to.items.Add(fromi);
+    }
+    if (toi != null)
+    {
+      to.items.Remove(toi);
+      toi.slot = fslot;
+      from.items.Add(toi);
+    }
+    return true;
+  } */
 
 }

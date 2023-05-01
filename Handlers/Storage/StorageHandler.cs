@@ -144,7 +144,12 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
       if (vehicle.storage_glovebox == null) goto end;
       storages.Add((await this.GetStorage(vehicle.storage_glovebox.id))!);
     }
-  end:
+
+    xStorage? closestStorage = await this.GetClosestStorage(player);
+    if (closestStorage != null)
+      storages.Add(closestStorage);
+
+    end:
     return storages;
   }
 }

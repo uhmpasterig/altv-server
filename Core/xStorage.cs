@@ -232,4 +232,11 @@ public class xStorage : Models.Storage
     }
     return false;
   }
+
+  public async Task UpdateItem(Storage_Item item)
+  {
+    if (item == null) return;
+    this.Items[this.Items.FindIndex(x => x.id == item.id)] = item;
+    this.CalculateWeight();
+  }
 }
