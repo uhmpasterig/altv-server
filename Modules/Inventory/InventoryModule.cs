@@ -116,12 +116,18 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     // perform a weight check before making any changes
     if (s1.id != s2.id)
       if (!await s2.CanCarryItem(i1, count)) return;
-
+    _logger.Log("");
+    _logger.Log("");
+    _logger.Log("");
+    _logger.Log("");
+    _logger.Log("-------------------------------------");
+    _logger.Log($"Drag Item: {i1.item_id} {i2?.item_id}");
+    _logger.Log($"Drag Item: {i1.slot} {i2?.slot}");
     if (i2 == null)
       await SetIntoSlot(s1, s2, i1, _s1, _s2, count);
-    else if (i1.item_id == i2.item_id)
+    else if (i1.Item_Data.id == i2.Item_Data.id)
       await MergeItems(s1, s2, i1, i2, count);
-    else if (i1.item_id != i2.item_id)
+    else if (i1.Item_Data.id != i2.Item_Data.id)
       await SwapItems(s1, s2, i1, i2);
     else
       _logger.Error("Something went wrong while dragging items!");
