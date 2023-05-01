@@ -176,6 +176,16 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     // Check if the item is null
     if (i1 == null) return;
 
+    // add logic for the count system so there stays an old stack of items inside the storage slot
+    if (count < i1.count)
+    {
+      // Create a new item
+      Storage_Item i2 = new Storage_Item(i1.Item_Data, i1.count - count);
+      // Add the item
+      await s1.AddItem(i2, _s1, true);
+      return;
+    }
+
     // simplify the code
     if (s1.id == s2.id)
     {
@@ -193,7 +203,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       i1.count = count;
       i1.storage_id = s2.id;
       i1.Storage = s2;
-      await s2.AddItem(i1);
+      await s2.AddItem(i1, _s2);
     }
     return;
   }
