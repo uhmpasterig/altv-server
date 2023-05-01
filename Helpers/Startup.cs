@@ -4,15 +4,24 @@ using server.Models;
 using Autofac;
 using server.Core;
 using System.Reflection;
+
 namespace server.Helpers;
 
-public static class Startup
+public class Startup
 {
-  static Type[] loadedTypes = Assembly.GetExecutingAssembly().GetTypes();
-  static List<Type> handlers = new List<Type>();
-  static List<Type> modules = new List<Type>();
+  List<string> moduleBlacklist = new List<string> {
+    "ProcessData",
+    "xBlip"
+    };
 
-  public static IContainer Configure()
+  Type[] loadedTypes = Assembly.GetExecutingAssembly().GetTypes();
+  List<Type> handlers = new List<Type>();
+  List<Type> modules = new List<Type>();
+
+  public IContainer _container;
+  private ILifetimeScope _scope;
+
+  public void Configure()
   {
     LoadTypes();
 
@@ -32,6 +41,7 @@ public static class Startup
     foreach (Type module in modules)
     {
       builder.RegisterType(module)
+        .AsImplementedInterfaces()
         .AsSelf()
         .SingleInstance();
     }
@@ -45,21 +55,37 @@ public static class Startup
       .AsSelf()
       .InstancePerLifetimeScope();
 
-    return builder.Build();
+    _container = builder.Build();
   }
 
-  private static void LoadTypes()
+  public void Resolve()
+  {
+    _scope = _container.BeginLifetimeScope();
+
+    var server = _scope.Resolve<IServer>();
+    server.Start();
+
+    foreach (Type module in modules)
+    {
+      _scope.Resolve(module);
+    }
+  }
+
+  private void LoadTypes()
   {
     foreach (Type type in loadedTypes)
     {
       if (IsHandler(type))
         handlers.Add(type);
       if (IsModule(type))
+      {
+        Console.WriteLine(type.Name);
         modules.Add(type);
+      }
     }
   }
 
-  private static bool IsHandler(Type type)
+  private bool IsHandler(Type type)
   {
     if (type.Namespace == null) return false;
 
@@ -72,10 +98,21 @@ public static class Startup
     && !type.Name.StartsWith("<");
   }
 
-  private static bool IsModule(Type type)
+  private bool IsModule(Type type)
   {
     if (type.Namespace == null) return false;
 
-    return type.Namespace.StartsWith("server.Modules") && !type.Name.StartsWith("<"); ;
+    bool isBlacklisted = false;
+    foreach (string module in moduleBlacklist)
+    {
+      if (type.Name.Contains(module))
+      {
+        isBlacklisted = true;
+        break;
+      }
+    }
+    if(isBlacklisted) return false;
+
+    return type.Namespace.StartsWith("server.Modules") && !type.Name.StartsWith("<");
   }
 }

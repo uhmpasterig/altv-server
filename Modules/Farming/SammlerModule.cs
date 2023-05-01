@@ -3,7 +3,7 @@ using server.Events;
 using server.Models;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
-using server.Enums;
+
 using server.Handlers.Items;
 using server.Handlers.Logger;
 

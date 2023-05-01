@@ -31,13 +31,9 @@ namespace server
 
     public override async void OnStart()
     {
-      var container = Startup.Configure();
-
-      using (var scope = container.BeginLifetimeScope())
-      {
-        var server = scope.Resolve<IServer>();
-        server.Start();
-      }
+      var startup = new Startup();
+      startup.Configure();
+      startup.Resolve();
     }
     public override async void OnStop()
     {

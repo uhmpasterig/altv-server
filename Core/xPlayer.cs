@@ -12,7 +12,7 @@ using server.Handlers.Storage;
 using server.Models;
 using server.Handlers.Vehicle;
 using server.Config.Weapons;
-using server.Enums;
+
 namespace server.Core;
 
 #region enums

@@ -6,44 +6,12 @@ using server.Models;
 using AltV.Net.Async;
 using server.Util.Garage;
 using Microsoft.EntityFrameworkCore;
-using server.Enums;
+
 
 using server.Handlers.Vehicle;
 using server.Handlers.Logger;
 
 namespace server.Modules.Garage;
-
-enum GARAGE_TYPES
-{
-  PKW = 1,
-  LKW = 2
-}
-
-enum GARAGE_SPRITES : int
-{
-  PKW = 357,
-  LKW = 357
-}
-
-enum GARAGE_COLORS : int
-{
-  PKW = 3,
-  LKW = 81
-}
-
-class GARAGE_NAMES
-{
-  static Dictionary<string, string> _names = new Dictionary<string, string>()
-  {
-    { "PKW", "PKW-Garage" },
-    { "LKW", "LKW-Garage" }
-  };
-
-  public static string GetName(string name)
-  {
-    return _names[name];
-  }
-}
 
 public class GaragenModule : ILoadEvent, IPressedEEvent
 {

@@ -8,8 +8,8 @@ using server.Models;
 namespace server.Util.Blip;
 public class BlipWriter : IWritable
 {
-  private readonly xBlip blip;
-  public BlipWriter(xBlip _blip)
+  private readonly Modules.Blip.Blip.xBlip blip;
+  public BlipWriter(Modules.Blip.Blip.xBlip _blip)
   {
     this.blip = _blip;
   }

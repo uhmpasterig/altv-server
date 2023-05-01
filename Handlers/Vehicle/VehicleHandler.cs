@@ -7,7 +7,7 @@ using server.Models;
 
 using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
-using server.Enums;
+
 using server.Handlers.Storage;
 using server.Handlers.Logger;
 namespace server.Handlers.Vehicle;

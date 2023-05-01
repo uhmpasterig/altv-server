@@ -9,11 +9,11 @@ using server.Handlers.Logger;
 using server.Util.Farming;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using server.Enums;
+
 
 namespace server.Modules.Farming.Verarbeiter;
 
-internal class ProcessData
+public class ProcessData
 {
   public xVehicle vehicle { get; set; }
   public xPlayer player { get; set; }
@@ -46,6 +46,9 @@ internal class ProcessData
 
 public class VerarbeiterModule : ILoadEvent, IFiveSecondsUpdateEvent, IPressedEEvent
 {
+
+
+
   ILogger _logger;
   IStorageHandler _storageHandler;
   IVehicleHandler _vehicleHandler;

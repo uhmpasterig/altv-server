@@ -9,18 +9,11 @@ using Newtonsoft.Json;
 using server.Modules.Items;
 using Microsoft.EntityFrameworkCore;
 using AltV.Net.Data;
-using server.Enums;
+
 using server.Handlers.Logger;
 using server.Handlers.Vehicle;
 
 namespace server.Modules.VehicleShop;
-
-enum VEHICLE_SHOP_TYPE : int
-{
-  LIMOUSINE = 0,
-  SPORTWAGEN = 1,
-  LKW = 2,
-}
 
 public class ShopModule : ILoadEvent, IPressedEEvent
 {

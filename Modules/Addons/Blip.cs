@@ -8,22 +8,31 @@ using server.Util.Blip;
 
 namespace server.Modules.Blip;
 
-/* public enum BlipColor {
-  WHITE = 0,
-  RED = 1,
-  GREEN = 2,
-  BLUE = 3,
-  YELLOW = 5,
-  LIGHT_RED = 6
-} */
-
 public class Blip : IPlayerConnectEvent
 {
+  public class xBlip
+  {
+    public xBlip(string _name, int _sprite, int _color, float _scale, Position _position)
+    {
+      name = _name;
+      sprite = _sprite;
+      color = _color;
+      scale = _scale;
+      Position = _position;
+    }
+
+    public string name { get; set; }
+    public int sprite { get; set; }
+    public int color { get; set; }
+    public float scale { get; set; }
+
+    public Position Position { get; set; }
+  }
 
   public Blip()
   {
   }
-  
+
   public static List<xBlip> All = new List<xBlip>();
 
   public static void Create(string name, int sprite, int color, float scale, Position position)
@@ -40,24 +49,4 @@ public class Blip : IPlayerConnectEvent
       player.Emit("Blip:Create", new BlipWriter(blip));
     }
   }
-}
-
-
-public class xBlip
-{
-  public xBlip(string _name, int _sprite, int _color, float _scale, Position _position)
-  {
-    name = _name;
-    sprite = _sprite;
-    color = _color;
-    scale = _scale;
-    Position = _position;
-  }
-
-  public string name { get; set; }
-  public int sprite { get; set; }
-  public int color { get; set; }
-  public float scale { get; set; }
-
-  public Position Position { get; set; }
 }

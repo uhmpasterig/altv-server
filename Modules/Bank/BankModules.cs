@@ -4,7 +4,7 @@ using server.Models;
 
 using server.Handlers.Entities;
 
-using server.Enums;
+
 using server.Handlers.Logger;
 namespace server.Modules.Banking;
 
