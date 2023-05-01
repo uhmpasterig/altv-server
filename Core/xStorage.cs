@@ -184,7 +184,7 @@ public class xStorage : Models.Storage
   public async Task<bool> AddItem(string name, int count)
   {
     // Defining needed variables
-    IItemHandler itemHandler = ItemHandler.Instance;
+    IItemHandler itemHandler = new ItemHandler();
     Item item = await itemHandler.GetItem(name);
     if (item == null) return false;
     List<Storage_Item> items = await itemHandler.CreateItemStacks(item, count);
@@ -212,7 +212,7 @@ public class xStorage : Models.Storage
   public async Task<bool> RemoveItem(string name, int count)
   {
     // Defining needed variables
-    IItemHandler itemHandler = ItemHandler.Instance;
+    IItemHandler itemHandler = new ItemHandler();
     Item item = await itemHandler.GetItem(name);
     if (item == null) return false;
     List<Storage_Item> items = await itemHandler.CreateItemStacks(item, count);

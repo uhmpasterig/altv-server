@@ -5,7 +5,6 @@ using AltV.Net;
 using server.Core;
 using server.Models;
 using server.Handlers.Storage;
-using server.Modules.Items;
 
 namespace server.Util.Inventory;
 public class InventoryWriter : IWritable

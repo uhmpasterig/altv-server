@@ -5,7 +5,6 @@ using AltV.Net.Data;
 using Newtonsoft.Json;
 using server.Config;
 
-using server.Modules.Items;
 using Microsoft.EntityFrameworkCore;
 using server.Events;
 using server.Handlers.Logger;

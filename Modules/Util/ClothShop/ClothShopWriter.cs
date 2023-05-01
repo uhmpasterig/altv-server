@@ -5,7 +5,7 @@ using AltV.Net;
 using server.Core;
 using server.Models;
 using server.Handlers.Storage;
-using server.Modules.Items;
+
 using server.Modules.Clothing;
 
 namespace server.Util.ClothShop;

@@ -4,7 +4,6 @@ using server.Events;
 using Newtonsoft.Json;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using server.Modules.Items;
 using server.Config;
 using server.Util.Inventory;
 

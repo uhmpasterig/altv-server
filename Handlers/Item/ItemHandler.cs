@@ -9,8 +9,6 @@ using server.Handlers.Storage;
 namespace server.Handlers.Items;
 public class ItemHandler : IItemHandler, ILoadEvent
 {
-  public static IItemHandler Instance => new ItemHandler();
-
   ServerContext _itemCtx = new ServerContext();
 
   ILogger _logger;
@@ -21,8 +19,8 @@ public class ItemHandler : IItemHandler, ILoadEvent
     _storageHandler = storageHandler;
   }
 
-  public static List<Item> Items = new List<Item>();
-  public static Dictionary<int, Action<xPlayer, Dictionary<string, object>, Action>> ItemActions = new Dictionary<int, Action<xPlayer, Dictionary<string, object>, Action>>();
+  public List<Item> Items = new List<Item>();
+  public Dictionary<int, Action<xPlayer, Dictionary<string, object>, Action>> ItemActions = new Dictionary<int, Action<xPlayer, Dictionary<string, object>, Action>>();
 
   public ItemHandler()
   {
@@ -42,6 +40,7 @@ public class ItemHandler : IItemHandler, ILoadEvent
     {
       _logger.Exception($"Cannot register useable item {itemname} because it does not exist. Trace: {Environment.StackTrace}");
     };
+    _logger.Debug($"Registering useable item {item.id}.");
     ItemActions.Add(item.id, action);
   }
 
@@ -68,7 +67,6 @@ public class ItemHandler : IItemHandler, ILoadEvent
     {
       name = inventory.Items.Where(i => i.slot == slot).FirstOrDefault()?.Item_Data.name!;
     };
-    _logger.Debug($"Using item {name} in slot {slot}.");
     Item? item = await GetItem(name);
     if (item == null) return;
     if (!await inventory.ContainsItem(item.name)) return;
@@ -80,18 +78,16 @@ public class ItemHandler : IItemHandler, ILoadEvent
       storageItem = await inventory.GetItem(slot);
 
     if (storageItem == null) return;
-
     Action RemoveItem = async () =>
     {
       await inventory.RemoveItem(item.name, 1);
     };
-
     if (ItemActions.ContainsKey(item.id))
     {
+      _logger.Debug($"Item {item.name} has an action.");
       ItemActions[item.id](player, storageItem.data, RemoveItem);
       return;
     }
-
     _logger.Debug($"Item {item.name} does not have an action.");
   }
 

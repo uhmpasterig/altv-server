@@ -1,13 +1,16 @@
 using server.Core;
 using server.Events;
-
 using server.Handlers.Items;
 
-namespace server.Modules.Items;
+namespace server.Items;
 
-class Westen : IItemsLoaded
+public class Westen : IItemsLoaded
 {
-  IItemHandler itemHandler = ItemHandler.Instance;
+  IItemHandler _itemHandler;
+  public Westen(IItemHandler itemHandler)
+  {
+    _itemHandler = itemHandler;
+  }
 
   static int time = 5000;
   public static async void PackWeste(xPlayer player)
@@ -27,21 +30,19 @@ class Westen : IItemsLoaded
       player.dataCache.Remove("weste");
     }
   }
-  
-  public void ItemsLoaded()
+
+  public async void ItemsLoaded()
   {
-    Console.WriteLine("Regwqffwqwfqwffwqqfwqwfwqwqfffffffffffffffffff");
-    itemHandler.RegisterUseableItem("underarmor", async (xPlayer player, Dictionary<string, object> data, Action RemoveItem) =>
+    await _itemHandler.RegisterUseableItem("underarmor", (xPlayer player, Dictionary<string, object> data, Action RemoveItem) =>
     {
       Console.WriteLine("underarmor");
-      player.Emit("playAnim", "items_weste");
+      /* player.Emit("playAnim", "items_weste");
       player.Emit("clientProgressbarStart", time);
-      await Task.Delay(time);
       player.Emit("stopAnim");
       RemoveItem();
       player.maxArmor = 75;
       player.Armor = 75;
-      player.dataCache.Add("weste", "underarmor");
+      player.dataCache.Add("weste", "underarmor"); */
     });
   }
 }

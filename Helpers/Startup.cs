@@ -17,6 +17,7 @@ public class Startup
   Type[] loadedTypes = Assembly.GetExecutingAssembly().GetTypes();
   List<Type> handlers = new List<Type>();
   List<Type> modules = new List<Type>();
+  List<Type> items = new List<Type>();
 
   public IContainer _container;
   private ILifetimeScope _scope;
@@ -46,6 +47,14 @@ public class Startup
         .SingleInstance();
     }
 
+    foreach (Type item in items)
+    {
+      builder.RegisterType(item)
+        .AsImplementedInterfaces()
+        .AsSelf()
+        .SingleInstance();
+    }
+
     var optionsBuilder = new DbContextOptionsBuilder<ServerContext>()
         .UseMySql("server=45.157.233.24;database=server;user=root;password=KrjganovOnTop1!23;treattinyasboolean=true",
             new MySqlServerVersion(new Version(8, 0, 25)));
@@ -69,6 +78,11 @@ public class Startup
     {
       _scope.Resolve(module);
     }
+
+    foreach (Type item in items)
+    {
+      _scope.Resolve(item);
+    }
   }
 
   private void LoadTypes()
@@ -78,10 +92,9 @@ public class Startup
       if (IsHandler(type))
         handlers.Add(type);
       if (IsModule(type))
-      {
-        Console.WriteLine(type.Name);
         modules.Add(type);
-      }
+      if (IsItem(type))
+        items.Add(type);
     }
   }
 
@@ -111,8 +124,15 @@ public class Startup
         break;
       }
     }
-    if(isBlacklisted) return false;
+    if (isBlacklisted) return false;
 
     return type.Namespace.StartsWith("server.Modules") && !type.Name.StartsWith("<");
+  }
+
+  private bool IsItem(Type type)
+  {
+    if (type.Namespace == null) return false;
+
+    return type.Namespace.StartsWith("server.Items") && !type.Name.StartsWith("<");
   }
 }

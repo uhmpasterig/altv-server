@@ -4,7 +4,7 @@ using AltV.Net.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 using AltV.Net.Elements.Entities;
 using server.Core;
-using server.Modules.Items;
+
 namespace server.Models;
 
 public class Factory_Reciep
