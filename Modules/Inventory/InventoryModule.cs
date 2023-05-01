@@ -74,6 +74,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     {
       _logger.Log("inventory:moveItem");
       _logger.Log($"fslot: {fslot}, tslot: {tslot}, fromStorage: {fromStorage}, toStorage: {toStorage}, count: {count}");
+      var watch = System.Diagnostics.Stopwatch.StartNew();
+
       xPlayer playerr = (xPlayer)player;
       xStorage? from = await _storageHandler.GetStorage(fromStorage);
       xStorage? to = await _storageHandler.GetStorage(toStorage);
@@ -83,13 +85,14 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       Storage_Item? item2 = await to.GetItem(tslot);
       if (item == null) return;
       if (item == null && item2 == null) return;
+      watch.Stop();
+      _logger.Log($"GetItem: Ticks: {watch.ElapsedTicks} | Milliseconds: {watch.ElapsedMilliseconds}");
 
-      var watch = System.Diagnostics.Stopwatch.StartNew();
-
+      watch = System.Diagnostics.Stopwatch.StartNew();
       await DragItem(from, to, item!, item2, fslot, tslot, count);
 
       watch.Stop();
-      _logger.Log($"Ticks: {watch.ElapsedTicks} | Milliseconds: {watch.ElapsedMilliseconds}");
+      _logger.Log($"Drag: Ticks: {watch.ElapsedTicks} | Milliseconds: {watch.ElapsedMilliseconds}");
 
       from.CalculateWeight();
       to.CalculateWeight();
