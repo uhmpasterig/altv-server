@@ -14,6 +14,12 @@ namespace server.Commands;
 
 public class AdminVehicle : IScript
 {
+  [Command("r")]
+  public static void Revive(xPlayer player)
+  {
+    player.Revive();
+  }
+
   [Command("coords")]
   public void GetCoords(xPlayer player, int range = 5)
   {

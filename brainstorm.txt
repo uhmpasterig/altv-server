@@ -10,4 +10,12 @@ bei storages mit localid 1:
   > pack icons 
   > context menu
 
+Oeffnen: 
+  > 
 
+Schauen ob gleiches storage:
+
+true: 
+
+
+false: 
