@@ -141,8 +141,8 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     i1.slot = i2.slot;
     i2.slot = slot;
     // Add the items back to the slots
-    await s1.AddItem(i2);
-    await s2.AddItem(i1);
+    await s1.AddItem(i2, i1.slot);
+    await s2.AddItem(i1, i2.slot);
   }
 
   private async Task MergeItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2, int count)
