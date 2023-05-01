@@ -96,6 +96,16 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
       from.CalculateWeight();
       to.CalculateWeight();
+
+      foreach (xPlayer p in storagePlayers[from.id])
+      {
+        p.Emit("inventory:update", new StorageWriter(from));
+      }
+
+      foreach (xPlayer p in storagePlayers[to.id])
+      {
+        p.Emit("inventory:update", new StorageWriter(to));
+      }
     });
 
     AltAsync.OnClient<xPlayer, int>("inventory:useItem", (player, slot) =>
@@ -125,62 +135,43 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     }
   }
 
-  public async Task DragOutsideStorage(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
+  public async Task DragOutsideStorage(xStorage s1, xStorage s2, Storage_Item _i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
   {
-    if (i1 == null) return;
+    if (_i1 == null) return;
 
-    // Remove the items
-    await s1.RemoveItem(i1);
-    if (i2 != null)
-      await s2.RemoveItem(i2);
-    if (count == 0)
+    Storage_Item i1 = _i1;
+    if (count != 0)
+    {
+      if (count > i1.count) count = i1.count;
+      i1 = new Storage_Item(i1.Item_Data, count);
+      _i1.count -= count;
+      await s1.UpdateItem(_i1);
+      await s1.AddItem(_i1, _s1);
+    }
+    else
+    {
       count = i1.count;
+    }
+
     // if its only 1 item
     if (i2 == null)
     {
       if (await s2.CanCarryItem(i1, count))
       {
+        await s1.RemoveItem(i1);
+        i1.storage_id = s2.id;
+        i1.Storage = s2;
         i1.slot = _s2;
-        await s2.AddItem(i1);
-        return;
+        await s2.AddItem(i1, _s2, true);
       }
       else
       {
-        await s1.AddItem(i1, i1.slot);
+        await s1.RemoveItem(i1);
         return;
       }
-    }
-
-    if (i1.Item_Data.id == i2.Item_Data.id)
-    {
-      if (await s2.CanCarryItem(i1, count))
-      {
-        await this.MergeItems(s1, s2, i1, i2, count);
-        return;
-      }
-      else
-      {
-        await s1.AddItem(i1, i1.slot);
-        await s1.AddItem(i2, i2.slot);
-        return;
-      }
-    }
-
-    if (await s2.CanCarryItem(i1, count) && await s1.CanCarryItem(i2, count))
-    {
-      i1.slot = _s2;
-      i2.slot = _s1;
-      await s2.AddItem(i1);
-      await s1.AddItem(i2);
-      return;
-    }
-    else
-    {
-      await s1.AddItem(i1, i1.slot);
-      await s1.AddItem(i2, i2.slot);
-      return;
     }
   }
+
 
   public async Task DragInsideStorage(xStorage storage, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count = 0)
   {

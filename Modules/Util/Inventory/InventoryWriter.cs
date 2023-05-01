@@ -22,32 +22,23 @@ public class InventoryWriter : IWritable
     writer.BeginArray();
     foreach (xStorage store in storages)
     {
-      Console.Write("1");
       writer.BeginObject();
-
       writer.Name("local_id");
       writer.Value(store.local_id);
-
       writer.Name("id");
       writer.Value(store.id);
-      Console.Write("2");
       writer.Name("name");
       writer.Value(store.name);
-      Console.Write("3");
       writer.Name("maxWeight");
       writer.Value(store.maxWeight);
-      Console.Write("4");
       writer.Name("currentWeight");
       writer.Value(store.currentWeight);
-      Console.Write("5");
       writer.Name("slots");
       writer.Value(store.slots);
-      Console.Write("6");
       writer.Name("items");
       writer.BeginArray();
       foreach (Storage_Item item in store.Items)
       {
-        Console.WriteLine("Writing item");
         writer.BeginObject();
         writer.Name("id");
         writer.Value(item.id);
