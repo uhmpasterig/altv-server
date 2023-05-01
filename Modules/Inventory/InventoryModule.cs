@@ -155,11 +155,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     int stackSize = i1.Item_Data.stackSize;
     int amount = i2.count + count;
     int newItemCount = (amount > stackSize) ? stackSize : amount;
-    int newCount = (amount > stackSize) ? amount - stackSize : 0;
 
     // Set the new values
     i2.count = newItemCount;
-    i1.count = newCount;
+    i1.count -= count;
 
     // Update the items
     await s1.UpdateItem(i1);
