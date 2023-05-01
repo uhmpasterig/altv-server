@@ -114,12 +114,12 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   private async Task DragItem(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count)
   {
     // perform a weight check before making any changes
-    if (s1.id != s2.id)
+    if (s1.id != s2.id && i2 == null)
       if (!await s2.CanCarryItem(i1, count)) return;
-    _logger.Log("");
-    _logger.Log("");
-    _logger.Log("");
-    _logger.Log("");
+    else if(s1.id != s2.id && i2 != null)
+      if (!await s2.CanCarryItem(i1, count, i2) || !await s1.CanCarryItem(i2, count, i1)) return;
+
+
     _logger.Log("-------------------------------------");
     _logger.Log($"Drag Item: {i1.item_id} {i2?.item_id}");
     _logger.Log($"Drag Item: {i1.slot} {i2?.slot}");
@@ -131,6 +131,12 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       await SwapItems(s1, s2, i1, i2);
     else
       _logger.Error("Something went wrong while dragging items!");
+
+    _logger.Log("-------------------------------------");
+    _logger.Log("");
+    _logger.Log("");
+    _logger.Log("");
+    _logger.Log("");
   }
 
   private async Task SwapItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2)
@@ -146,9 +152,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     int slot = i1.slot;
     i1.slot = i2.slot;
     i2.slot = slot;
+    _logger.Log($"DEBUG: slot: {slot} | i1.slot {i1.slot} | i2.slot {i2.slot}");
     // Add the items back to the slots
-    await s1.AddItem(i2, i1.slot);
-    await s2.AddItem(i1, i2.slot);
+    await s1.AddItem(i2, i2.slot);
+    await s2.AddItem(i1, i1.slot);
   }
 
   private async Task MergeItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2, int count)
@@ -161,10 +168,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     int stackSize = i1.Item_Data.stackSize;
     int amount = i2.count + count;
     int newItemCount = (amount > stackSize) ? stackSize : amount;
-
+    int addedToStack = newItemCount - i2.count;
     // Set the new values
     i2.count = newItemCount;
-    i1.count -= count;
+    i1.count -= addedToStack;
 
     // Update the items
     await s1.UpdateItem(i1);

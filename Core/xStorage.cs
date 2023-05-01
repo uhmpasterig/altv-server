@@ -140,9 +140,11 @@ public class xStorage : Models.Storage
     return count;
   }
 
-  public async Task<bool> CanCarryItem(Storage_Item item, int count = 0)
+  public async Task<bool> CanCarryItem(Storage_Item item, int count = 0, Storage_Item? ignore = null)
   {
-    if(count == 0) count = item.count;
+    if (count == 0) count = item.count;
+    if (ignore != null)
+      if ((item.Item_Data.weight * count) + this.weight - (ignore.Item_Data.weight * ignore.count) > this.maxWeight) return false;
 
     if ((item.Item_Data.weight * count) + this.weight > this.maxWeight) return false;
     return true;
