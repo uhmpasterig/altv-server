@@ -1,16 +1,17 @@
 using server.Models;
-using server.Handlers.Storage;
 using server.Core;
 using server.Events;
 using Newtonsoft.Json;
-using server.Handlers.Vehicle;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using server.Modules.Items;
-using server.Handlers.Player;
 using server.Config;
 using server.Util.Inventory;
 
+using server.Handlers.Vehicle;
+using server.Handlers.Storage;
+using server.Handlers.Player;
+using server.Handlers.Items;
 
 namespace server.Modules.Inventory;
 
@@ -19,12 +20,14 @@ public class InventoryModule : IPressedIEvent
   IStorageHandler _storageHandler;
   IPlayerHandler _playerHandler;
   IVehicleHandler _vehicleHandler;
+  IItemHandler _itemHandler;
 
-  public InventoryModule(IStorageHandler storageHandler, IPlayerHandler playerHandler, IVehicleHandler vehicleHandler)
+  public InventoryModule(IStorageHandler storageHandler, IPlayerHandler playerHandler, IVehicleHandler vehicleHandler, IItemHandler itemHandler)
   {
     _storageHandler = storageHandler;
     _playerHandler = playerHandler;
     _vehicleHandler = vehicleHandler;
+    _itemHandler = itemHandler;
   }
 
   internal static Dictionary<int, List<xPlayer>> storagePlayers = new Dictionary<int, List<xPlayer>>();
@@ -50,16 +53,24 @@ public class InventoryModule : IPressedIEvent
   public async Task<bool> OnKeyPressI(xPlayer player)
   {
     List<xStorage> uiStorages = await _storageHandler.GetViewableStorages(player);
+
+    uiStorages.ForEach(s =>
+    {
+      if (storagePlayers.ContainsKey(s.id))
+        storagePlayers[s.id].Add(player);
+      else
+        storagePlayers.Add(s.id, new List<xPlayer>() { player });
+    });
+
     player.Emit("frontend:open", "inventar", new InventoryWriter(uiStorages));
     return true;
   }
 
-  /* #region Events
   public void OnLoad()
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {
-      var watch = System.Diagnostics.Stopwatch.StartNew();
+      /* var watch = System.Diagnostics.Stopwatch.StartNew();
       xPlayer playerr = (xPlayer)player;
       StorageHandler storageHandler = new StorageHandler();
       xStorage from = await storageHandler.GetStorage(fromStorage);
@@ -100,94 +111,94 @@ public class InventoryModule : IPressedIEvent
       watch.Stop();
       var elapsedTicks = watch.ElapsedTicks;
       var elapsedMs = watch.ElapsedMilliseconds;
-      var additonalInfo = $"Ticks: {elapsedTicks} | Milliseconds: {elapsedMs}";
+      var additonalInfo = $"Ticks: {elapsedTicks} | Milliseconds: {elapsedMs}"; */
     });
 
-    AltAsync.OnClient<xPlayer, int, int>("inventory:useItem", (player, slot, storageId) =>
+    AltAsync.OnClient<xPlayer, int>("inventory:useItem", (player, slot) =>
     {
-      _items.UseItemFromSlot(player, slot, storageId);
+      _itemHandler.UseItem(player, null!, slot);
+      // _items.UseItemFromSlot(player, slot, storageId);
     });
 
     AltAsync.OnClient<xPlayer, int, int, int>("inventory:throwItem", (player, slot, storageId, count) =>
     {
-      _items.RemoveItemFromSlot(slot, storageId, count);
+      // _items.RemoveItemFromSlot(slot, storageId, count);
     });
   }
-  #endregion Events
-  #region DragCheck
-  // Ich weis das ist scheiße aber ich hab keine Lust mehr
-  public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count)
-  {
-    if (fromi == null && toi == null) return false;
-    if (to.id == from.id) goto move;
 
-    if (to.weight + (fromi?.weight * count) > to.maxWeight) return false;
-    if (from.weight + (toi?.weight * toi?.count) > from.maxWeight)
+  /*   // Ich weis das ist scheiße aber ich hab keine Lust mehr
+    public async Task<bool> DragCheck(InventoryItem fromi, InventoryItem toi, xStorage from, xStorage to, int fslot, int tslot, int count)
     {
-      if (toi == null) return false;
-      if (fromi == null) return false;
-      if (fromi.name == toi.name) goto move;
-    };
-  move:
-    if (count == 0 && fromi != null)
-    {
-      count = fromi!.count;
-    }
-    else if (fromi!.count < count)
-    {
-      return false;
-    }
-    if (fromi != null && toi != null)
-    {
-      if (fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize))
+      if (fromi == null && toi == null) return false;
+      if (to.id == from.id) goto move;
+
+      if (to.weight + (fromi?.weight * count) > to.maxWeight) return false;
+      if (from.weight + (toi?.weight * toi?.count) > from.maxWeight)
       {
-        if (fromi.count + toi.count <= toi.stackSize)
+        if (toi == null) return false;
+        if (fromi == null) return false;
+        if (fromi.name == toi.name) goto move;
+      };
+    move:
+      if (count == 0 && fromi != null)
+      {
+        count = fromi!.count;
+      }
+      else if (fromi!.count < count)
+      {
+        return false;
+      }
+      if (fromi != null && toi != null)
+      {
+        if (fromi!.name == toi.name && (fromi.count < fromi.stackSize && toi.count < toi.stackSize))
         {
-          toi.count += count;
-          fromi.count -= count;
-          if (fromi.count <= 0)
+          if (fromi.count + toi.count <= toi.stackSize)
           {
-            from.items.Remove(fromi);
+            toi.count += count;
+            fromi.count -= count;
+            if (fromi.count <= 0)
+            {
+              from.items.Remove(fromi);
+            }
           }
+          else
+          {
+            int diff = toi.stackSize - toi.count;
+            toi.count = toi.stackSize;
+            fromi.count -= diff;
+          }
+          return true;
         }
-        else
-        {
-          int diff = toi.stackSize - toi.count;
-          toi.count = toi.stackSize;
-          fromi.count -= diff;
-        }
-        return true;
       }
-    }
-    if (from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
-    if (fromi != null)
-    {
-      if (count != fromi.count)
+      if (from.weight + (toi?.weight * toi?.count) > from.maxWeight) return false;
+      if (fromi != null)
       {
-        if (fromi.count - count <= 0) return false;
-        fromi.count -= count;
-        InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.label, fromi.stackSize, fromi.weight, fromi.job, fromi.data, tslot, count);
-        to.items.Add(item);
-        return true;
+        if (count != fromi.count)
+        {
+          if (fromi.count - count <= 0) return false;
+          fromi.count -= count;
+          InventoryItem item = new InventoryItem(fromi.id, fromi.name, fromi.label, fromi.stackSize, fromi.weight, fromi.job, fromi.data, tslot, count);
+          to.items.Add(item);
+          return true;
+        }
       }
-    }
-    if (toi == null)
-    {
-      if (to.items.Count >= to.slots) return false;
-    }
-    if (fromi != null)
-    {
-      from.items.Remove(fromi);
-      fromi.slot = tslot;
-      to.items.Add(fromi);
-    }
-    if (toi != null)
-    {
-      to.items.Remove(toi);
-      toi.slot = fslot;
-      from.items.Add(toi);
-    }
-    return true;
-  }
-  #endregion
- */}
+      if (toi == null)
+      {
+        if (to.items.Count >= to.slots) return false;
+      }
+      if (fromi != null)
+      {
+        from.items.Remove(fromi);
+        fromi.slot = tslot;
+        to.items.Add(fromi);
+      }
+      if (toi != null)
+      {
+        to.items.Remove(toi);
+        toi.slot = fslot;
+        from.items.Add(toi);
+      }
+      return true;
+    } */
+
+}

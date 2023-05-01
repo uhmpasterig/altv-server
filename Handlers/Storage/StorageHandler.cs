@@ -93,6 +93,7 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
       Items = new List<Storage_Item>()
     };
     await _storageCtx.Storages.AddAsync(storage);
+    await _storageCtx.SaveChangesAsync();
     return storage.id;
   }
 
@@ -117,7 +118,6 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
       if (player.boundStorages.ContainsKey(storageData.local_id)) continue;
       int storageId = await CreateStorage(storageData.name, storageData.slots, storageData.maxWeight, storageData.position, player.id);
       player.boundStorages.Add(storageData.local_id, storageId);
-      _logger.Debug($"Created storage {storageData.name} for player {player.name}.");
     }
   }
 

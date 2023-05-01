@@ -52,6 +52,7 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
       await player.SetDataFromDatabase(dbPlayer);
 
       // STORAGES
+      
       await _storageHandler.CreateAllStorages(player);
       if (player.boundStorages.Count != dbPlayer.boundStorages.Count) dbPlayer.boundStorages = player.boundStorages;
       foreach (KeyValuePair<int, int> storage in player.boundStorages)

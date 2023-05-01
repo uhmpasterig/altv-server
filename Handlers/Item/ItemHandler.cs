@@ -62,10 +62,13 @@ public class ItemHandler : IItemHandler, ILoadEvent
 
   public async Task UseItem(xPlayer player, string name, int slot = 0)
   {
-    Item? item = await GetItem(name);
-    if (item == null) return;
     xStorage? inventory = await _storageHandler.GetStorage(player.boundStorages[1]);
     if (inventory == null) return;
+    if(name == null) {
+      name = inventory.data.items[slot].name;
+    };
+    Item? item = await GetItem(name);
+    if (item == null) return;
     if (!await inventory.ContainsItem(item.name)) return;
     Storage_Item? storageItem = null;
 
