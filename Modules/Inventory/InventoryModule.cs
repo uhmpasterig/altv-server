@@ -116,6 +116,7 @@ public class InventoryModule : IPressedIEvent
 
     AltAsync.OnClient<xPlayer, int>("inventory:useItem", (player, slot) =>
     {
+      Console.WriteLine("Use Item", slot);
       _itemHandler.UseItem(player, null!, slot);
       // _items.UseItemFromSlot(player, slot, storageId);
     });

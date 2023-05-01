@@ -13,6 +13,7 @@ namespace server.Core;
 public class xStorage : Models.Storage
 {
   public float weight = 0;
+  public int local_id = 0;
 
   public List<xPlayer> PlayersInside = new List<xPlayer>();
 

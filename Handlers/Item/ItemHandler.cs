@@ -64,9 +64,11 @@ public class ItemHandler : IItemHandler, ILoadEvent
   {
     xStorage? inventory = await _storageHandler.GetStorage(player.boundStorages[1]);
     if (inventory == null) return;
-    if(name == null) {
-      name = inventory.data.items[slot].name;
+    if (name == null)
+    {
+      name = inventory.Items.Where(i => i.slot == slot).FirstOrDefault()?.Item_Data.name!;
     };
+    _logger.Debug($"Using item {name} in slot {slot}.");
     Item? item = await GetItem(name);
     if (item == null) return;
     if (!await inventory.ContainsItem(item.name)) return;

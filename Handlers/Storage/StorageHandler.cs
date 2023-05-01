@@ -135,8 +135,9 @@ public class StorageHandler : IStorageHandler, IOneMinuteUpdateEvent
   public async Task<List<xStorage>> GetViewableStorages(xPlayer player)
   {
     List<xStorage> storages = new List<xStorage>();
-
-    storages.Add((await this.GetStorage(player.boundStorages[(int)STORAGES.INVENTORY]))!);
+    xStorage? inventory = await this.GetStorage(player.boundStorages[(int)STORAGES.INVENTORY]);
+    inventory.local_id = 1;
+    storages.Add(inventory);
 
     if (player.IsInVehicle)
     {

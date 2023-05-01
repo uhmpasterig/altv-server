@@ -25,6 +25,10 @@ public class InventoryWriter : IWritable
     {
       Console.Write("1");
       writer.BeginObject();
+
+      writer.Name("local_id");
+      writer.Value(store.local_id);
+
       writer.Name("id");
       writer.Value(store.id);
       Console.Write("2");
