@@ -11,18 +11,21 @@ using server.Handlers.Vehicle;
 using server.Handlers.Storage;
 using server.Handlers.Player;
 using server.Handlers.Items;
+using server.Handlers.Logger;
 
 namespace server.Modules.Inventory;
 
 public class InventoryModule : IPressedIEvent, ILoadEvent
 {
+  ILogger _logger;
   IStorageHandler _storageHandler;
   IPlayerHandler _playerHandler;
   IVehicleHandler _vehicleHandler;
   IItemHandler _itemHandler;
 
-  public InventoryModule(IStorageHandler storageHandler, IPlayerHandler playerHandler, IVehicleHandler vehicleHandler, IItemHandler itemHandler)
+  public InventoryModule(ILogger logger, IStorageHandler storageHandler, IPlayerHandler playerHandler, IVehicleHandler vehicleHandler, IItemHandler itemHandler)
   {
+    _logger = logger;
     _storageHandler = storageHandler;
     _playerHandler = playerHandler;
     _vehicleHandler = vehicleHandler;
@@ -69,48 +72,42 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {
-      /* var watch = System.Diagnostics.Stopwatch.StartNew();
+      _logger.Log("inventory:moveItem");
+      _logger.Log($"fslot: {fslot}, tslot: {tslot}, fromStorage: {fromStorage}, toStorage: {toStorage}, count: {count}");
+      var watch = System.Diagnostics.Stopwatch.StartNew();
       xPlayer playerr = (xPlayer)player;
-      StorageHandler storageHandler = new StorageHandler();
-      xStorage from = await storageHandler.GetStorage(fromStorage);
-      xStorage to = await storageHandler.GetStorage(toStorage);
-      InventoryItem? item = from.items.Find(x => x.slot == fslot);
-      InventoryItem? item2 = to.items.Find(x => x.slot == tslot);
-      if (item == null && item2 == null) return;
+      xStorage? from = await _storageHandler.GetStorage(fromStorage);
+      xStorage? to = await _storageHandler.GetStorage(toStorage);
       if (from == null || to == null) return;
 
-      if (count == 0 && item != null)
+      Storage_Item? item = await from.GetItem(fslot);
+      Storage_Item? item2 = await to.GetItem(tslot);
+      if (item == null && item2 == null) return;
+      
+      if (fromStorage == toStorage)
       {
-        count = item!.count;
+        if (item != null)
+          item.slot = tslot;
+        if (item2 != null)
+          item2.slot = fslot;
       }
-      try
+      else
       {
-        await DragCheck(item!, item2!, from, to, fslot, tslot, count);
+        if (item != null)
+          item.storage_id = toStorage;
+        item.Storage = to;
+        item.slot = tslot;
+        if (item2 != null)
+          item2.storage_id = fromStorage;
+        item2.Storage = from;
+        item2.slot = fslot;
       }
-      catch (Exception e)
-      {
-        _logger.Log(e.Message);
-      }
+
       from.CalculateWeight();
       to.CalculateWeight();
 
-      List<xStorage> uiStorages = new List<xStorage>();
-      foreach (int storageId in userOpenInventorys[(xPlayer)player])
-      {
-        xStorage? storage = await storageHandler.GetStorage(storageId);
-        uiStorages.Add(storage!);
-      }
-
-      if (fromStorage != toStorage)
-      {
-        player.Emit("playAnim", "storage_pickup");
-      }
-
-      player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
       watch.Stop();
-      var elapsedTicks = watch.ElapsedTicks;
-      var elapsedMs = watch.ElapsedMilliseconds;
-      var additonalInfo = $"Ticks: {elapsedTicks} | Milliseconds: {elapsedMs}"; */
+      var additonalInfo = $"Ticks: {watch.ElapsedTicks} | Milliseconds: {watch.ElapsedMilliseconds}";
     });
 
     AltAsync.OnClient<xPlayer, int>("inventory:useItem", (player, slot) =>

@@ -162,16 +162,20 @@ public class xStorage : Models.Storage
 
   #endregion
 
-  public async Task<bool> AddItem(Storage_Item item)
+  public async Task<bool> AddItem(Storage_Item item, int slot = -1, bool skipChecks = false)
   {
     // Defining needed variables
-    int slot = await this.GetFreeSlot();
+    if (!skipChecks)
+    {
+      if (slot == -1)
+        slot = await this.GetFreeSlot();
+      // Checks for space and item
+      if (item == null) return false;
+      if (item.count <= 0) return false;
+      if (!await this.CanFitItem(item)) return false;
+      if (slot == -1) return false;
+    }
 
-    // Checks for space and item
-    if (item == null) return false;
-    if (item.count <= 0) return false;
-    if (!await this.CanFitItem(item)) return false;
-    if (slot == -1) return false;
 
     // Adding item
     item.slot = slot;

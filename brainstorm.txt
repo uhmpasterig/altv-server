@@ -1,0 +1,11 @@
+Needed:
+Drag 1 slot to 2 slot 
+Drag 1 slot and 1 storage to 2 slot and 2 storage (combined)
+
+UseItem(slot, storageid = 1)
+RemoveItem(slot, storageid = 1 - infinite)
+MoveItem(slot, storageid = 1, slot2, storageid2 = 1)
+
+bei storages mit localid 1:
+  > pack icons 
+  > context menu
