@@ -181,17 +181,18 @@ public class PlayerHandler : IPlayerHandler, IPlayerConnectEvent, IPlayerDisconn
 
   public async void OnFiveSecondsUpdate()
   {
-    _playerCtx.Players.Where(p => p.isOnline == true).ToList().ForEach(async p =>
+    ServerContext __playerCtx = new ServerContext();
+    __playerCtx.Players.Where(p => p.isOnline == true).ToList().ForEach(async p =>
     {
       xPlayer? player = await GetPlayer(p.id);
+      if (player == null) return;
       if (player.Dimension == (int)DIMENSIONEN.WORLD)
       {
         p.Position = player.Position;
         p.Rotation = player.Rotation;
       }
     });
-    _logger.Info("Saved all players!");
-    _playerCtx.SaveChanges();
+    __playerCtx.SaveChanges();
   }
 
   public async void OnOneMinuteUpdate()

@@ -1,4 +1,4 @@
-/* using server.Models;
+using server.Models;
 using server.Handlers.Storage;
 using server.Core;
 using server.Events;
@@ -14,7 +14,7 @@ using server.Util.Inventory;
 
 namespace server.Modules.Inventory;
 
-public class InventoryModule : IPressedIEvent, ILoadEvent
+public class InventoryModule : IPressedIEvent
 {
   IStorageHandler _storageHandler;
   IPlayerHandler _playerHandler;
@@ -28,9 +28,10 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   }
 
   internal static Dictionary<int, List<xPlayer>> storagePlayers = new Dictionary<int, List<xPlayer>>();
+
   public static async void OpenStorage(xPlayer player, int storage_id)
   {
-    List<xStorage> uiStorages = new List<xStorage>();
+    /* List<xStorage> uiStorages = new List<xStorage>();
     List<int> openInventorys = new List<int>();
 
     xStorage? playerStorage = await _storageHandler.GetStorage(player.boundStorages[1]);
@@ -42,59 +43,18 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     {
       openInventorys.Add(storage.id);
       uiStorages.Add(storage);
-    }
-    player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
+    } */
+    // player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
   }
 
   public async Task<bool> OnKeyPressI(xPlayer player)
   {
-    List<xStorage> uiStorages = new List<xStorage>();
-    List<int> openInventorys = new List<int>();
-
-    xStorage? playerStorage = await _storageHandler.GetStorage(player.boundStorages[(int)STORAGES.INVENTORY]);
-    uiStorages.Add(playerStorage!);
-    openInventorys.Add(playerStorage.id);
-
-    if (player.IsInVehicle)
-    {
-      xVehicle vehicle = (xVehicle)player.Vehicle;
-      if (vehicle.storage_glovebox == null) goto load;
-      openInventorys.Add(vehicle.storage_glovebox.id);
-      uiStorages.Add(vehicle.storage_glovebox);
-      goto load;
-    }
-
-    xVehicle closestVehicle = await _vehicleHandler.GetClosestVehicle(player.Position);
-    if (closestVehicle != null)
-    {
-      if (closestVehicle.canTrunkBeOpened() == false) goto load;
-      openInventorys.Add(closestVehicle.storage_trunk.id);
-      uiStorages.Add(closestVehicle.storage_trunk);
-      goto load;
-    }
-
-
-    if (player.player_society.Faction.name != "Zivilist" && player.player_society.Faction.StoragePosition.Distance(player.Position) < 2)
-    {
-      xStorage? factionStorage = await _storageHandler.GetStorage(player.boundStorages[(int)STORAGES.FACTION]);
-      openInventorys.Add(factionStorage.id);
-      uiStorages.Add(factionStorage!);
-      goto load;
-    }
-
-    xStorage? closestStorage = await _storageHandler.GetClosestStorage(player, 2);
-    if (closestStorage != null)
-    {
-      openInventorys.Add(closestStorage.id);
-      uiStorages.Add(closestStorage);
-    }
-
-  load:
-    player.Emit("frontend:open", "inventar", new inventoryWriter(uiStorages));
+    List<xStorage> uiStorages = await _storageHandler.GetViewableStorages(player);
+    player.Emit("frontend:open", "inventar", new InventoryWriter(uiStorages));
     return true;
   }
 
-  #region Events
+  /* #region Events
   public void OnLoad()
   {
     AltAsync.OnClient<IPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
@@ -230,4 +190,4 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     return true;
   }
   #endregion
-} */
+ */}

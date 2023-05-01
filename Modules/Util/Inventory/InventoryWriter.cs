@@ -8,10 +8,10 @@ using server.Handlers.Storage;
 using server.Modules.Items;
 
 namespace server.Util.Inventory;
-public class inventoryWriter : IWritable
+public class InventoryWriter : IWritable
 {
   private readonly List<xStorage> storages;
-  public inventoryWriter(List<xStorage> _storages)
+  public InventoryWriter(List<xStorage> _storages)
   {
     this.storages = _storages;
   }
@@ -47,6 +47,7 @@ public class inventoryWriter : IWritable
         writer.Value(item.Item_Data.weight);
         // TODO add data
         writer.Name("data");
+        writer.Value("null");
         // writer.Value($"{item.label} {item.count * item.weight}KG");
         writer.Name("count");
         writer.Value(item.count);

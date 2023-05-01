@@ -15,5 +15,5 @@ public interface IStorageHandler
   Task SaveAllStorages();
   Task CreateAllStorages(xPlayer player);
   Task<xStorage?> GetClosestStorage(xPlayer player, int range = 2);
-
+  Task<List<xStorage>> GetViewableStorages(xPlayer player);
 }
