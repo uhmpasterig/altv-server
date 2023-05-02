@@ -15,6 +15,8 @@ public partial class Storage_Item
     this.Item_Data = item;
     this.item_id = item.id;
     this.count = count;
+    this.created_at = DateTime.Now;
+
   }
 
   public Storage_Item(Item item, int count, int slot)
@@ -23,7 +25,7 @@ public partial class Storage_Item
     this.item_id = item.id;
     this.count = count;
     this.slot = slot;
-
+    this.created_at = DateTime.Now;
   }
 
   public Storage_Item() { }

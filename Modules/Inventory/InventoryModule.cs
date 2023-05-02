@@ -85,8 +85,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
     AltAsync.OnClient<xPlayer, int, int, int, int, int>("inventory:moveItem", async (player, fslot, tslot, fromStorage, toStorage, count) =>
     {
-      _logger.Log($"fslot: {fslot}, tslot: {tslot}, fromStorage: {fromStorage}, toStorage: {toStorage}, count: {count}");
-
       xStorage? from = await _storageHandler.GetStorage(fromStorage);
       xStorage? to = await _storageHandler.GetStorage(toStorage);
       if (from == null || to == null) return;
@@ -127,7 +125,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     }
 
 
-    _logger.Log("-------------------------------------");
+    /* _logger.Log("-------------------------------------");
     _logger.Log($"Item 1: {i1.Item_Data.name} | {i1.item_id} | {i1.count} | {_s1}");
     if (i2 != null)
       _logger.Log($"Item 2: {i2.Item_Data.name} | {i2.item_id} | {i2.count} | {_s2}");
@@ -135,7 +133,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       _logger.Log($"Item 2: null");
 
     _logger.Log($"Storage 1: {s1.id} | {s1.name} | {s1.weight}");
-    _logger.Log($"Storage 2: {s2.id} | {s2.name} | {s2.weight}");
+    _logger.Log($"Storage 2: {s2.id} | {s2.name} | {s2.weight}"); */
 
     if (i2 == null)
       await SetIntoSlot(s1, s2, i1, _s1, _s2, count);
@@ -146,13 +144,13 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     else
       _logger.Error("Something went wrong while dragging items!");
 
-    _logger.Log("-------------------------------------");
+    /* _logger.Log("-------------------------------------");
     _logger.Log("Storage 1: ");
     _logger.Log($"  Items: ({s1.Items.Count})");
     s1.Items.ForEach(i => _logger.Log($"    > Item: {i.Item_Data.name} | Count: {i.count} | Slot: {i.slot}"));
     _logger.Log("Storage 2: ");
     _logger.Log($"  Items: ({s2.Items.Count})");
-    s2.Items.ForEach(i => _logger.Log($"    > Item: {i.Item_Data.name} | Count: {i.count} | Slot: {i.slot}"));
+    s2.Items.ForEach(i => _logger.Log($"    > Item: {i.Item_Data.name} | Count: {i.count} | Slot: {i.slot}")); */
   }
 
   private async Task SwapItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2)
@@ -205,9 +203,15 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     // add logic for the count system so there stays an old stack of items inside the storage slot
     if (count < i1.count)
     {
+      ServerContext ctx = new ServerContext();
       // Create a new item
       Storage_Item i2 = new Storage_Item(i1.Item_Data, i1.count - count, _s2);
       // Add the item
+      _logger.Log("Adding new item to the database OLD KEY WOULD BE: " + i2.id);
+      ctx.Storage_Items.Add(i2);
+      // Save the changes
+      await ctx.SaveChangesAsync();
+      _logger.Log("Key generated: " + i2.id);
       await s1.AddItem(i2, _s1, true);
     }
 
