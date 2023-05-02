@@ -142,11 +142,23 @@ public class xStorage : Models.Storage
 
   public async Task<bool> CanCarryItem(Storage_Item item, int count = 0, Storage_Item? ignore = null)
   {
-    if (count == 0) count = item.count;
-    if (ignore != null)
-      if ((item.Item_Data.weight * count) + this.weight - (ignore.Item_Data.weight * ignore.count) > this.maxWeight) return false;
+    // 1 7.5 | 4 2.5
 
-    if ((item.Item_Data.weight * count) + this.weight > this.maxWeight) return false;
+    // 4 2.5 | 1 7.5
+
+    if (count == 0) count = item.count;
+
+    if (ignore != null)
+    {
+      if ((item.Item_Data.weight * count) + this.weight - (ignore.Item_Data.weight * ignore.count) > this.maxWeight) return false;
+      //(10) + 10 - (7.5) > 10
+      // 20 - 7.5 > 10
+      // 12.5 > 10
+    }
+    else
+    {
+      if ((item.Item_Data.weight * count) + this.weight > this.maxWeight) return false;
+    }
     return true;
   }
 
@@ -185,11 +197,12 @@ public class xStorage : Models.Storage
       if (!await this.CanFitItem(item)) return false;
       if (slot == -1) return false;
     }
-
+    Console.WriteLine($"Adding item in slot {slot} with name {item.Item_Data.name}");
 
     // Adding item
     item.slot = slot;
     item.Storage = this;
+    item.storage_id = this.id;
     this.Items.Add(item);
     this.CalculateWeight();
     return true;
@@ -246,6 +259,7 @@ public class xStorage : Models.Storage
   public async Task UpdateItem(Storage_Item item)
   {
     if (item == null) return;
+    Console.WriteLine($"Updating item in slot {item.slot} with name {item.Item_Data.name}");
     this.Items[this.Items.FindIndex(x => x.id == item.id)] = item;
     this.CalculateWeight();
   }

@@ -114,15 +114,29 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
   private async Task DragItem(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item? i2, int _s1, int _s2, int count)
   {
     // perform a weight check before making any changes
-    if (s1.id != s2.id && i2 == null)
-      if (!await s2.CanCarryItem(i1, count)) return;
-    else if(s1.id != s2.id && i2 != null)
-      if (!await s2.CanCarryItem(i1, count, i2) || !await s1.CanCarryItem(i2, count, i1)) return;
+    if (s1.id != s2.id)
+    {
+      if (i2 == null)
+      { if (!await s2.CanCarryItem(i1, count)) return; }
+
+      else if (i1.Item_Data.id == i2.Item_Data.id)
+      { if (!await s2.CanCarryItem(i1, count)) return; }
+
+      else if (i1.Item_Data.id != i2.Item_Data.id)
+      { if (!await s2.CanCarryItem(i1, 0, i2) || !await s1.CanCarryItem(i2, 0, i1)) return; }
+    }
 
 
     _logger.Log("-------------------------------------");
-    _logger.Log($"Drag Item: {i1.item_id} {i2?.item_id}");
-    _logger.Log($"Drag Item: {i1.slot} {i2?.slot}");
+    _logger.Log($"Item 1: {i1.Item_Data.name} | {i1.item_id} | {i1.count} | {_s1}");
+    if (i2 != null)
+      _logger.Log($"Item 2: {i2.Item_Data.name} | {i2.item_id} | {i2.count} | {_s2}");
+    else
+      _logger.Log($"Item 2: null");
+
+    _logger.Log($"Storage 1: {s1.id} | {s1.name} | {s1.weight}");
+    _logger.Log($"Storage 2: {s2.id} | {s2.name} | {s2.weight}");
+
     if (i2 == null)
       await SetIntoSlot(s1, s2, i1, _s1, _s2, count);
     else if (i1.Item_Data.id == i2.Item_Data.id)
@@ -133,10 +147,12 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       _logger.Error("Something went wrong while dragging items!");
 
     _logger.Log("-------------------------------------");
-    _logger.Log("");
-    _logger.Log("");
-    _logger.Log("");
-    _logger.Log("");
+    _logger.Log("Storage 1: ");
+    _logger.Log($"  Items: ({s1.Items.Count})");
+    s1.Items.ForEach(i => _logger.Log($"    > Item: {i.Item_Data.name} | Count: {i.count} | Slot: {i.slot}"));
+    _logger.Log("Storage 2: ");
+    _logger.Log($"  Items: ({s2.Items.Count})");
+    s2.Items.ForEach(i => _logger.Log($"    > Item: {i.Item_Data.name} | Count: {i.count} | Slot: {i.slot}"));
   }
 
   private async Task SwapItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2)
@@ -144,18 +160,15 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     _logger.Log($"Swap Items: {i1.item_id} {i2.item_id}");
     // Check if the items are the same and not null
     if (i1 == null || i2 == null) return;
+
     // Remove the items from the slots
     await s1.RemoveItem(i1);
     await s2.RemoveItem(i2);
 
-    // Swap the slots
-    int slot = i1.slot;
-    i1.slot = i2.slot;
-    i2.slot = slot;
-    _logger.Log($"DEBUG: slot: {slot} | i1.slot {i1.slot} | i2.slot {i2.slot}");
-    // Add the items back to the slots
-    await s1.AddItem(i2, i2.slot);
-    await s2.AddItem(i1, i1.slot);
+    // Swap the slots and add the items back
+    int tempSlot = i1.slot;
+    await s2.AddItem(i1, i2.slot, true);
+    await s1.AddItem(i2, tempSlot, true);
   }
 
   private async Task MergeItems(xStorage s1, xStorage s2, Storage_Item i1, Storage_Item i2, int count)
@@ -179,6 +192,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
 
     // Remove the item if the count is 0
     if (i1.count == 0) await s1.RemoveItem(i1);
+    if (i2.count == 0) await s2.RemoveItem(i2);
     return;
   }
 
@@ -210,10 +224,7 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
     {
       await s1.RemoveItem(i1);
       // Set the new values
-      i1.slot = _s2;
       i1.count = count;
-      i1.storage_id = s2.id;
-      i1.Storage = s2;
       await s2.AddItem(i1, _s2);
     }
     return;
