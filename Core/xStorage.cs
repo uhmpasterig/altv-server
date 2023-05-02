@@ -260,8 +260,8 @@ public class xStorage : Models.Storage
   {
     if (item == null) return;
     Console.WriteLine($"Updating item in slot {item.slot} with name {item.Item_Data.name}");
-    Console.WriteLine($"  > Setting: {item.count} | {item.Item_Data.name} | {item.Item_Data.weight} | {item.slot} | {item.storage_id} | {item.id}");
-    this.Items[this.Items.FindIndex(x => x.id == item.id)] = item;
+    Console.WriteLine($"  > Setting: {item.count} | {item.Item_Data.name} | {item.Item_Data.weight} | {item.slot} | {item.storage_id}");
+    this.Items[this.Items.FindIndex(x => x.slot == item.slot)] = item;
     this.CalculateWeight();
   }
 }

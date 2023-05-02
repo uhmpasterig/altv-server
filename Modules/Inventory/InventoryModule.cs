@@ -207,11 +207,6 @@ public class InventoryModule : IPressedIEvent, ILoadEvent
       // Create a new item
       Storage_Item i2 = new Storage_Item(i1.Item_Data, i1.count - count, _s2);
       // Add the item
-      _logger.Log("Adding new item to the database OLD KEY WOULD BE: " + i2.id);
-      ctx.Storage_Items.Add(i2);
-      // Save the changes
-      await ctx.SaveChangesAsync();
-      _logger.Log("Key generated: " + i2.id);
       await s1.AddItem(i2, _s1, true);
     }
 
