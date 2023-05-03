@@ -28,3 +28,109 @@ Modules:
   > VehicleShop
   > Weapon
   > Workstation
+
+
+Player: 
+  > Lager(Privat)
+  
+  > Kleidung 
+    > Ausgewählte Kleidung
+    > Besitzt Kleidung
+  
+  > Waffen
+    > Begrentze Anzahl (eine lange eine kurze ein hand (BSP))
+    > Waffen 
+      > Munition 
+    
+    > Munition 
+      > Pistolen 
+      > Gewehre 55.2 55.6 nach types
+      > Schrotflinten
+      > ...
+
+  > Geld
+    > Bargeld
+    > Bankgeld
+    > Kredite
+    > Hat Kreditkarte
+    (Adden Removen Hat geld) 
+  
+  > Stats 
+    > Vitals
+      > Hunger
+      > Durst
+      > Sport
+    
+    > Leben 
+    > Weste
+      > Type
+      > Value
+    
+    > Drogen Effekte
+  
+  > Society 
+    > Sozial Stufe 
+    > Spielzeit
+    > Fraktion 
+      > Perms 
+      > Rang 
+    > Biz 
+      > Perms
+      > Rang
+    > Minijob
+      > Stufe
+
+  > Fahrzeuge 
+    > Besitzt
+    > Fraktion 
+    > Schluessel
+    
+  > Versicherungen 
+    > Krankenversicherung 
+    > Lebensversicherung
+    > KFZ Versicherung
+    > Rechtschutzversicherung
+  
+  > Lizenzen 
+    > Waffen
+    > Fahrzeuge
+      > Auto
+      > Motorrad
+      > LKW
+      > Flugzeug
+    > Medizin
+    > Dienstausweis
+
+  > Telefon 
+    > Nummer
+    > Kontakte
+    > Anrufe
+    > SMS
+
+  > Status 
+    > Tot 
+      > Zeit
+      > Stauts(koma, stabi, tot)
+      > Verletzung
+    > Gefesselt 
+      > Zeit
+    > Im Gefängnis
+      > Zeit
+    
+  > Cache 
+    > GW / FFA / Camper / etc. 
+      > Waffen
+      > Munition
+      > Coords
+      > Kleidung
+      > Vitals
+    > Gefaengnis 
+      > Kleidung 
+
+  > Schluessel
+    > Lagerhalle (owned)
+    > Fahrzeuge (owned)
+    > Lagerhalle (rented)
+    > Fahrzeuge (rented)
+  
+  

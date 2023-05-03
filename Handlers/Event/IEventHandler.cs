@@ -15,5 +15,4 @@ namespace server.Handlers.Event;
 public interface IEventHandler
 {
   Task LoadHandlers();
-  void ItemsLoaded();
 }
