@@ -24,6 +24,7 @@ public partial class Player_Weapon
 
   public string name { get; set; }
   public int ammo { get; set; }
+  public byte tintIndex { get; set; }
 
   public uint hash
   {

@@ -26,6 +26,20 @@ public partial class Player_Vitals
   public bool isDead { get; set; }
   public string? deathCause { get; set; }
 
+  // set function of all vitals
+  public async Task SaveAsync(Player_Vitals Player_Vitals)
+  {
+    this.health = Player_Vitals.health;
+    this.armor = Player_Vitals.armor;
+    this.maxArmor = Player_Vitals.maxArmor;
+    this.hunger = Player_Vitals.hunger;
+    this.thirst = Player_Vitals.thirst;
+    this.fitness = Player_Vitals.fitness;
+
+    this.isDead = Player_Vitals.isDead;
+    this.deathCause = Player_Vitals.deathCause;
+  }
+
   [NotMapped]
   public Player_Vitals Default => new()
   {

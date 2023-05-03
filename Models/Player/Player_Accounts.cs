@@ -20,4 +20,14 @@ public partial class Player_Accounts
   public int debt { get; set; }
   public int society { get; set; }
   public bool creditCard { get; set; }
+
+  [NotMapped]
+  public Player_Accounts Default => new()
+  {
+    cash = 0,
+    bank = 0,
+    debt = 0,
+    society = 0,
+    creditCard = false
+  };
 }

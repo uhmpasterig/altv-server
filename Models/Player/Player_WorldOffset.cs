@@ -28,4 +28,14 @@ public partial class Player_WorldOffset
   public float Roll { get; set; }
   public float Pitch { get; set; }
   public float Yaw { get; set; }
+
+  public async Task SaveAsync(Player_WorldOffset Player_WorldOffset)
+  {
+    this.x = Player_WorldOffset.x;
+    this.y = Player_WorldOffset.y;
+    this.z = Player_WorldOffset.z;
+    this.Roll = Player_WorldOffset.Roll;
+    this.Pitch = Player_WorldOffset.Pitch;
+    this.Yaw = Player_WorldOffset.Yaw;
+  }
 }

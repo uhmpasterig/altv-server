@@ -3,7 +3,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Async.Elements.Entities;
 using AltV.Net.Async;
 using Newtonsoft.Json;
-
+using Microsoft.EntityFrameworkCore;
 using AltV.Net.Resources.Chat.Api;
 using AltV.Net.Data;
 using server.Models;
@@ -24,16 +24,18 @@ public partial class xPlayer : AsyncPlayer
 
   public async Task LoadPlayer(Models.Player _player)
   {
-    this.Frozen = true;
     this.id = _player.id;
     this.name = _player.name;
     this.Model = _player.ped;
 
-    // Load the player's weapons
-    await this._loadWeapons(_player.Weapons);
-
-    // Load the player's vitals
-    await this._loadVitals(_player.Vitals);
+    // Load the players's variables from the database parallel to speed up the process
+    var _task = new List<Task>
+    {
+      this._loadWeapons(_player.Weapons),
+      this._loadAccounts(_player.Accounts),
+      this._loadVitals(_player.Vitals)
+    };
+    await Task.WhenAll(_task);
 
     // Spawn the player and set it frozen
     await this.Respawn();
@@ -42,5 +44,32 @@ public partial class xPlayer : AsyncPlayer
     await this._loadWorldOffset(_player.WorldOffset);
 
     this.Frozen = false;
+  }
+
+  public async Task SavePlayer()
+  {
+    var ctx = new PlayerContext().Instance;
+    var dbPlayer = await ctx.Players
+      .Include(p => p.Weapons)
+      .Include(p => p.Accounts)
+      .Include(p => p.Vitals)
+      .Include(p => p.WorldOffset)
+      .Where(p => p.id == this.id)
+      .FirstOrDefaultAsync();
+
+    if (dbPlayer == null) return;
+    dbPlayer.Weapons = this.Weapons;
+    dbPlayer.Accounts = this.Accounts;
+
+    var _task = new List<Task>
+    {
+      dbPlayer.Vitals.SaveAsync(this.Vitals),
+      dbPlayer.WorldOffset.SaveAsync(this.WorldOffset)
+    };
+
+    await Task.WhenAll(_task);
+
+    await ctx.SaveChangesAsync();
+    await ctx.ClearInstance();
   }
 }

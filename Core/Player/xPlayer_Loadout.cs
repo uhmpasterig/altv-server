@@ -33,7 +33,8 @@ public partial class xPlayer
   {
     foreach (var weapon in this.Weapons)
     {
-      this.GiveWeapon(Alt.Hash(weapon.name), weapon.ammo, false);
+      this.GiveWeapon(weapon.hash, weapon.ammo, false);
+      this.SetWeaponTintIndex(weapon.hash, weapon.tintIndex);
     }
   }
 

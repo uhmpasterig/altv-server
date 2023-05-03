@@ -15,11 +15,15 @@ using server.Handlers.Logger;
 
 namespace server.Handlers.Player;
 
-public partial class PlayerHandler : IPlayerDisconnectEvent
+public partial class PlayerHandler : IOneMinuteUpdateEvent
 {
-  public async void OnPlayerDisconnect(xPlayer player, string reason)
+  public async void OnOneMinuteUpdate()
   {
-    await player.SavePlayer();
-    Players.Remove(player.id);
+    _logger.Log("Saving all player accounts to database");
+    Players.ToList().ForEach(async (KeyValuePair<int, xPlayer> kvp) =>
+    {
+      _logger.Log($"Saving {kvp.Value.Name} to database");
+      await kvp.Value.SavePlayer();
+    });
   }
 }

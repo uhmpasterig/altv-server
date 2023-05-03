@@ -18,7 +18,9 @@ public class EventHandler : IEventHandler
   private readonly IEnumerable<IPlayerDeadEvent> _playerDeadEvents;
   private readonly IEnumerable<ILoadEvent> _loadEvents;
 
-  // timer event
+  // timer events 
+  private readonly ITimerHandler _timerHandler;
+  private readonly IEnumerable<IOneMinuteUpdateEvent> _oneMinuteUpdateEvents;
 
   ILogger _logger;
   public EventHandler(
@@ -27,7 +29,8 @@ public class EventHandler : IEventHandler
     IEnumerable<IPlayerConnectEvent> playerConnectedEvents,
     IEnumerable<IPlayerDisconnectEvent> playerDisconnectEvents,
     IEnumerable<IPlayerDeadEvent> playerDeadEvents,
-    IEnumerable<ILoadEvent> loadEvents
+    IEnumerable<ILoadEvent> loadEvents,
+    IEnumerable<IOneMinuteUpdateEvent> oneMinuteUpdateEvents
   )
   {
     _logger = logger;
@@ -35,6 +38,8 @@ public class EventHandler : IEventHandler
     _playerDisconnectedEvents = playerDisconnectEvents;
     _playerDeadEvents = playerDeadEvents;
     _loadEvents = loadEvents;
+    _timerHandler = timerHandler;
+    _oneMinuteUpdateEvents = oneMinuteUpdateEvents;
   }
 
   public Task LoadHandlers()
@@ -54,6 +59,9 @@ public class EventHandler : IEventHandler
 
     AltAsync.OnPlayerDead += async (IPlayer player, IEntity killer, uint weapon) =>
       _playerDeadEvents?.ForEach(playerDeadEvent => playerDeadEvent.OnPlayerDeath(player, killer, weapon));
+
+    _timerHandler.AddInterval(1000 * 60, async (s, e) =>
+      _oneMinuteUpdateEvents?.ForEach(oneMinuteUpdateEvent => oneMinuteUpdateEvent.OnOneMinuteUpdate()));
 
     return Task.CompletedTask;
   }

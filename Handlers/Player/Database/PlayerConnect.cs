@@ -41,6 +41,7 @@ public partial class PlayerHandler : IPlayerConnectEvent
       .Include(p => p.WorldOffset)
       .Include(p => p.Identifier)
       .Include(p => p.Vitals)
+      .Include(p => p.Accounts)
       .Where(p => p.Identifier.launcher_name == player.Name)
       .FirstOrDefaultAsync();
 
@@ -58,8 +59,12 @@ public partial class PlayerHandler : IPlayerConnectEvent
 
   public async void OnPlayerConnect(xPlayer player, string reason)
   {
-    _logger.Log("Player connected: " + player.Name);
-    // catch error 
     player = await LoadPlayerFromDatabase(player);
+    if (player == null)
+    {
+      Console.WriteLine($"Player {player.Name} not found in database");
+      return;
+    }
+    Players.Add(player.id, player);
   }
 }
