@@ -7,18 +7,24 @@ namespace server.Core;
 
 public partial class xPlayer
 {
+  private Position? cachePosition { get; set; }
+  private Rotation? cacheRotation { get; set; }
+
   public Player_WorldOffset WorldOffset
   {
     get
     {
+      Position pos = cachePosition ?? this.Position;
+      Rotation rot = cacheRotation ?? this.Rotation;
+
       return new Player_WorldOffset()
       {
-        x = this.Position.X,
-        y = this.Position.Y,
-        z = this.Position.Z,
-        Roll = this.Rotation.Roll,
-        Pitch = this.Rotation.Pitch,
-        Yaw = this.Rotation.Yaw
+        x = pos.X,
+        y = pos.Y,
+        z = pos.Z,
+        Roll = rot.Roll,
+        Pitch = rot.Pitch,
+        Yaw = rot.Yaw
       };
     }
     set
@@ -41,5 +47,21 @@ public partial class xPlayer
   public async Task<Rotation> GetRotation()
   {
     return new Rotation(this.Rotation.Roll, this.Rotation.Pitch, this.Rotation.Yaw);
+  }
+
+  public async Task SetDimension(int dimension)
+  {
+    if (dimension != 1)
+    {
+      this.cachePosition = this.Position;
+      this.cacheRotation = this.Rotation;
+    }
+    else
+    {
+      this.cachePosition = null;
+      this.cacheRotation = null;
+    }
+
+    this.Dimension = dimension;
   }
 }

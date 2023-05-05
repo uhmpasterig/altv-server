@@ -8,6 +8,12 @@ public partial class xPlayer
 {
   public List<Player_Weapon> Weapons { get; set; }
 
+  private async Task _loadWeapons(List<Player_Weapon> Weapons)
+  {
+    this.Weapons = Weapons;
+    await this.RestoreRPWeapons();
+  }
+
   public async Task GiveRPWeapon(string name, int ammo = 0)
   {
     this.GiveWeapon(Alt.Hash(name), ammo, false);
@@ -36,11 +42,5 @@ public partial class xPlayer
       this.GiveWeapon(weapon.hash, weapon.ammo, false);
       this.SetWeaponTintIndex(weapon.hash, weapon.tintIndex);
     }
-  }
-
-  private async Task _loadWeapons(List<Player_Weapon> Weapons)
-  {
-    this.Weapons = Weapons;
-    await this.RestoreRPWeapons();
   }
 }
