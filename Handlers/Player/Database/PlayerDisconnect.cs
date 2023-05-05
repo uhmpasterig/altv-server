@@ -19,7 +19,7 @@ public partial class PlayerHandler : IPlayerDisconnectEvent
 {
   public async void OnPlayerDisconnect(xPlayer player, string reason)
   {
-    await player.SavePlayer();
+    await player.Save();
     Players.Remove(player.id);
   }
 }

@@ -23,6 +23,6 @@ internal class WeaponCommands : IScript
   [Command("save")]
   public async static void SaveMe(xPlayer player)
   {
-    await player.SavePlayer();
+    await player.Save();
   }
 }

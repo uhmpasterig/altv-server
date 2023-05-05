@@ -66,13 +66,13 @@ public class EventHandler : IEventHandler
   public async Task DispatchLoadEventAsync()
   {
     _logger.Startup($"Dispatching {_loadEvents.Count()} load events!");
-    var loadTasks = new List<Task>();
+    List<Task> tasks = new List<Task>();
+
     _loadEvents?.ForEach(loadEvent =>
     {
-      // _logger.Startup($"Loading event handler: {loadEvent.GetType().Name} from {loadEvent.GetType().Namespace}");
-      loadTasks.Add(loadEvent.OnLoad());
+      _logger.Startup($"Dispatching {loadEvent.GetType().Name}");
+      tasks.Add(loadEvent.OnLoad());
     });
-
-    await Task.WhenAll(loadTasks).ConfigureAwait(false);
+    Task.WaitAll(tasks.ToArray());
   }
 }

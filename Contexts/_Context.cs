@@ -24,6 +24,7 @@ public partial class ServerContext : DbContext, IDisposable
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
+    VehicleContextConfiguring(modelBuilder);
     CoreContextConfiguring(modelBuilder);
     PlayerContextConfiguring(modelBuilder);
     base.OnModelCreating(modelBuilder);

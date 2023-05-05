@@ -49,7 +49,7 @@ public partial class PlayerHandler : IPlayerConnectEvent
       return player;
     }
 
-    await player.LoadPlayer(dbPlayer);
+    await player.Load(dbPlayer);
 
     await ctx.ClearInstance();
     return player;

@@ -23,7 +23,7 @@ public partial class xPlayer : AsyncPlayer
     this.Spawn(new Position(x, y, z), 0);
   }
 
-  public async Task LoadPlayer(Models.Player _player)
+  public async Task Load(Models.Player _player)
   {
     this.id = _player.id;
     this.name = _player.name;
@@ -47,7 +47,7 @@ public partial class xPlayer : AsyncPlayer
     this.Frozen = false;
   }
 
-  public async Task SavePlayer()
+  public async Task Save()
   {
     var ctx = ServerContext.Instance;
     var dbPlayer = await ctx.Players

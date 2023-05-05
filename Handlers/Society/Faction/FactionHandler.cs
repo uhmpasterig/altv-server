@@ -20,12 +20,9 @@ public class FactionHandler : IFactionHandler, ILoadEvent
     ServerContext ctx = ServerContext.Instance;
     _logger.Debug("Loading factions");
 
-
     Factions = await ctx.Factions
       .Include(f => f.Ranks)
       .ToListAsync();
-
-
 
     await ctx.ClearInstance();
 

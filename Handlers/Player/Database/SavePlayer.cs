@@ -23,7 +23,7 @@ public partial class PlayerHandler : IOneMinuteUpdateEvent
     Players.ToList().ForEach(async (KeyValuePair<int, xPlayer> kvp) =>
     {
       _logger.Log($"Saving {kvp.Value.Name} to database");
-      await kvp.Value.SavePlayer();
+      await kvp.Value.Save();
     });
   }
 }

@@ -1,10 +1,5 @@
-using AltV.Net.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
-using AltV.Net;
 
 namespace server.Models;
 

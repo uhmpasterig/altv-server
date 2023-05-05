@@ -48,7 +48,7 @@ namespace server
     }
 
     public override IEntityFactory<IPlayer> GetPlayerFactory() => new xPlayerFactory();
-    // public override IEntityFactory<IVehicle> GetVehicleFactory() => new xVehicleFactory();
+    public override IEntityFactory<IVehicle> GetVehicleFactory() => new xVehicleFactory();
   }
 }
 
@@ -66,7 +66,7 @@ public class xPlayerFactory : IEntityFactory<IPlayer>
   }
 }
 
-/* public class xVehicleFactory : IEntityFactory<IVehicle>
+public class xVehicleFactory : IEntityFactory<IVehicle>
 {
   public IVehicle Create(ICore core, IntPtr vehiclePointer, ushort id)
   {
@@ -77,4 +77,4 @@ public class xPlayerFactory : IEntityFactory<IPlayer>
   {
     return new xVehicle(core, vehiclePointer, id);
   }
-} */
+}
