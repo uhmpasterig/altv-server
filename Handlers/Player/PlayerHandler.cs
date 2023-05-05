@@ -10,6 +10,7 @@ using server.Events;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using server.Config;
+using server.Contexts;
 
 using server.Handlers.Logger;
 
@@ -20,10 +21,8 @@ public partial class PlayerHandler : IPlayerHandler, IPlayerDisconnectEvent
   public Dictionary<int, xPlayer> Players = new Dictionary<int, xPlayer>();
 
   ILogger _logger;
-  PlayerContext _playerContext;
-  public PlayerHandler(ILogger logger, PlayerContext playerContext)
+  public PlayerHandler(ILogger logger)
   {
     _logger = logger;
-    _playerContext = playerContext;
   }
 }

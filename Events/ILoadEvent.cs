@@ -7,5 +7,5 @@ using AltV.Net.Elements.Entities;
 namespace server.Events;
 public interface ILoadEvent
 {
-  void OnLoad();
+  Task OnLoad();
 }

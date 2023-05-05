@@ -1,27 +1,15 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using server.Models;
 
-namespace server.Models;
+namespace server.Contexts;
 
-public partial class PlayerContext : DbContext
+public partial class ServerContext : DbContext
 {
-  public PlayerContext() { }
-
-  public PlayerContext(DbContextOptions<PlayerContext> options) : base(options) { }
-
-  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-  {
-    if (!optionsBuilder.IsConfigured)
-    {
-      optionsBuilder.UseMySql("server=45.157.233.24;database=server_player;user=root;password=KrjganovOnTop1!23;treattinyasboolean=true",
-        new MySqlServerVersion(new Version(8, 0, 25)));
-    }
-  }
-
   public virtual DbSet<Player> Players { get; set; }
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  private void PlayerContextConfiguring(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<Player>(entity =>
     {
@@ -50,19 +38,5 @@ public partial class PlayerContext : DbContext
         .HasForeignKey<Player_Accounts>(a => a.player_id)
         .HasPrincipalKey<Player>(a => a.id);
     });
-
-    OnModelCreatingPartial(modelBuilder);
   }
-
-  // function to create a new instance of the PlayerContext class
-  public PlayerContext Instance => new PlayerContext();
-
-  // function to clear the instance and dispose of the PlayerContext class instance after saving changes
-  public async Task ClearInstance()
-  {
-    await this.SaveChangesAsync();
-    await this.DisposeAsync();
-  }
-
-  partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

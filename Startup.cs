@@ -4,6 +4,7 @@ using server.Models;
 using Autofac;
 using server.Core;
 using System.Reflection;
+using server.Contexts;
 
 namespace server.Helpers;
 
@@ -55,12 +56,12 @@ public class Startup
         .SingleInstance();
     }
 
-    builder.Register(x =>
+    builder.Register(c =>
     {
-      var optionsBuilder = new DbContextOptionsBuilder<PlayerContext>()
-        .UseMySql("server=45.157.233.24;database=server_player;user=root;password=KrjganovOnTop1!23;treattinyasboolean=true",
-          new MySqlServerVersion(new Version(8, 0, 25)));
-      return new PlayerContext(optionsBuilder.Options);
+      var optionsBuilder = new DbContextOptionsBuilder<ServerContext>()
+              .UseMySql("server=45.157.233.24;database=altserver;user=root;password=KrjganovOnTop1!23;treattinyasboolean=true",
+                new MySqlServerVersion(new Version(8, 0, 25)));
+      return new ServerContext(optionsBuilder.Options);
     });
 
     _container = builder.Build();

@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using server.Models;
 using AltV.Net.Async.Elements.Entities;
 
-using server.Handlers.Entities;
 using server.Handlers.Event;
 using server.Handlers.Player;
 
@@ -31,9 +30,17 @@ namespace server
 
     public override async void OnStart()
     {
+      var stopWatch = new System.Diagnostics.Stopwatch();
+      stopWatch.Start();
       var startup = new Startup();
       startup.Configure();
       startup.Resolve();
+
+      stopWatch.Stop();
+
+      Console.ForegroundColor = ConsoleColor.Magenta;
+      Console.WriteLine($"[STARTUP COMPLETED] It took {stopWatch.ElapsedMilliseconds}ms | {stopWatch.ElapsedTicks} ticks to start the server and load all modules");
+      Console.ResetColor();
     }
     public override async void OnStop()
     {

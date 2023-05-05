@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using AltV.Net.Resources.Chat.Api;
 using AltV.Net.Data;
 using server.Models;
+using server.Contexts;
 
 namespace server.Core;
 
@@ -48,7 +49,7 @@ public partial class xPlayer : AsyncPlayer
 
   public async Task SavePlayer()
   {
-    var ctx = new PlayerContext().Instance;
+    var ctx = ServerContext.Instance;
     var dbPlayer = await ctx.Players
       .Include(p => p.Weapons)
       .Include(p => p.Accounts)

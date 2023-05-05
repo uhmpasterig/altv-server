@@ -15,4 +15,12 @@ internal static class IEnumerableExtensions
 
     return Task.CompletedTask;
   }
+
+  internal async static Task ForEachAsync<T>(this IEnumerable<T> elements, Func<T, Task> action)
+  {
+    foreach (var element in elements)
+    {
+      await action(element);
+    }
+  }
 }

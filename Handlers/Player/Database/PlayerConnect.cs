@@ -7,9 +7,7 @@ using server.Core;
 using server.Models;
 using Microsoft.EntityFrameworkCore;
 using server.Events;
-using Newtonsoft.Json;
-using System.Diagnostics;
-using server.Config;
+using server.Contexts;
 
 using server.Handlers.Logger;
 
@@ -35,7 +33,7 @@ public partial class PlayerHandler : IPlayerConnectEvent
 
   public async Task<xPlayer> LoadPlayerFromDatabase(xPlayer player)
   {
-    var ctx = new PlayerContext().Instance;
+    var ctx = ServerContext.Instance;
     Models.Player? dbPlayer = await ctx.Players
       .Include(p => p.Weapons)
       .Include(p => p.WorldOffset)

@@ -42,14 +42,10 @@ public class EventHandler : IEventHandler
     _oneMinuteUpdateEvents = oneMinuteUpdateEvents;
   }
 
-  public Task LoadHandlers()
+  public async Task LoadHandlers()
   {
-    foreach (var loadEvent in _loadEvents)
-    {
-      _logger.Debug($"Loading event handler: {loadEvent.GetType().Name}");
-      loadEvent.OnLoad();
-    }
-    _logger.Debug("Loading event handlers");
+    _logger.Startup("Loading event handlers");
+    _ = DispatchLoadEventAsync();
 
     AltAsync.OnPlayerConnect += async (IPlayer player, string reason) =>
       _playerConnectedEvents?.ForEach(playerConnectEvent => playerConnectEvent.OnPlayerConnect((xPlayer)player, reason));
@@ -63,6 +59,20 @@ public class EventHandler : IEventHandler
     _timerHandler.AddInterval(1000 * 60, async (s, e) =>
       _oneMinuteUpdateEvents?.ForEach(oneMinuteUpdateEvent => oneMinuteUpdateEvent.OnOneMinuteUpdate()));
 
-    return Task.CompletedTask;
+    _logger.Startup("Event handlers loaded");
+    return;
+  }
+
+  public async Task DispatchLoadEventAsync()
+  {
+    _logger.Startup($"Dispatching {_loadEvents.Count()} load events!");
+    var loadTasks = new List<Task>();
+    _loadEvents?.ForEach(loadEvent =>
+    {
+      // _logger.Startup($"Loading event handler: {loadEvent.GetType().Name} from {loadEvent.GetType().Namespace}");
+      loadTasks.Add(loadEvent.OnLoad());
+    });
+
+    await Task.WhenAll(loadTasks).ConfigureAwait(false);
   }
 }

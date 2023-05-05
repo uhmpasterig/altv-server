@@ -10,8 +10,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.EntitySync;
 using AltV.Net.EntitySync.SpatialPartitions;
 using AltV.Net.EntitySync.ServerEvent;
-
-
+using server.Contexts;
 
 namespace server.Core;
 
@@ -20,28 +19,20 @@ public class Server : IServer
   ILogger _logger = new Logger();
   IEventHandler _eventHandler;
   ITimerHandler _timerHandler;
-  IPlayerHandler _playerHandler;
-  PlayerContext _playerContext;
 
-  public Server(ILogger logger, PlayerContext playerContext, IPlayerHandler playerHandler, IEventHandler eventHandler, ITimerHandler timerHandler)
+  public Server(ILogger logger, IEventHandler eventHandler, ITimerHandler timerHandler)
   {
     _logger = logger;
-    _playerContext = playerContext;
-    _playerHandler = playerHandler;
     _eventHandler = eventHandler;
     _timerHandler = timerHandler;
   }
 
   public void Start()
   {
-    _logger.Startup("Server startet...");
-
-    _logger.Startup("Lade Handler...");
+    _logger.Startup("Server initializing...");
     _eventHandler.LoadHandlers();
-    _logger.Startup("Handler Geladen!");
 
-    _logger.Startup("Server gestartet!");
-
+    _logger.Startup("Server is ready to accept connections!");
   }
 
   public async Task Stop()
