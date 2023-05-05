@@ -20,7 +20,7 @@ internal class WeaponCommands : IScript
     await player.SetDimension(id);
   }
 
-  [Command("saveme")]
+  [Command("save")]
   public async static void SaveMe(xPlayer player)
   {
     await player.SavePlayer();
