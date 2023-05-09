@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e9249116-69cd-45aa-b081-125bca998abd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.vs/server/DesignTimeBuild/.dtbcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/server/DesignTimeBuild/.dtbcache.v2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/server/v17/.futdcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/server/v17/.futdcache.v2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/server/v17/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/server/v17/.suo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Commands/DebugCommands.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Commands/DebugCommands.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Contexts/CoreContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Contexts/CoreContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Contexts/VehicleContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Contexts/VehicleContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Player/xPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Player/xPlayer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Player/xPlayer_Vitals.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Player/xPlayer_Vitals.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Vehicle/xVehicle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Vehicle/xVehicle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/IItemsLoaded.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Events/IItemsLoaded.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Handlers/Player/Database/PlayerConnect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Handlers/Player/Database/PlayerConnect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Handlers/Player/PlayerHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Handlers/Player/PlayerHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Handlers/Utils/Event/EventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Handlers/Utils/Event/EventHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Handlers/Vehicle/VehicleHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Handlers/Vehicle/VehicleHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Player/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Player/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Vehicle/Vehicle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Vehicle/Vehicle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProjectId" id="2PRAfAFiCI7SGADKb0cFk7qRvpV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;,
+      &quot;mariadb&quot;
+    ],
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\Administrator\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\Administrator\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\Administrator\\AppData\\Local\\Symbols\\src&quot;
+    ]
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e9249116-69cd-45aa-b081-125bca998abd" name="Changes" comment="" />
+      <created>1683409622484</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683409622484</updated>
+      <workItem from="1683409623696" duration="373000" />
+      <workItem from="1683410010662" duration="19000" />
+      <workItem from="1683410038901" duration="456000" />
+      <workItem from="1683413469299" duration="62000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
