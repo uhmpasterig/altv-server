@@ -15,7 +15,7 @@ public partial class ServerContext : DbContext, IDisposable
   {
     if (!optionsBuilder.IsConfigured)
     {
-      optionsBuilder.UseMySql("server=45.157.233.24;database=altserver;user=root;password=KrjganovOnTop1!23;treattinyasboolean=true",
+      optionsBuilder.UseMySql("wdwwdwd",
         new MySqlServerVersion(new Version(8, 0, 25)));
     }
   }
